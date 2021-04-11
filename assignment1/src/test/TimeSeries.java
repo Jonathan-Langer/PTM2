@@ -62,7 +62,7 @@ public class TimeSeries {
 	
 	public int getSize() { return titles.size();}
 	
-	public ArrayList<Float> getLine(String s) {return 	info.get(titles.indexOf(s));}
+	public ArrayList<Float> getLine(String s) {return info.get(titles.indexOf(s));}
 
 	public float[] getLineAsArray(int i) {
 		float[] retArr = new float[info.get(i).size()];
@@ -74,4 +74,9 @@ public class TimeSeries {
 	public ArrayList<String> getTitles() {return titles;}
 
 	public ArrayList<ArrayList<Float>> getInfo() {return info;}
+	
+	public void addCol(String feature,ArrayList<Float> data) {
+		titles.add(feature);
+		info.add(data);
+	}
 }

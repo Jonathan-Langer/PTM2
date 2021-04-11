@@ -11,7 +11,9 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 		super();
 		this.normalModel = null;
 	}
-
+	public SimpleAnomalyDetector(float th) {
+		this.th=th;
+	}
 	List<CorrelatedFeatures> normalModel;
 
 	@Override
@@ -29,7 +31,7 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 			for (int j=i+1; j<ts.getSize();j++) {
 				valY= ts.getLineAsArray(j);
 				pear =StatLib.pearson(valX,valY);	
-				if (Math.abs(pear)>th && Math.abs(pear)>maxAbsPear)		
+				if (Math.abs(pear)>=th && Math.abs(pear)>maxAbsPear)		
 				{
 					maxAbsPear=Math.abs(pear);
 					maxPlace=j;
