@@ -95,7 +95,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ComboBox prefHeight="25.0" prefWidth="106.0">
+                        <ComboBox fx:id="options" prefHeight="25.0" prefWidth="106.0">
                            <HBox.margin>
                               <Insets left="10.0" top="29.0" />
                            </HBox.margin>
