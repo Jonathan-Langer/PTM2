@@ -17,7 +17,7 @@ public class AnomalyDetectionHandler implements ClientHandler{
 	public class SocketIO implements DefaultIO{
 		
 		Scanner in;
-		PrintWriter out;
+		PrintWriter out;//
 		
 		public SocketIO(BufferedReader bufferedReader, OutputStream output) {
 				in=new Scanner(bufferedReader);
