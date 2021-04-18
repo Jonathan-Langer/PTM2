@@ -21,6 +21,7 @@
                <StackPane.margin>
                   <Insets bottom="50.0" right="20.0" top="20.0" />
                </StackPane.margin>
+               
             </Canvas>
             <Canvas height="300.0" width="610.0" StackPane.alignment="CENTER_RIGHT">
                <StackPane.margin>

@@ -10,10 +10,5 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JavaFX"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/fontAwesome"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/javaFX"/>
-	<classpathentry kind="lib" path="C:/javaFX/lwjgl-2.9.3/jar/lwjgl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="C:/javaFX/lwjgl-2.9.3/native/windows"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
