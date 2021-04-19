@@ -39,6 +39,7 @@ public class WindowController implements Initializable{
 		ObservableList<String> list=FXCollections.observableArrayList
 				("0.25","0.5","0.75","1","1.25","1.5","1.75","2");
 		options.setItems(list);
-		options.setValue("1");
+		if(options.getValue()==null)
+			options.setValue("1");
 	}
 }
