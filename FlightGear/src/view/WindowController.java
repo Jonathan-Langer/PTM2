@@ -31,7 +31,7 @@ public class WindowController implements Initializable{
 				);
 		File chooser=fc.showOpenDialog(null);
 		if(chooser!=null)
-			csvFileName=chooser.getName();
+			csvFileName=chooser.getPath();
 	}
 
 	@Override
