@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import anomaly_detectors.TimeSeries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,17 +18,13 @@ public class WindowController implements Initializable{
 	@FXML
 	private ComboBox<String> options;
 	
-	public WindowController() {
-		//options=new ComboBox<>();
-		//options.setValue("1");
-	}
-	
 	public void openCSVFile() {
 		FileChooser fc=new FileChooser();
 		fc.setTitle("open csv file");
 		fc.setInitialDirectory(new File("./resources"));
 		fc.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("csv file", "*.csv")
+				new FileChooser.ExtensionFilter
+				("csv file", "*.csv")
 				);
 		File chooser=fc.showOpenDialog(null);
 		if(chooser!=null)
