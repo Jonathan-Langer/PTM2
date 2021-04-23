@@ -92,24 +92,24 @@ public class WindowController extends Observable implements Initializable{
 		}
 	}
 	
-	public void joystickOnMouseDrag(MouseEvent event) {
-		/*if(this.manual.isSelected()) {
+	/*public void joystickOnMouseDrag(MouseEvent event) {
+		if(this.manual.isSelected()) {
 			if (event.getX() <= 100 && event.getX() >= -100)
 				if (event.getY() <= 100 && event.getY() >= -100) {
 					joystick.setCenterX(event.getX());
 					joystick.setCenterY(event.getY());
 					statlabel.setText("(Alieron = " +event.getX()/100 + " Elevator = " + event.getY()/100 + ")");
-					//this.elevatorVal.set(event.getY()/-100);
-					//this.alieronVal.set(event.getX()/100);
-					//this.vm.elevatorChanged();
-					//this.vm.aileronChanged();
+					this.elevatorVal.set(event.getY()/-100);
+					this.alieronVal.set(event.getX()/100);
+					this.vm.elevatorChanged();
+					this.vm.aileronChanged();
 			}
 		}
-		//else this.statlabel.setText(MCL);*/
+		else this.statlabel.setText(MCL);
 	}
 	
 	public void joystickOnMouseRelease(MouseEvent event) {
-		//joystick.setCenterX(0);
-		//joystick.setCenterY(0);
-	}
+		joystick.setCenterX(0);
+		joystick.setCenterY(0);
+	}*/
 }
