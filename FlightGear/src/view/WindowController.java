@@ -1,35 +1,43 @@
 package view;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.util.Observable;
 import java.util.ResourceBundle;
 
 import anomaly_detectors.TimeSeries;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.stage.FileChooser;
-
+import javafx.stage.Stage;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 //import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 //import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 
-public class WindowController implements Initializable{
+public class WindowController extends Observable implements Initializable{
 	
 	String csvFileName;
 	@FXML
 	private ComboBox<String> options;
 	
 	//---------------FXML Objects--------------
-		
+		@FXML
+		MenuItem editSetting;
 		//@FXML
 		//JoystickDisplayer joystickDisplayer;
 		
@@ -68,6 +76,20 @@ public class WindowController implements Initializable{
 		options.setItems(list);
 		if(options.getValue()==null)
 			options.setValue("1");
+	}
+	
+	public void editSetting() {
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditSetting.fxml"));
+		Parent root1;
+		try {
+			root1 = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.setScene(new Scene(root1));  
+			stage.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void joystickOnMouseDrag(MouseEvent event) {
