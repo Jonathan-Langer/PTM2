@@ -18,6 +18,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
@@ -126,12 +129,29 @@
 				    <RadioButton fx:id="manual" layoutX="8.0" layoutY="4.0" mnemonicParsing="false" text="Manual Contorls" /> 
 				      <Slider fx:id="rudder" layoutX="53.0" layoutY="287.0" max="1.0" min="-1.0" prefHeight="16.0" prefWidth="200.0" showTickLabels="true" /> 
 						<Slider fx:id="throttle" layoutX="20.0" layoutY="62.0" max="1.0" orientation="VERTICAL" prefHeight="190.0" prefWidth="16.0" showTickLabels="true" />
-							   <Circle fx:id="joystickBorder" fill="#babfc3" layoutX="153.0" layoutY="161.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+							   <Circle fx:id="joystickBorder" layoutX="153.0" layoutY="161.0" radius="100.0" stroke="BLACK" strokeType="INSIDE">
+               <fill>
+                  <LinearGradient endX="1.0" endY="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.5169956088066101" green="0.7385051250457764" blue="0.9078947305679321" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color green="1.0" blue="0.949999988079071" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </fill>
+            </Circle>
 							    <Label layoutX="118.0" layoutY="300.0" text="&lt;-rudder-&gt;" />
 								  <Label layoutX="-26.0" layoutY="149.0" rotate="-90.0" text="&lt;-throttle-&gt;" />
 								    <Label layoutX="118.0" layoutY="41.0" text="&lt;-aileron-&gt;" />
 									  <Label layoutX="230.0" layoutY="153.0" rotate="90.0" text="&lt;-elevator-&gt;" />
-									    <Circle fx:id="joystick" fill="#8e9397" focusTraversable="true" layoutX="153.0" layoutY="161.0" onMouseDragged="#joystickOnMouseDrag" onMouseReleased="#joystickOnMouseRelease" radius="46.0" stroke="BLACK" strokeLineCap="ROUND" strokeWidth="3.0">
+									    <Circle fx:id="joystick" focusTraversable="true" layoutX="153.0" layoutY="161.0" onMouseDragged="#joystickOnMouseDrag" onMouseReleased="#joystickOnMouseRelease" radius="46.0" stroke="#dd4343" strokeLineCap="ROUND" strokeWidth="3.0">
 										  <effect>
 										    <InnerShadow choke="0.53" height="40.62" radius="20.939999999999998" width="45.14" />
 											  </effect>
