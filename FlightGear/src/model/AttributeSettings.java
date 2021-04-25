@@ -1,7 +1,7 @@
 package model;
 
 public class AttributeSettings {
-	String name;
+	Integer rowInCSV;
 	float minValue,maxValue;
 	/*float latitude_deg;
 	float longitude_deg;
@@ -26,10 +26,11 @@ public class AttributeSettings {
 	//file name algorithm detections
 	int port;
 	int IP;*/
+	//need to add yaw in the settings
 	
 	public AttributeSettings(String[] data) {
 		if(data.length==3) {
-			this.name = data[0];
+			this.rowInCSV = Integer.parseInt(data[0]);
 			this.minValue = Float.parseFloat(data[1]);
 			this.maxValue = Float.parseFloat(data[2]);
 		}

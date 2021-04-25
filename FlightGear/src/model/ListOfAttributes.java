@@ -37,7 +37,7 @@ public class ListOfAttributes extends Observable{
 							(new String[]{data[1],data[2],data[3]}));
 				else {
 					if(data.length==2) {
-						int value=Integer.parseInt(data[1]);
+						Integer value= Integer.parseInt(data[1]);
 						switch(data[0]) {
 						case "ip":
 							ip=data[1];

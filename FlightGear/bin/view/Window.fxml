@@ -151,7 +151,7 @@
 								  <Label layoutX="-26.0" layoutY="149.0" rotate="-90.0" text="&lt;-throttle-&gt;" />
 								    <Label layoutX="118.0" layoutY="41.0" text="&lt;-aileron-&gt;" />
 									  <Label layoutX="230.0" layoutY="153.0" rotate="90.0" text="&lt;-elevator-&gt;" />
-									    <Circle fx:id="joystick" focusTraversable="true" layoutX="153.0" layoutY="161.0" onMouseDragged="#joystickOnMouseDrag" onMouseReleased="#joystickOnMouseRelease" radius="46.0" stroke="#dd4343" strokeLineCap="ROUND" strokeWidth="3.0">
+									    <Circle fx:id="joystick" focusTraversable="true" layoutX="153.0" layoutY="161.0" radius="46.0" stroke="#dd4343" strokeLineCap="ROUND" strokeWidth="3.0">
 										  <effect>
 										    <InnerShadow choke="0.53" height="40.62" radius="20.939999999999998" width="45.14" />
 											  </effect>
