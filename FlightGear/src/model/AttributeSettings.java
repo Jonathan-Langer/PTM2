@@ -3,7 +3,7 @@ package model;
 public class AttributeSettings {
 	String name;
 	float minValue,maxValue;
-	float latitude_deg;
+	/*float latitude_deg;
 	float longitude_deg;
 	float altitude_ft;
 	float alttitude;
@@ -25,13 +25,14 @@ public class AttributeSettings {
 	//file name regular flight
 	//file name algorithm detections
 	int port;
-	int IP;
+	int IP;*/
 	
-	public AttributeSettings(String name, float minValue, float maxValue) {
-		super();
-		this.name = name;
-		this.minValue = minValue;
-		this.maxValue = maxValue;
+	public AttributeSettings(String[] data) {
+		if(data.length==3) {
+			this.name = data[0];
+			this.minValue = Float.parseFloat(data[1]);
+			this.maxValue = Float.parseFloat(data[2]);
+		}
 	}
 	
 }
