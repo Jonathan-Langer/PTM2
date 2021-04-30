@@ -11,6 +11,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import anomaly_detectors.TimeSeries;
@@ -40,7 +41,7 @@ import javafx.scene.layout.BorderPane;
 //import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 
-public class WindowController extends Observable implements Initializable{
+public class WindowController extends Observable implements Initializable,Observer{
 	
 	String csvFilePath;
 	String txtFilePath;
@@ -51,6 +52,7 @@ public class WindowController extends Observable implements Initializable{
 	public WindowController() {
 		txtFilePath=new File("resources/last_setting.txt").getAbsolutePath();
 		attributes=new ListOfAttributes(txtFilePath);
+		attributesView=new AttributesViewDisplayer();
 	}
 
 		//---------------FXML Objects--------------
@@ -75,7 +77,7 @@ public class WindowController extends Observable implements Initializable{
 		Circle joystick, joystickBorder;
 		
 		@FXML
-		private ListView attributesView;
+		private AttributesViewDisplayer attributesView;
 		
 		ObservableList<String> list = FXCollections.observableArrayList();
 		
@@ -100,7 +102,7 @@ public class WindowController extends Observable implements Initializable{
 		options.setItems(list);
 		if(options.getValue()==null)
 			options.setValue("1");
-		loadAttributesToListView();
+		attributesView.loadAttributesToListView(attributes);
 	}
 	
 	public void loadTxtFile() {
@@ -216,5 +218,11 @@ public class WindowController extends Observable implements Initializable{
 		list.removeAll(list);
 		list.addAll(attributes.getAttributesNames());
 		attributesView.getItems().addAll(list);
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 }
