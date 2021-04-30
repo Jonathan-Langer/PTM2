@@ -1,8 +1,15 @@
 package view;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
 import java.net.URL;
+import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.ResourceBundle;
 
@@ -16,8 +23,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.AttributeSettings;
+import model.ListOfAttributes;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -31,11 +41,18 @@ import javafx.scene.shape.Circle;
 
 public class WindowController extends Observable implements Initializable{
 	
-	String csvFileName;
+	String csvFilePath;
+	String txtFilePath;
+	ListOfAttributes attributes;
 	@FXML
 	private ComboBox<String> options;
 	
-	//---------------FXML Objects--------------
+	public WindowController() {
+		txtFilePath=new File("resources/last_setting.txt").getAbsolutePath();
+		attributes=new ListOfAttributes(txtFilePath);
+	}
+
+		//---------------FXML Objects--------------
 		@FXML
 		MenuItem editSetting;
 		//@FXML
@@ -66,7 +83,7 @@ public class WindowController extends Observable implements Initializable{
 				);
 		File chooser=fc.showOpenDialog(null);
 		if(chooser!=null)
-			csvFileName=chooser.getPath();
+			csvFilePath=chooser.getPath();
 	}
 
 	@Override
@@ -78,17 +95,92 @@ public class WindowController extends Observable implements Initializable{
 			options.setValue("1");
 	}
 	
-	public void editSetting() {
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditSetting.fxml"));
-		Parent root1;
+	public void loadTxtFile() {
+		FileChooser fc=new FileChooser();
+		fc.setTitle("open txt setting file");
+		fc.setInitialDirectory(new File("./resources"));
+		fc.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter
+				("txt file", "*.txt")
+				);
+		File chooser=fc.showOpenDialog(null);
+		if(chooser!=null) {
+			if(!checkValidateSettingFile(chooser.getPath())) {
+				Alert message=new Alert(Alert.AlertType.ERROR);
+				message.setContentText("oops!"
+						+ " \n this file format is not valid \n and the file was'nt saved in the system");
+				message.show();
+				txtFilePath=new File("resources/last_setting.txt").getAbsolutePath();
+			}
+			else {
+				txtFilePath=chooser.getPath();
+				File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
+				File currentAttributes=new File(txtFilePath);
+				try {
+					if(!lastSetting.exists())
+						lastSetting.createNewFile();
+					PrintWriter write=new PrintWriter(lastSetting);
+					BufferedReader read=new BufferedReader(new FileReader(currentAttributes));
+					String line=null;
+					while((line=read.readLine())!=null) {
+						write.println(line);
+						write.flush();
+					}
+					Alert message=new Alert(Alert.AlertType.CONFIRMATION);
+					message.setContentText("well done!"
+							+ " \n your txt file was saved in the system");
+					message.show();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			attributes=new ListOfAttributes(txtFilePath);
+			
+		}
+	}
+	
+	private boolean checkValidateSettingFile(String txtFile) {
+		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
+		cellsAreApeared.put(0, false);
+		cellsAreApeared.put(1, false);
+		cellsAreApeared.put(2, false);
+		cellsAreApeared.put(3, false);
+		cellsAreApeared.put(5, false);
+		cellsAreApeared.put(6, false);
+		cellsAreApeared.put(14, false);
+		cellsAreApeared.put(15, false);
+		cellsAreApeared.put(16, false);
+		cellsAreApeared.put(17, false);
+		cellsAreApeared.put(18, false);
+		cellsAreApeared.put(19, false);
 		try {
-			root1 = (Parent) fxmlLoader.load();
-			Stage stage = new Stage();
-			stage.setScene(new Scene(root1));  
-			stage.show();
+			BufferedReader read=new BufferedReader(new FileReader(new File(txtFile)));
+			String line=null;
+			while((line=read.readLine())!=null) {
+				String[] data=line.split(",");
+				if(data.length==4) {
+					if(!cellsAreApeared.containsKey(Integer.parseInt(data[1]))) {
+						read.close();
+						return false;
+					}
+				}
+				else {
+					if(data.length==2) {
+						if(!(data[0].equals("ip")||data[0].equals("port")||data[0].equals("rate"))) {
+							read.close();
+							return false;
+						}
+					}
+					else {
+						read.close();
+						return false;
+					}
+				}
+			}
+			read.close();
+			return true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return false;
 		}
 	}
 	

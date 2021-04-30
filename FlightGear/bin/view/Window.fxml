@@ -193,9 +193,9 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="Setting">
+          <Menu mnemonicParsing="false" text="settings">
             <items>
-              <MenuItem fx:id="editSetting" mnemonicParsing="false" onAction="#editSetting" text="edit Setting" />
+              <MenuItem mnemonicParsing="false" onAction="#loadTxtFile" text="upload a new setting file" />
             </items>
           </Menu>
         </menus>

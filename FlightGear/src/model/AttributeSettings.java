@@ -1,7 +1,9 @@
 package model;
 
-public class AttributeSettings {
-	Integer rowInCSV;
+import java.util.Observable;
+
+public class AttributeSettings extends Observable {
+	Integer colInCSV;
 	float minValue,maxValue;
 	/*float latitude_deg;
 	float longitude_deg;
@@ -30,10 +32,9 @@ public class AttributeSettings {
 	
 	public AttributeSettings(String[] data) {
 		if(data.length==3) {
-			this.rowInCSV = Integer.parseInt(data[0]);
+			this.colInCSV = Integer.parseInt(data[0]);
 			this.minValue = Float.parseFloat(data[1]);
 			this.maxValue = Float.parseFloat(data[2]);
 		}
 	}
-	
 }

@@ -37,26 +37,23 @@ public class ListOfAttributes extends Observable{
 							(new String[]{data[1],data[2],data[3]}));
 				else {
 					if(data.length==2) {
-						Integer value= Integer.parseInt(data[1]);
 						switch(data[0]) {
 						case "ip":
 							ip=data[1];
 							break;
 						case "port":
-							port=value;
+							port=Integer.parseInt(data[1]);
 							break;
 						case "rate":
-							rate=value;
+							rate=Integer.parseInt(data[1]);
 							break;
 						}
 					}
 				}
 				
 			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	public void addAttribute(String attributeName, AttributeSettings attributeSettings) {
