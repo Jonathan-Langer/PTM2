@@ -16,6 +16,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Observable;
+import java.util.Set;
 
 public class ListOfAttributes extends Observable{
 	HashMap<String,AttributeSettings> attributesConnection;
@@ -60,5 +61,8 @@ public class ListOfAttributes extends Observable{
 		attributesConnection.put(attributeName, attributeSettings);
 		setChanged();
 		notifyObservers();
+	}
+	public Set<String> getAttributesNames() {
+		return attributesConnection.keySet();
 	}
 }

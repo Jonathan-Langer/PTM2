@@ -30,6 +30,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
@@ -72,6 +73,12 @@ public class WindowController extends Observable implements Initializable{
 
 		@FXML
 		Circle joystick, joystickBorder;
+		
+		@FXML
+		private ListView attributesView;
+		
+		ObservableList<String> list = FXCollections.observableArrayList();
+		
 	
 	public void openCSVFile() {
 		FileChooser fc=new FileChooser();
@@ -93,6 +100,7 @@ public class WindowController extends Observable implements Initializable{
 		options.setItems(list);
 		if(options.getValue()==null)
 			options.setValue("1");
+		loadAttributesToListView();
 	}
 	
 	public void loadTxtFile() {
@@ -204,4 +212,9 @@ public class WindowController extends Observable implements Initializable{
 		joystick.setCenterX(0);
 		joystick.setCenterY(0);
 	}*/
+	private void loadAttributesToListView() {
+		list.removeAll(list);
+		list.addAll(attributes.getAttributesNames());
+		attributesView.getItems().addAll(list);
+	}
 }
