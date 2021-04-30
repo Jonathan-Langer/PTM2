@@ -25,16 +25,17 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import view.AttributesViewDisplayer?>
+<?import view.JoystickDisplayer?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WindowController">
      <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Canvas height="300.0" width="610.0" StackPane.alignment="TOP_RIGHT">
+            <JoystickDisplayer fx:id="joystickDisplayer"   prefHeight="300.0" prefWidth="610.0" StackPane.alignment="TOP_RIGHT">
                <StackPane.margin>
                   <Insets bottom="50.0" right="20.0" top="20.0" />
                </StackPane.margin>
-            </Canvas>
+            </JoystickDisplayer>
             <Canvas height="300.0" width="610.0" StackPane.alignment="CENTER_RIGHT">
                <StackPane.margin>
                   <Insets bottom="-110.0" right="20.0" top="50.0" />
@@ -125,6 +126,7 @@
          </children>
       </StackPane>
    </center>
+   <!--  
    <right>
      <AnchorPane prefHeight="775.0" prefWidth="315.0" BorderPane.alignment="CENTER">
 				  <children>
@@ -191,7 +193,7 @@
 														   </font></Label> 			 
 				</children>
 			</AnchorPane>
-   </right>
+   </right> -->
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>

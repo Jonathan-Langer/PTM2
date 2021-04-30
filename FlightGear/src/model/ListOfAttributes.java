@@ -65,4 +65,7 @@ public class ListOfAttributes extends Observable{
 	public Set<String> getAttributesNames() {
 		return attributesConnection.keySet();
 	}
+	public HashMap<String, AttributeSettings> getList(){
+		return this.attributesConnection;
+	}
 }

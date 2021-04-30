@@ -37,4 +37,28 @@ public class AttributeSettings extends Observable {
 			this.maxValue = Float.parseFloat(data[2]);
 		}
 	}
+
+	public Integer getColInCSV() {
+		return colInCSV;
+	}
+
+	public void setColInCSV(Integer colInCSV) {
+		this.colInCSV = colInCSV;
+	}
+
+	public float getMinValue() {
+		return minValue;
+	}
+
+	public void setMinValue(float minValue) {
+		this.minValue = minValue;
+	}
+
+	public float getMaxValue() {
+		return maxValue;
+	}
+
+	public void setMaxValue(float maxValue) {
+		this.maxValue = maxValue;
+	}
 }

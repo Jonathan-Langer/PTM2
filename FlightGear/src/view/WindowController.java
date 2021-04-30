@@ -34,6 +34,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Slider;
 //import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
@@ -53,13 +54,14 @@ public class WindowController extends Observable implements Initializable,Observ
 		txtFilePath=new File("resources/last_setting.txt").getAbsolutePath();
 		attributes=new ListOfAttributes(txtFilePath);
 		attributesView=new AttributesViewDisplayer();
+		joystickDisplayer=new JoystickDisplayer();
+		joystickDisplayer.setAttributes(attributes);
+		joystickDisplayer.draw();
 	}
 
 		//---------------FXML Objects--------------
 		@FXML
 		MenuItem editSetting;
-		//@FXML
-		//JoystickDisplayer joystickDisplayer;
 		
 		@FXML
 		Button connect, textfile;
@@ -77,10 +79,11 @@ public class WindowController extends Observable implements Initializable,Observ
 		Circle joystick, joystickBorder;
 		
 		@FXML
-		private AttributesViewDisplayer attributesView;
+		AttributesViewDisplayer attributesView;
 		
-		ObservableList<String> list = FXCollections.observableArrayList();
-		
+		@FXML
+		JoystickDisplayer joystickDisplayer;
+				
 	
 	public void openCSVFile() {
 		FileChooser fc=new FileChooser();
@@ -145,7 +148,8 @@ public class WindowController extends Observable implements Initializable,Observ
 				}
 			}
 			attributes=new ListOfAttributes(txtFilePath);
-			
+			attributesView.loadAttributesToListView(attributes);
+			joystickDisplayer.draw();
 		}
 	}
 	
@@ -214,12 +218,7 @@ public class WindowController extends Observable implements Initializable,Observ
 		joystick.setCenterX(0);
 		joystick.setCenterY(0);
 	}*/
-	private void loadAttributesToListView() {
-		list.removeAll(list);
-		list.addAll(attributes.getAttributesNames());
-		attributesView.getItems().addAll(list);
-	}
-
+	
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
