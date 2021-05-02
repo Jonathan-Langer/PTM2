@@ -24,7 +24,7 @@ public class JoystickDisplayerController extends AnchorPane {
 	public JoystickDisplayerController(ListOfAttributes attributes) {
 		super();
 		try {
-			FXMLLoader loader=new FXMLLoader(getClass().getResource("Stam.fxml"));
+			FXMLLoader loader=new FXMLLoader(getClass().getResource("Joystick.fxml"));
 			joystick=new Joystick(attributes);
 			loader.setController(joystick);
 			Node n=loader.load();
