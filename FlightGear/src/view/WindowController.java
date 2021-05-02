@@ -54,9 +54,7 @@ public class WindowController extends Observable implements Initializable,Observ
 		txtFilePath=new File("resources/last_setting.txt").getAbsolutePath();
 		attributes=new ListOfAttributes(txtFilePath);
 		attributesView=new AttributesViewDisplayer();
-		joystickDisplayer=new JoystickDisplayer();
-		joystickDisplayer.setAttributes(attributes);
-		joystickDisplayer.draw();
+		//joystickDisplayer=new JoystickDisplayer(attributes);
 	}
 
 		//---------------FXML Objects--------------
@@ -81,8 +79,8 @@ public class WindowController extends Observable implements Initializable,Observ
 		@FXML
 		AttributesViewDisplayer attributesView;
 		
-		@FXML
-		JoystickDisplayer joystickDisplayer;
+		//@FXML
+		//JoystickDisplayer joystickDisplayer;
 				
 	
 	public void openCSVFile() {
@@ -149,7 +147,9 @@ public class WindowController extends Observable implements Initializable,Observ
 			}
 			attributes=new ListOfAttributes(txtFilePath);
 			attributesView.loadAttributesToListView(attributes);
-			joystickDisplayer.draw();
+			attributesView.addEventFilter(MouseEvent.MOUSE_CLICKED,
+					(e)->attributesView.toDisplay.requestFocus());
+			//joystickDisplayer=new JoystickDisplayer(attributes);
 		}
 	}
 	
