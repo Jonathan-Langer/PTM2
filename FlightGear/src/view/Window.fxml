@@ -31,7 +31,7 @@
      <center>
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <JoystickDisplayerController prefHeight="300.0" prefWidth="610.0" StackPane.alignment="TOP_RIGHT">
+            <JoystickDisplayerController fx:id="joystickDisplayer" prefHeight="300.0" prefWidth="610.0" StackPane.alignment="TOP_RIGHT">
                <StackPane.margin>
                   <Insets bottom="50.0" right="20.0" top="20.0" left="1000.0" />
                </StackPane.margin> 

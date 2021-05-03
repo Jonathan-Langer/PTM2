@@ -17,6 +17,7 @@ public class JoystickDisplayerController extends AnchorPane {
 			joystick=new Joystick();
 			loader.setController(joystick);
 			Node n=loader.load();
+			this.getChildren().removeAll(this.getChildren());
 			this.getChildren().add(n);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -29,6 +30,7 @@ public class JoystickDisplayerController extends AnchorPane {
 			joystick=new Joystick(attributes);
 			loader.setController(joystick);
 			Node n=loader.load();
+			this.getChildren().removeAll(this.getChildren());
 			this.getChildren().add(n);
 		} catch (IOException e) {
 			e.printStackTrace();

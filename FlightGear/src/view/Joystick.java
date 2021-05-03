@@ -18,8 +18,6 @@ import model.ListOfAttributes;
 public class Joystick implements Initializable{
 	// -------------data members-------------
 	@FXML
-	RadioButton manual;
-	@FXML
 	Slider rudder;
 	@FXML
 	Slider throttle;
@@ -41,6 +39,25 @@ public class Joystick implements Initializable{
 		attributes=new ListOfAttributes(new File("resources/last_setting.txt").getAbsolutePath());
 		throttle=new Slider();
 		rudder=new Slider();
+		if(attributes!=null) {
+			for(AttributeSettings a:attributes.getList().values()) {
+				if(a.getColInCSV()==2) {
+					rudder.setMax(a.getMaxValue());
+					rudder.setMin(a.getMinValue());
+					continue;
+				}
+				if(a.getColInCSV()==6) {
+					throttle.setMax(a.getMaxValue());
+					throttle.setMin(a.getMinValue());
+					continue;
+				}
+			}
+		}
+	}
+	public Joystick(ListOfAttributes attributes) {
+		this.attributes=attributes;
+		throttle=new Slider();
+		rudder=new Slider();
 		for(AttributeSettings a:attributes.getList().values()) {
 			if(a.getColInCSV()==2) {
 				rudder.setMax(a.getMaxValue());
@@ -53,13 +70,6 @@ public class Joystick implements Initializable{
 				continue;
 			}
 		}
-	}
-	public Joystick(ListOfAttributes attributes) {
-		this.attributes=attributes;
-	}
-	
-	public RadioButton getManual() {
-		return manual;
 	}
 
 	public Slider getRudder() {
@@ -109,7 +119,6 @@ public class Joystick implements Initializable{
 				continue;
 			}
 		}
-		
 	}
 
 }

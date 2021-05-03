@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -54,7 +55,7 @@ public class WindowController extends Observable implements Initializable,Observ
 		txtFilePath=new File("resources/last_setting.txt").getAbsolutePath();
 		attributes=new ListOfAttributes(txtFilePath);
 		attributesView=new AttributesViewDisplayer();
-		//joystickDisplayer=new JoystickDisplayer(attributes);
+		joystickDisplayer=new JoystickDisplayerController(attributes);
 	}
 
 		//---------------FXML Objects--------------
@@ -79,8 +80,8 @@ public class WindowController extends Observable implements Initializable,Observ
 		@FXML
 		AttributesViewDisplayer attributesView;
 		
-		//@FXML
-		//JoystickDisplayer joystickDisplayer;
+		@FXML
+		JoystickDisplayerController joystickDisplayer;
 				
 	
 	public void openCSVFile() {
@@ -104,6 +105,9 @@ public class WindowController extends Observable implements Initializable,Observ
 		if(options.getValue()==null)
 			options.setValue("1");
 		attributesView.loadAttributesToListView(attributes);
+		attributesView.addEventFilter(MouseEvent.ANY,
+				(e)->attributesView.toDisplay.requestFocus());
+		joystickDisplayer=new JoystickDisplayerController(attributes);
 	}
 	
 	public void loadTxtFile() {
@@ -147,9 +151,6 @@ public class WindowController extends Observable implements Initializable,Observ
 			}
 			attributes=new ListOfAttributes(txtFilePath);
 			attributesView.loadAttributesToListView(attributes);
-			attributesView.addEventFilter(MouseEvent.MOUSE_CLICKED,
-					(e)->attributesView.toDisplay.requestFocus());
-			//joystickDisplayer=new JoystickDisplayer(attributes);
 		}
 	}
 	
@@ -167,6 +168,7 @@ public class WindowController extends Observable implements Initializable,Observ
 		cellsAreApeared.put(17, false);
 		cellsAreApeared.put(18, false);
 		cellsAreApeared.put(19, false);
+		cellsAreApeared.put(39, false);
 		try {
 			BufferedReader read=new BufferedReader(new FileReader(new File(txtFile)));
 			String line=null;
