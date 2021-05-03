@@ -16,6 +16,7 @@ import java.util.Observer;
 import java.util.ResourceBundle;
 
 import anomaly_detectors.TimeSeries;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,8 +48,8 @@ import javafx.scene.shape.Circle;
 
 public class WindowController extends Observable implements Initializable,Observer{
 	
-	StringProperty csvFilePath;
-	StringProperty txtFilePath;
+	StringProperty csvFilePath=new SimpleStringProperty();
+	StringProperty txtFilePath=new SimpleStringProperty();
 	ListOfAttributes attributes;
 	ViewModel vm;
 	@FXML
