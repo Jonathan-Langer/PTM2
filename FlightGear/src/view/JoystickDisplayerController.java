@@ -36,4 +36,19 @@ public class JoystickDisplayerController extends AnchorPane {
 			e.printStackTrace();
 		}
 	}
+	
+	public void editRudderMaxVal(double max) {
+		try {
+			this.getChildren().removeAll(this.getChildren());
+			FXMLLoader loader=new FXMLLoader(getClass().getResource("Joystick.fxml"));
+			joystick.rudder.setMax(max);
+			loader.setController(joystick);
+			Node n = loader.load();
+			this.getChildren().add(n);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 }

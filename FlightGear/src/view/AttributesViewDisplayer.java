@@ -20,6 +20,7 @@ public class AttributesViewDisplayer extends StackPane {
 		toDisplay.getItems().removeAll(toDisplay.getItems());
 		list.removeAll(list);
 		list.addAll(attributes.getAttributesNames());
+		list.sort((s1,s2)->s1.compareTo(s2));
 		toDisplay.getItems().addAll(list);
 		getChildren().add(toDisplay);
 	}

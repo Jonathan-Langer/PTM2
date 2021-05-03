@@ -16,6 +16,7 @@ import java.util.Observer;
 import java.util.ResourceBundle;
 
 import anomaly_detectors.TimeSeries;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,6 +28,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.AttributeSettings;
 import model.ListOfAttributes;
+import viewModel.ViewModel;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -45,19 +47,27 @@ import javafx.scene.shape.Circle;
 
 public class WindowController extends Observable implements Initializable,Observer{
 	
-	String csvFilePath;
-	String txtFilePath;
+	StringProperty csvFilePath;
+	StringProperty txtFilePath;
 	ListOfAttributes attributes;
+	ViewModel vm;
 	@FXML
 	private ComboBox<String> options;
 	
 	public WindowController() {
-		txtFilePath=new File("resources/last_setting.txt").getAbsolutePath();
-		attributes=new ListOfAttributes(txtFilePath);
+		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
+		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView=new AttributesViewDisplayer();
 		joystickDisplayer=new JoystickDisplayerController(attributes);
 	}
-
+	
+	public void setViewModel(ViewModel vm) {
+		this.vm=vm;
+		vm.csvFilePath.bind(this.csvFilePath);
+		vm.txtFilePath.bind(this.txtFilePath);
+		this.vm.addObserver(this);
+	}
+	
 		//---------------FXML Objects--------------
 		@FXML
 		MenuItem editSetting;
@@ -94,7 +104,7 @@ public class WindowController extends Observable implements Initializable,Observ
 				);
 		File chooser=fc.showOpenDialog(null);
 		if(chooser!=null)
-			csvFilePath=chooser.getPath();
+			csvFilePath.set(chooser.getPath());
 	}
 
 	@Override
@@ -125,12 +135,12 @@ public class WindowController extends Observable implements Initializable,Observ
 				message.setContentText("oops!"
 						+ " \n this file format is not valid \n and the file was'nt saved in the system");
 				message.show();
-				txtFilePath=new File("resources/last_setting.txt").getAbsolutePath();
+				txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
 			}
 			else {
-				txtFilePath=chooser.getPath();
+				txtFilePath.set(chooser.getPath());
 				File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
-				File currentAttributes=new File(txtFilePath);
+				File currentAttributes=new File(txtFilePath.get());
 				try {
 					if(!lastSetting.exists())
 						lastSetting.createNewFile();
@@ -149,8 +159,9 @@ public class WindowController extends Observable implements Initializable,Observ
 					e.printStackTrace();
 				}
 			}
-			attributes=new ListOfAttributes(txtFilePath);
+			attributes=new ListOfAttributes(txtFilePath.get());
 			attributesView.loadAttributesToListView(attributes);
+			joystickDisplayer=new JoystickDisplayerController();
 		}
 	}
 	
