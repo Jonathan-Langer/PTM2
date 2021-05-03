@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -52,6 +53,10 @@ public class Joystick implements Initializable{
 				continue;
 			}
 		}
+		elevatorLabel=new Label();
+		aileronLabel=new Label();
+		rudderLabel=new Label();
+		throttleLabel=new Label();
 	}
 	public Joystick(ListOfAttributes attributes) {
 		this.attributes=attributes;
