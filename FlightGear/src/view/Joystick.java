@@ -53,10 +53,6 @@ public class Joystick implements Initializable{
 				continue;
 			}
 		}
-		elevatorLabel=new Label();
-		aileronLabel=new Label();
-		rudderLabel=new Label();
-		throttleLabel=new Label();
 	}
 	public Joystick(ListOfAttributes attributes) {
 		this.attributes=attributes;
@@ -101,7 +97,18 @@ public class Joystick implements Initializable{
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+		for(AttributeSettings a:attributes.getList().values()) {
+			if(a.getColInCSV()==2) {
+				rudder.setMax(a.getMaxValue());
+				rudder.setMin(a.getMinValue());
+				continue;
+			}
+			if(a.getColInCSV()==6) {
+				throttle.setMax(a.getMaxValue());
+				throttle.setMin(a.getMinValue());
+				continue;
+			}
+		}
 		
 	}
 

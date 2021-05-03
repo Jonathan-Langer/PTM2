@@ -10,6 +10,7 @@ altitude-ft,16,-10000,1000
 roll-deg,17,-50,50
 pitch-deg,18,-20,20
 heading-deg,19,0,500
+yaw,39,-1,1000
 ip,127.0.0.1
 port,5400
 rate,10
