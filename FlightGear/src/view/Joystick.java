@@ -34,25 +34,10 @@ public class Joystick implements Initializable{
 	Label elevatorLabel;
 	@FXML
 	Circle joystick;
-	@FXML
-	Button r1,r2;
-	@FXML
-	Slider flaps;
-	@FXML
-	Label flapsLabel;
-	@FXML
-	Label speedLabel;
-	@FXML 
-	Label airspeed;
-	@FXML
-	Label altitudeLabel;
-	@FXML
-	Label altitude;
 	ListOfAttributes attributes;
 	
 	public Joystick() {
 		attributes=new ListOfAttributes(new File("resources/last_setting.txt").getAbsolutePath());
-		flaps=new Slider();
 		throttle=new Slider();
 		rudder=new Slider();
 		for(AttributeSettings a:attributes.getList().values()) {
@@ -64,11 +49,6 @@ public class Joystick implements Initializable{
 			if(a.getColInCSV()==6) {
 				throttle.setMax(a.getMaxValue());
 				throttle.setMin(a.getMinValue());
-				continue;
-			}
-			if(a.getColInCSV()==3) {
-				flaps.setMax(a.getMaxValue());
-				flaps.setMin(a.getMinValue());
 				continue;
 			}
 		}
@@ -113,37 +93,6 @@ public class Joystick implements Initializable{
 		return joystick;
 	}
 
-	public Button getR1() {
-		return r1;
-	}
-
-	public Button getR2() {
-		return r2;
-	}
-
-	public Slider getFlaps() {
-		return flaps;
-	}
-
-	public Label getFlapsLabel() {
-		return flapsLabel;
-	}
-
-	public Label getSpeedLabel() {
-		return speedLabel;
-	}
-
-	public Label getAirspeed() {
-		return airspeed;
-	}
-
-	public Label getAltitudeLabel() {
-		return altitudeLabel;
-	}
-
-	public Label getAltitude() {
-		return altitude;
-	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
