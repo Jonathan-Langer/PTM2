@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
-
+import view.player.*;
 import anomaly_detectors.TimeSeries;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -48,23 +48,23 @@ import javafx.scene.shape.Circle;
 
 public class WindowController extends Observable implements Initializable,Observer{
 	
-	StringProperty csvFilePath=new SimpleStringProperty();
+	//StringProperty csvFilePath=new SimpleStringProperty();
 	StringProperty txtFilePath=new SimpleStringProperty();
 	ListOfAttributes attributes;
 	ViewModel vm;
-	@FXML
-	private ComboBox<String> options;
+
 	
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
 		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView=new AttributesViewDisplayer();
 		joystickDisplayer=new JoystickDisplayerController(attributes);
+		playerDisplayer = new Player();
 	}
 	
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
-		vm.csvFilePath.bind(this.csvFilePath);
+		//vm.csvFilePath.bind(playerDisplayer.csvFilePath);
 		vm.txtFilePath.bind(this.txtFilePath);
 		this.vm.addObserver(this);
 	}
@@ -93,8 +93,10 @@ public class WindowController extends Observable implements Initializable,Observ
 		
 		@FXML
 		JoystickDisplayerController joystickDisplayer;
-				
-	
+		
+		@FXML
+		Player playerDisplayer;
+	/*
 	public void openCSVFile() {
 		FileChooser fc=new FileChooser();
 		fc.setTitle("open csv file");
@@ -106,19 +108,17 @@ public class WindowController extends Observable implements Initializable,Observ
 		File chooser=fc.showOpenDialog(null);
 		if(chooser!=null)
 			csvFilePath.set(chooser.getPath());
-	}
-
+	}*/
+		
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		ObservableList<String> list=FXCollections.observableArrayList
-				("0.25","0.5","0.75","1","1.25","1.5","1.75","2");
-		options.setItems(list);
-		if(options.getValue()==null)
-			options.setValue("1");
+	/*	
 		attributesView.loadAttributesToListView(attributes);
 		attributesView.addEventFilter(MouseEvent.ANY,
 				(e)->attributesView.toDisplay.requestFocus());
 		joystickDisplayer=new JoystickDisplayerController(attributes);
+		playerDisplayer = new Player();*/
 	}
 	
 	public void loadTxtFile() {
