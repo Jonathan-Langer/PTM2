@@ -3,6 +3,7 @@ package view.player;
 import java.io.IOException;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -10,8 +11,8 @@ import javafx.scene.layout.AnchorPane;
 
 public class Player extends AnchorPane {
 	
-	StringProperty options;
-	StringProperty csvFilePath; 
+	StringProperty options=new SimpleStringProperty();
+	StringProperty csvFilePath=new SimpleStringProperty(); 
 	
 	public Player() {
 		/*

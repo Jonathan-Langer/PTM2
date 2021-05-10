@@ -27,6 +27,7 @@
 <?import view.AttributesViewDisplayer?>
 <?import view.JoystickDisplayerController?>
 <?import view.player.PlayerDisplayerController?>
+<?import view.player.Player?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WindowController">
      <center>
@@ -137,8 +138,6 @@
       </MenuBar>
    </top>
    <bottom>
-      <Player fx:id ="playerDisplayer">
-          
-      </Player>
+   	<Player fx:id="playerDisplayer"></Player>
    </bottom>
 </BorderPane>

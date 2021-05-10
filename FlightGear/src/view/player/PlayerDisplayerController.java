@@ -27,7 +27,7 @@ public class PlayerDisplayerController  implements Initializable {
 	public StringProperty csvFilePath=new SimpleStringProperty();
 	
 	@FXML
-	public ComboBox<String> options;
+	public ComboBox<String> options = new ComboBox<>();
 	
 	public PlayerDisplayerController() {
 		/*super();
