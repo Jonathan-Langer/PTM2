@@ -148,7 +148,7 @@ public class TableClocksController implements Initializable {
                 .tickLabelsVisible(true)
                 .tickLabelOrientation(TickLabelOrientation.HORIZONTAL)
                 .tickLabelLocation(TickLabelLocation.INSIDE)
-                .title("altitude")
+                .title("yaw")
                 .unit("km")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
@@ -173,7 +173,7 @@ public class TableClocksController implements Initializable {
                 .tickLabelsVisible(true)
                 .tickLabelOrientation(TickLabelOrientation.HORIZONTAL)
                 .tickLabelLocation(TickLabelLocation.INSIDE)
-                .title("altitude")
+                .title("pitch")
                 .unit("km")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
