@@ -26,6 +26,7 @@
 <?import javafx.scene.text.Font?>
 <?import view.AttributesViewDisplayer?>
 <?import view.JoystickDisplayerController?>
+<?import view.player.PlayerDisplayerController?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WindowController">
      <center>
@@ -51,79 +52,9 @@
                   <Insets bottom="420.0" right="1100.0" top="50.0" left="50.0" />
                </AttributesViewDisplayer.margin>
             </AttributesViewDisplayer>
-            <VBox alignment="BOTTOM_CENTER" prefHeight="775.0" prefWidth="983.0" StackPane.alignment="BOTTOM_CENTER">
-               <children>
-                  <HBox prefHeight="113.0" prefWidth="1280.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#openCSVFile" prefHeight="33.0" prefWidth="67.0" text="Open">
-                           <HBox.margin>
-                              <Insets left="30.0" top="25.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Button>
-                        <FontAwesomeIcon glyphName="BACKWARD" size="2em">
-                           <HBox.margin>
-                              <Insets left="80.0" right="-80.0" top="30.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </FontAwesomeIcon>
-                        <FontAwesomeIcon glyphName="PLAY" size="2em" wrappingWidth="13.142857551574707">
-                           <HBox.margin>
-                              <Insets left="100.0" top="30.0" />
-                           </HBox.margin>
-                        </FontAwesomeIcon>
-                        <FontAwesomeIcon glyphName="PAUSE" size="2em">
-                           <HBox.margin>
-                              <Insets left="20.0" top="30.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </FontAwesomeIcon>
-                        <FontAwesomeIcon glyphName="STOP" size="2em">
-                           <HBox.margin>
-                              <Insets left="20.0" top="30.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </FontAwesomeIcon>
-                        <FontAwesomeIcon glyphName="FORWARD" size="2em" wrappingWidth="12.142857551574707">
-                           <HBox.margin>
-                              <Insets left="20.0" top="30.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </FontAwesomeIcon>
             
-                                                            <Label prefHeight="24.0" prefWidth="73.0" text="Play Speed">
-                           <HBox.margin>
-                              <Insets left="150.0" top="29.0" />
-                           </HBox.margin>
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <ComboBox fx:id="options" prefHeight="25.0" prefWidth="106.0">
-                           <HBox.margin>
-                              <Insets left="10.0" top="29.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                     </children>
-                  </HBox>
-                  <Slider prefHeight="35.0" prefWidth="1148.0">
-                     <VBox.margin>
-                        <Insets left="50.0" right="50.0" />
-                     </VBox.margin>
-                  </Slider>
-               </children>
-            </VBox>
          </children>
+         
       </StackPane>
    </center>
    <!--  
@@ -205,4 +136,9 @@
         </menus>
       </MenuBar>
    </top>
+   <bottom>
+      <Player fx:id ="playerDisplayer">
+          
+      </Player>
+   </bottom>
 </BorderPane>
