@@ -1,14 +1,17 @@
 package view;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import model.ListOfAttributes;
 
-public class JoystickDisplayerController extends AnchorPane {
+public class JoystickDisplayerController extends AnchorPane implements Initializable {
 	Joystick joystick;
 	public JoystickDisplayerController() {
 		super();
@@ -50,5 +53,9 @@ public class JoystickDisplayerController extends AnchorPane {
 			e.printStackTrace();
 		}
 		
+	}
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+				
 	}
 }

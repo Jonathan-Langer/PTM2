@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import model.AttributeSettings;
 import model.ListOfAttributes;
@@ -119,6 +120,7 @@ public class Joystick implements Initializable{
 				continue;
 			}
 		}
+		rudder.addEventFilter(MouseEvent.MOUSE_CLICKED, (e)->rudder.requestFocus());
 	}
 
 }
