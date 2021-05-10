@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="1036.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.tableClocks.TableClocksController">
+   <children>
+      <StackPane fx:id="altitude" layoutX="14.0" layoutY="440.0" prefHeight="207.0" prefWidth="296.0" />
+      <StackPane fx:id="speedbrake" layoutX="348.0" layoutY="440.0" prefHeight="207.0" prefWidth="296.0" />
+      <StackPane fx:id="rudder" layoutX="678.0" layoutY="440.0" prefHeight="207.0" prefWidth="296.0" />
+      <StackPane fx:id="roll" layoutX="678.0" layoutY="155.0" prefHeight="207.0" prefWidth="296.0" />
+      <StackPane fx:id="pitch" layoutX="348.0" layoutY="155.0" prefHeight="207.0" prefWidth="296.0" />
+      <StackPane fx:id="yaw" layoutX="14.0" layoutY="155.0" prefHeight="207.0" prefWidth="296.0" />
+   </children>
+</Pane>

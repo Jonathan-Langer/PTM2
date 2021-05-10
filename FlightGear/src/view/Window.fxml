@@ -26,6 +26,7 @@
 <?import javafx.scene.text.Font?>
 <?import view.AttributesViewDisplayer?>
 <?import view.JoystickDisplayerController?>
+<?import view.tableClocks.TableClocksDisplayer?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WindowController">
      <center>
@@ -36,11 +37,11 @@
                   <Insets bottom="50.0" right="20.0" top="20.0" left="1000.0" />
                </StackPane.margin> 
             </JoystickDisplayerController>
-            <Canvas height="300.0" width="610.0" StackPane.alignment="CENTER_RIGHT">
+            <TableClocksDisplayer minHeight="-50" maxHeight="500" maxWidth="1000" prefHeight="300.0" prefWidth="610.0" StackPane.alignment="CENTER_RIGHT">
                <StackPane.margin>
                   <Insets bottom="-110.0" right="20.0" top="50.0" />
                </StackPane.margin>
-            </Canvas>
+            </TableClocksDisplayer>
             <Canvas height="300.0" width="610.0" StackPane.alignment="CENTER_LEFT">
                <StackPane.margin>
                   <Insets bottom="-110.0" left="20.0" top="50.0" />
