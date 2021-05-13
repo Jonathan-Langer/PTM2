@@ -8,6 +8,8 @@ import eu.hansolo.medusa.GaugeBuilder;
 import eu.hansolo.medusa.TickLabelLocation;
 import eu.hansolo.medusa.TickLabelOrientation;
 import eu.hansolo.medusa.TickMarkType;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.StackPane;
@@ -17,6 +19,7 @@ import javafx.scene.paint.Stop;
 public class TableClocksController implements Initializable {
 	@FXML
 	StackPane altitude,speedbrake,rudder,roll,pitch,yaw;
+	
 	
 	public TableClocksController() {
 		altitude=new StackPane();

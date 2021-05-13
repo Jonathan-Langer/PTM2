@@ -2,6 +2,8 @@ package view;
 	
 import javafx.application.Application;
 import javafx.stage.Stage;
+import model.Model;
+import model.MyModel;
 import viewModel.ViewModel;
 import view.WindowController;
 import javafx.scene.Scene;
@@ -16,7 +18,12 @@ public class Main extends Application {
 			FXMLLoader fxl = new FXMLLoader();
 			BorderPane root = fxl.load(getClass().getResource("Window.fxml").openStream());
 			Scene scene = new Scene(root,1500,800);
-			viewModel.ViewModel vm=new ViewModel();
+			MyModel m=new MyModel(); 
+			viewModel.ViewModel vm=new ViewModel(m);
+			m.addObserver(vm);
+			WindowController view=new WindowController();
+			view.setViewModel(vm);
+			vm.addObserver(view);
 			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);

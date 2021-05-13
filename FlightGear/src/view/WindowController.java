@@ -15,6 +15,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 import view.player.*;
+import view.tableClocks.TableClocksController;
+import view.tableClocks.TableClocksDisplayer;
 import anomaly_detectors.TimeSeries;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -46,9 +48,9 @@ import javafx.scene.layout.BorderPane;
 //import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 
-public class WindowController extends Observable implements Initializable,Observer{
+public class WindowController implements Initializable,Observer{
 	
-	//StringProperty csvFilePath=new SimpleStringProperty();
+	StringProperty csvFilePath=new SimpleStringProperty();
 	StringProperty txtFilePath=new SimpleStringProperty();
 	ListOfAttributes attributes;
 	ViewModel vm;
@@ -60,13 +62,19 @@ public class WindowController extends Observable implements Initializable,Observ
 		attributesView=new AttributesViewDisplayer();
 		joystickDisplayer=new JoystickDisplayerController(attributes);
 		playerDisplayer = new Player();
+		tableClocks=new TableClocksDisplayer();
 	}
 	
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
-		//vm.csvFilePath.bind(playerDisplayer.csvFilePath);
+		vm.csvFilePath.bind(playerDisplayer.csvFilePath);
 		vm.txtFilePath.bind(this.txtFilePath);
-		this.vm.addObserver(this);
+		vm.altitudeValue.bind(tableClocks.altitudeValue);
+		vm.pitchValue.bind(tableClocks.pitchValue);
+		vm.rollValue.bind(tableClocks.rollValue);
+		vm.rudderValue.bind(tableClocks.rudderValue);
+		vm.speedbrakeValue.bind(tableClocks.speedbrakeValue);
+		vm.yawValue.bind(tableClocks.yawValue);
 	}
 	
 		//---------------FXML Objects--------------
@@ -93,6 +101,9 @@ public class WindowController extends Observable implements Initializable,Observ
 		
 		@FXML
 		JoystickDisplayerController joystickDisplayer;
+		
+		@FXML
+		TableClocksDisplayer tableClocks;
 		
 		@FXML
 		Player playerDisplayer;

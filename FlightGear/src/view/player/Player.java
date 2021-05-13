@@ -11,8 +11,8 @@ import javafx.scene.layout.AnchorPane;
 
 public class Player extends AnchorPane {
 	
-	StringProperty options=new SimpleStringProperty();
-	StringProperty csvFilePath=new SimpleStringProperty(); 
+	public StringProperty options=new SimpleStringProperty();
+	public StringProperty csvFilePath=new SimpleStringProperty(); 
 	
 	public Player() {
 		/*

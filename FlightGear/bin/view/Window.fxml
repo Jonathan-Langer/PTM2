@@ -39,7 +39,7 @@
                   <Insets bottom="50.0" right="20.0" top="20.0" left="1000.0" />
                </StackPane.margin> 
             </JoystickDisplayerController>
-            <TableClocksDisplayer minHeight="-50" maxHeight="500" maxWidth="1000" prefHeight="300.0" prefWidth="610.0" StackPane.alignment="CENTER_RIGHT">
+            <TableClocksDisplayer fx:id="tableClocks" minHeight="-50" maxHeight="500" maxWidth="1000" prefHeight="300.0" prefWidth="610.0" StackPane.alignment="CENTER_RIGHT">
                <StackPane.margin>
                   <Insets bottom="-110.0" right="20.0" top="50.0" />
                </StackPane.margin>
