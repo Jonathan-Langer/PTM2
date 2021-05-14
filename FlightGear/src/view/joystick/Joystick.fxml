@@ -13,8 +13,8 @@
 
 <AnchorPane prefHeight="398.0" prefWidth="499.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.joystick.JoystickController">
 	<children>
-		<Slider blockIncrement="0.001" layoutX="151.0" layoutY="270.0" prefHeight="16.0" prefWidth="200.0" showTickLabels="true" />
-		<Slider blockIncrement="0.001" layoutX="108.0" layoutY="62.0" orientation="VERTICAL" prefHeight="190.0" prefWidth="16.0" showTickLabels="true" />
+		<Slider fx:id="rudder" blockIncrement="0.001" layoutX="151.0" layoutY="270.0" prefHeight="16.0" prefWidth="200.0" showTickLabels="true" showTickMarks="true" />
+		<Slider fx:id="throttle" blockIncrement="0.001" layoutX="108.0" layoutY="62.0" orientation="VERTICAL" prefHeight="190.0" prefWidth="16.0" showTickLabels="true" showTickMarks="true" />
 		<Circle layoutX="248.0" layoutY="161.0" radius="100.0" stroke="BLACK" strokeType="INSIDE">
 			<fill>
 				<LinearGradient endX="0.4618320829085722" endY="0.9274809351404205" startX="1.0" startY="0.5801527008755517">

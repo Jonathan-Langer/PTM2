@@ -23,6 +23,9 @@ public class ListOfAttributes extends Observable{
 	int port,rate;
 	String ip;
 	//the connection between the attribute name to its' setting
+	public ListOfAttributes() {
+		attributesConnection=new HashMap<String, AttributeSettings>();
+	}
 	
 	public ListOfAttributes(String txtFile) {
 		attributesConnection=new HashMap<>();

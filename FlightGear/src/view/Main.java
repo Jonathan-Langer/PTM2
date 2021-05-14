@@ -31,7 +31,7 @@ public class Main extends Application {
 			//WindowController wc = fxl.getController();
 			//wc.setViewModel(vm);
 			//vm.addObserver(wc);
-			
+			//view.toDelete();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+
+import view.joystick.JoystickDisplayer;
 import view.player.*;
 import view.tableClocks.TableClocksController;
 import view.tableClocks.TableClocksDisplayer;
@@ -55,14 +57,14 @@ public class WindowController implements Initializable,Observer{
 	ListOfAttributes attributes;
 	ViewModel vm;
 
-	
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
 		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView=new AttributesViewDisplayer();
-		joystickDisplayer=new JoystickDisplayerController(attributes);
+		joystickDisplayer=new JoystickDisplayer();
 		playerDisplayer = new Player();
 		tableClocks=new TableClocksDisplayer();
+		joystickDisplayer=new JoystickDisplayer();
 	}
 	
 	public void setViewModel(ViewModel vm) {
@@ -75,32 +77,20 @@ public class WindowController implements Initializable,Observer{
 		vm.rudderValue.bind(tableClocks.rudderValue);
 		vm.speedbrakeValue.bind(tableClocks.speedbrakeValue);
 		vm.yawValue.bind(tableClocks.yawValue);
+		vm.rudderValue.bind(joystickDisplayer.rudderValue);
+		vm.throttleValue.bind(joystickDisplayer.throttleValue);
+		vm.aileronValue.bind(joystickDisplayer.aileronValue);
+		vm.elevatorsValue.bind(joystickDisplayer.elevatorsValue);
 	}
-	
 		//---------------FXML Objects--------------
 		@FXML
 		MenuItem editSetting;
 		
 		@FXML
-		Button connect, textfile;
-		
-		@FXML
-		RadioButton manual, autopilot;
-		
-		@FXML
-		Label statlabel, airspeed, altitude;
-		
-		@FXML
-		Slider throttle, rudder, flaps;
-
-		@FXML
-		Circle joystick, joystickBorder;
-		
-		@FXML
 		AttributesViewDisplayer attributesView;
 		
 		@FXML
-		JoystickDisplayerController joystickDisplayer;
+		JoystickDisplayer joystickDisplayer;
 		
 		@FXML
 		TableClocksDisplayer tableClocks;
@@ -173,7 +163,7 @@ public class WindowController implements Initializable,Observer{
 			}
 			attributes=new ListOfAttributes(txtFilePath.get());
 			attributesView.loadAttributesToListView(attributes);
-			joystickDisplayer=new JoystickDisplayerController();
+			joystickDisplayer=new JoystickDisplayer();
 		}
 	}
 	
@@ -223,26 +213,6 @@ public class WindowController implements Initializable,Observer{
 		}
 	}
 	
-	/*public void joystickOnMouseDrag(MouseEvent event) {
-		if(this.manual.isSelected()) {
-			if (event.getX() <= 100 && event.getX() >= -100)
-				if (event.getY() <= 100 && event.getY() >= -100) {
-					joystick.setCenterX(event.getX());
-					joystick.setCenterY(event.getY());
-					statlabel.setText("(Alieron = " +event.getX()/100 + " Elevator = " + event.getY()/100 + ")");
-					this.elevatorVal.set(event.getY()/-100);
-					this.alieronVal.set(event.getX()/100);
-					this.vm.elevatorChanged();
-					this.vm.aileronChanged();
-			}
-		}
-		else this.statlabel.setText(MCL);
-	}
-	
-	public void joystickOnMouseRelease(MouseEvent event) {
-		joystick.setCenterX(0);
-		joystick.setCenterY(0);
-	}*/
 	
 	@Override
 	public void update(Observable o, Object arg) {

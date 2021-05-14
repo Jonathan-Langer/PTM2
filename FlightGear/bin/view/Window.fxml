@@ -25,20 +25,21 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import view.AttributesViewDisplayer?>
-<?import view.JoystickDisplayerController?>
+<?import view.joystick.JoystickDisplayer?>
 <?import view.tableClocks.TableClocksDisplayer?>
 <?import view.player.PlayerDisplayerController?>
 <?import view.player.Player?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.WindowController">
      <center>
+     
       <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <JoystickDisplayerController fx:id="joystickDisplayer" prefHeight="300.0" prefWidth="610.0" StackPane.alignment="TOP_RIGHT">
+            <JoystickDisplayer fx:id="joystickDisplayer" prefHeight="300.0" prefWidth="610.0" StackPane.alignment="TOP_RIGHT">
                <StackPane.margin>
                   <Insets bottom="50.0" right="20.0" top="20.0" left="1000.0" />
                </StackPane.margin> 
-            </JoystickDisplayerController>
+            </JoystickDisplayer>
             <TableClocksDisplayer fx:id="tableClocks" minHeight="-50" maxHeight="100" maxWidth="800" prefHeight="100.0" prefWidth="610.0" StackPane.alignment="CENTER_RIGHT">
                <StackPane.margin>
                   <Insets bottom="-150.0" right="-120.0" top="50.0" />

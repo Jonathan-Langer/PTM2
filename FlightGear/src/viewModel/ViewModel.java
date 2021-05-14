@@ -15,8 +15,10 @@ public class ViewModel extends Observable implements Observer{
 	
 	public StringProperty txtFilePath;
 	public StringProperty csvFilePath;
-	public DoubleProperty altitudeValue, speedbrakeValue,rudderValue,
-	rollValue,pitchValue,yawValue;
+	public DoubleProperty altitudeValue, speedbrakeValue,
+	rollValue,pitchValue,yawValue;//values of table clocks
+	public DoubleProperty aileronValue, elevatorsValue
+	, throttleValue, rudderValue;//values of joystick
 	public Model m;
 	
 	public ViewModel(Model m) {
@@ -29,10 +31,12 @@ public class ViewModel extends Observable implements Observer{
 		rollValue=new SimpleDoubleProperty();
 		pitchValue=new SimpleDoubleProperty();
 		yawValue=new SimpleDoubleProperty();
+		aileronValue=new SimpleDoubleProperty();
+		elevatorsValue=new SimpleDoubleProperty();
+		throttleValue=new SimpleDoubleProperty();
 	}
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
 		
 	}
 
