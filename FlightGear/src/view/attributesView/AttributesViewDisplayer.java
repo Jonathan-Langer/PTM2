@@ -9,13 +9,14 @@ import view.joystick.JoystickController;
 
 public class AttributesViewDisplayer extends AnchorPane {
 	ListOfAttributes attributes;
+	AttributesViewController controller;
 	public AttributesViewDisplayer() {
 		super();
 		attributes=new ListOfAttributes();
 		FXMLLoader loader=new FXMLLoader();
 		try {
 			AnchorPane toDisplay=loader.load(getClass().getResource("AttributesView.fxml").openStream());
-			AttributesViewController controller=new AttributesViewController(attributes);
+			controller=new AttributesViewController(attributes);
 			this.getChildren().add(toDisplay);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -34,5 +35,8 @@ public class AttributesViewDisplayer extends AnchorPane {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public void loadAttributesToListView(ListOfAttributes attributes) {
+		controller.loadAttributesToListView(attributes);
 	}
 }

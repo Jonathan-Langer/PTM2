@@ -25,8 +25,20 @@ public class AttributesViewController implements Initializable {
 		this.attributes=attributes;
 	}
 	
+	public AttributesViewController() {
+		this.attributes=new ListOfAttributes();
+	}
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		listAttributes.getItems().removeAll(listAttributes.getItems());
+		list.removeAll(list);
+		list.addAll(attributes.getAttributesNames());
+		list.sort((s1,s2)->s1.compareTo(s2));
+		listAttributes.getItems().addAll(list);
+	}
+	
+	public void loadAttributesToListView(ListOfAttributes attributes) {
 		listAttributes.getItems().removeAll(listAttributes.getItems());
 		list.removeAll(list);
 		list.addAll(attributes.getAttributesNames());

@@ -15,6 +15,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
+import view.attributesView.AttributesViewDisplayer;
 import view.joystick.JoystickDisplayer;
 import view.player.*;
 import view.tableClocks.TableClocksController;
