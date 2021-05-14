@@ -126,9 +126,10 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="settings">
+          <Menu mnemonicParsing="false" text="Settings">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#loadTxtFile" text="upload a new setting file" />
+              <MenuItem mnemonicParsing="false" onAction="#loadTxtFile" text="Upload a new setting file" />
+              <MenuItem mnemonicParsing="false"  text= "Upload a new csv train file"></MenuItem>
             </items>
           </Menu>
         </menus>

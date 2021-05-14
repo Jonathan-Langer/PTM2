@@ -65,10 +65,16 @@ public class ListOfAttributes extends Observable{
 		setChanged();
 		notifyObservers();
 	}
+	public boolean contains(String attributeName) {
+		return attributesConnection.containsKey(attributeName);
+	}
 	public Set<String> getAttributesNames() {
 		return attributesConnection.keySet();
 	}
 	public HashMap<String, AttributeSettings> getList(){
 		return this.attributesConnection;
+	}
+	public int getLength() {
+		return attributesConnection.size();
 	}
 }

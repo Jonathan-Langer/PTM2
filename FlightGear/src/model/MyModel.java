@@ -5,8 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Observable;
+import java.util.*;
+import java.util.function.Consumer;
 
 import anomaly_detectors.TimeSeries;
 import anomaly_detectors.TimeSeriesAnomalyDetector;
@@ -15,6 +16,7 @@ public class MyModel extends Observable implements Model {
 
 	TimeSeries train,test;
 	TimeSeriesAnomalyDetector detector;
+	ListOfAttributes atrList;
 	
 	public boolean checkValidateSettingFile(String txtFile) {
 		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
@@ -60,20 +62,44 @@ public class MyModel extends Observable implements Model {
 		} catch (IOException e) {
 			return false;
 		}
-	}
-	public boolean checkValidateCSV(String csvFilePath) {
-		try {
-			BufferedReader read=new BufferedReader(new FileReader(csvFilePath));
-			
-		} catch (FileNotFoundException e) {
-			return false;
-		}
-		return false;
+ 
 	}
 	
+	public TimeSeries CheckValidation(String csv) {
+		TimeSeries ts=new TimeSeries(csv);
+		int atrLen=0;
+		for(String s : ts.getTitles()) {
+			if(ts.getLine(s).size()!=ts.getSize()) //if all cols are in same length
+				return null;
+			if(atrList.contains(s)) { //check if the col in the csv matches to 
+									//the col that is written in the settings file 
+				if(ts.getTitles().indexOf(s)!=atrList.getList().get(s).getColInCSV())
+					return null;
+				atrLen++;
+				for(float f : ts.getLine(s)) { //if all values are between the min and max that was defind in the setting file
+					if(f>atrList.getList().get(s).getMaxValue()||f<atrList.getList().get(s).getMinValue())
+						return null;
+				}
+			}
+		}
+		if(atrLen!=atrList.getLength()) // if all the names in the csv apeearing int he setting file
+			return null;
+		
+		return ts;
+	}
 	
 	@Override
-	public void setTimeSeries(TimeSeries ts) {
+	public void setTrainTimeSeries(String csvTrainFile) {
+		TimeSeries ts= CheckValidation(csvTrainFile);
+		if(ts!=null)
+			train=ts;
+	}
+	
+	@Override
+	public void setTestTimeSeries(String csvTestFile) {
+		TimeSeries ts= CheckValidation(csvTestFile);
+		if(ts!=null)
+			test=ts;
 		
 	}
 
@@ -106,5 +132,7 @@ public class MyModel extends Observable implements Model {
 		// TODO Auto-generated method stub
 
 	}
+
+
 
 }

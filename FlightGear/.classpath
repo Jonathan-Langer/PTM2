@@ -8,6 +8,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/dror/Documents/PTM2/FlightGear/jarsToInstall/Medusa/Medusa-8.0.jar"/>
+	<classpathentry kind="lib" path="jarsToInstall/Medusa/Medusa-8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
