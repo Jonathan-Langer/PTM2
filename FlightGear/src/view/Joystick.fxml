@@ -17,16 +17,16 @@
 						<Slider fx:id="throttle" blockIncrement="0.001" layoutX="108.0" layoutY="62.0" orientation="VERTICAL" prefHeight="190.0" prefWidth="16.0" showTickLabels="true" />
 							   <Circle fx:id="joystickBorder" layoutX="248.0" layoutY="161.0" radius="100.0" stroke="BLACK" strokeType="INSIDE">
          <fill>
-            <LinearGradient endX="0.8473282442748092" endY="0.7404580307370834" startX="0.2671755452192467" startY="0.3702290367534143">
+            <LinearGradient endX="0.4618320829085722" endY="0.9274809351404205" startX="1.0" startY="0.5801527008755517">
                <stops>
                   <Stop>
                      <color>
-                        <Color red="0.833333432674408" green="1.0" />
+                        <Color green="0.7843137383460999" blue="1.0" />
                      </color>
                   </Stop>
                   <Stop offset="1.0">
                      <color>
-                        <Color red="1.0" green="1.0" />
+                        <Color green="1.0" blue="0.699999988079071" />
                      </color>
                   </Stop>
                </stops>

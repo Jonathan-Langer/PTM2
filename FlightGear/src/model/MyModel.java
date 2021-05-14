@@ -68,6 +68,7 @@ public class MyModel extends Observable implements Model {
 		} catch (FileNotFoundException e) {
 			return false;
 		}
+		return false;
 	}
 	
 	

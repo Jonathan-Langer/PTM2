@@ -15,22 +15,8 @@ public class Player extends AnchorPane {
 	public StringProperty csvFilePath=new SimpleStringProperty(); 
 	
 	public Player() {
-		/*
-		 * super(); try { FXMLLoader loader=new FXMLLoader(); AnchorPane play =
-		 * loader.load(getClass().getResource("Player.fxml").openStream());
-		 * PlayerDisplayerController playerControl = loader.getController(); csvFilePath
-		 * = playerControl.csvFilePath;
-		 * 
-		 * this.getChildren().add(play); System.out.println(""); } catch (IOException e)
-		 * { e.printStackTrace(); }
-		 */
 		super();
 		try {
-			/*FXMLLoader loader=new FXMLLoader(getClass().getResource("Player.fxml"));
-			controller=new PlayerDisplayerController();
-			loader.setController(controller);
-			Node n=loader.load();
-			this.getChildren().add(n);*/
 			FXMLLoader fxl = new FXMLLoader();
 			AnchorPane chuck = fxl.load(getClass().getResource("Player.fxml").openStream());
 			

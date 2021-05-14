@@ -21,26 +21,13 @@ import javafx.scene.control.ComboBox;
 import model.ListOfAttributes;
 
 public class PlayerDisplayerController  implements Initializable {
-	
-	//Player player;
-	
+		
 	public StringProperty csvFilePath=new SimpleStringProperty();
 	
 	@FXML
 	public ComboBox<String> options = new ComboBox<>();
 	
 	public PlayerDisplayerController() {
-		/*super();
-		try {
-			FXMLLoader loader=new FXMLLoader(getClass().getResource("Player.fxml"));
-			player=new Player();
-			loader.setController(player);
-			Node n=loader.load();
-			player.getChildren().removeAll(player.getChildren());
-			player.getChildren().add(n);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
 		options = new ComboBox<>();
 		csvFilePath = new SimpleStringProperty();
 	}
