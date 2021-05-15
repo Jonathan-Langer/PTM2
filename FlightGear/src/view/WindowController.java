@@ -61,7 +61,7 @@ public class WindowController implements Initializable,Observer{
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
 		attributes=new ListOfAttributes(txtFilePath.get());
-		attributesView=new AttributesViewDisplayer();
+		attributesView=new AttributesViewDisplayer(attributes);
 		joystickDisplayer=new JoystickDisplayer();
 		playerDisplayer = new Player();
 		tableClocks=new TableClocksDisplayer();

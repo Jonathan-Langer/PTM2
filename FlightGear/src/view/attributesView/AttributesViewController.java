@@ -1,5 +1,6 @@
 package view.attributesView;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -26,7 +27,11 @@ public class AttributesViewController implements Initializable {
 	}
 	
 	public AttributesViewController() {
-		this.attributes=new ListOfAttributes();
+		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
+		if(lastSetting.exists())
+			this.attributes=new ListOfAttributes(lastSetting.getAbsolutePath());
+		else
+			this.attributes=new ListOfAttributes();
 	}
 	
 	@Override
