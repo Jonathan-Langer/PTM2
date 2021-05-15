@@ -18,13 +18,13 @@ import javafx.scene.paint.Stop;
 
 public class TableClocksController implements Initializable {
 	@FXML
-	StackPane altitude,speedbrake,rudder,roll,pitch,yaw;
+	StackPane altimeter,airspeed,heading,roll,pitch,yaw;
 	
 	
 	public TableClocksController() {
-		altitude=new StackPane();
-		speedbrake=new StackPane();
-		rudder=new StackPane();
+		altimeter=new StackPane(); //height of the flight
+		airspeed=new StackPane(); //speed of the flight
+		heading=new StackPane(); //direction of the flight
 		roll=new StackPane();
 		pitch=new StackPane();
 		yaw=new StackPane();
@@ -55,7 +55,7 @@ public class TableClocksController implements Initializable {
                 .unit("km")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
-		this.altitude.getChildren().add(altitude);
+		this.altimeter.getChildren().add(altitude);
 		Gauge speedbreak=GaugeBuilder.create()
                 .minValue(0)
                 .maxValue(10)
@@ -80,7 +80,7 @@ public class TableClocksController implements Initializable {
                 .unit("km/h")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
-		this.speedbrake.getChildren().add(speedbreak);
+		this.airspeed.getChildren().add(speedbreak);
 		Gauge rudder=GaugeBuilder.create()
                 .minValue(0)
                 .maxValue(10)
@@ -105,7 +105,7 @@ public class TableClocksController implements Initializable {
                 .unit("degrees")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
-		this.rudder.getChildren().add(rudder);
+		this.heading.getChildren().add(rudder);
 		Gauge roll=GaugeBuilder.create()
                 .minValue(0)
                 .maxValue(10)

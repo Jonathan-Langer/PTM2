@@ -67,11 +67,11 @@
 		<MenuBar BorderPane.alignment="CENTER">
 			<menus>
 				<Menu mnemonicParsing="false" text="Settings">
-					<items>
+			<items>
 						<MenuItem mnemonicParsing="false" onAction="#loadTxtFile"
 							text="Upload a new setting file" />
 						<MenuItem mnemonicParsing="false"
-							text="Upload a new csv train file" />
+							text="Upload a new csv train file" onAction="#loadCSVFile" />
 					</items>
 				</Menu>
 			</menus>

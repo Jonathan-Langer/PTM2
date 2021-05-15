@@ -1,10 +1,7 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.io.*;
 import java.util.Observable;
 import java.util.*;
 import java.util.function.Consumer;
@@ -18,21 +15,22 @@ public class MyModel extends Observable implements Model {
 	TimeSeriesAnomalyDetector detector;
 	ListOfAttributes atrList;
 	
+	Thread t;
+	Process p;
+	
 	public boolean checkValidateSettingFile(String txtFile) {
 		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
 		cellsAreApeared.put(0, false);
 		cellsAreApeared.put(1, false);
 		cellsAreApeared.put(2, false);
-		cellsAreApeared.put(3, false);
 		cellsAreApeared.put(5, false);
 		cellsAreApeared.put(6, false);
-		cellsAreApeared.put(14, false);
-		cellsAreApeared.put(15, false);
-		cellsAreApeared.put(16, false);
-		cellsAreApeared.put(17, false);
-		cellsAreApeared.put(18, false);
-		cellsAreApeared.put(19, false);
-		cellsAreApeared.put(39, false);
+		cellsAreApeared.put(20, false);
+		cellsAreApeared.put(24, false);
+		cellsAreApeared.put(25, false);
+		cellsAreApeared.put(28, false);
+		cellsAreApeared.put(29, false);
+		cellsAreApeared.put(36, false);
 		try {
 			BufferedReader read=new BufferedReader(new FileReader(new File(txtFile)));
 			String line=null;
@@ -65,7 +63,7 @@ public class MyModel extends Observable implements Model {
  
 	}
 	
-	public TimeSeries CheckValidation(String csv) {
+	public TimeSeries checkValidation(String csv) {
 		TimeSeries ts=new TimeSeries(csv);
 		int atrLen=0;
 		for(String s : ts.getTitles()) {
@@ -88,16 +86,17 @@ public class MyModel extends Observable implements Model {
 		return ts;
 	}
 	
+	
 	@Override
 	public void setTrainTimeSeries(String csvTrainFile) {
-		TimeSeries ts= CheckValidation(csvTrainFile);
+		TimeSeries ts= checkValidation(csvTrainFile);
 		if(ts!=null)
 			train=ts;
 	}
 	
 	@Override
 	public void setTestTimeSeries(String csvTestFile) {
-		TimeSeries ts= CheckValidation(csvTestFile);
+		TimeSeries ts= checkValidation(csvTestFile);
 		if(ts!=null)
 			test=ts;
 		

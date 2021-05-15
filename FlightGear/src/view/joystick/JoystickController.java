@@ -15,8 +15,12 @@ public class JoystickController implements Initializable {
 	@FXML
 	Slider rudder;
 	
+	@FXML
+	Slider throttle;
+	
 	public JoystickController() {
-		rudder=new Slider();
+		rudder = new Slider();
+		throttle = new Slider();
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

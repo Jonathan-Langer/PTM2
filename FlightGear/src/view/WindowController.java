@@ -1,19 +1,11 @@
 package view;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.Reader;
+
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import view.attributesView.AttributesViewDisplayer;
 import view.joystick.JoystickDisplayer;
@@ -30,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.AttributeSettings;
@@ -40,79 +33,75 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.Slider;
+//import javafx.scene.control.ListView;
+//import javafx.scene.control.MenuItem;
+//import javafx.scene.control.RadioButton;
+//import javafx.scene.control.SelectionMode;
+import javafx.scene.*;
 //import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import model.MyModel;
 //import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 
 public class WindowController implements Initializable,Observer{
 	
-	StringProperty csvFilePath=new SimpleStringProperty();
 	StringProperty txtFilePath=new SimpleStringProperty();
+	StringProperty csvTrainFile=new SimpleStringProperty();
 	ListOfAttributes attributes;
 	ViewModel vm;
 
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
+		csvTrainFile.set(new File("resources/last_train.csv").getAbsolutePath());
 		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView=new AttributesViewDisplayer(attributes);
 		joystickDisplayer=new JoystickDisplayer();
 		playerDisplayer = new Player();
 		tableClocks=new TableClocksDisplayer();
-		joystickDisplayer=new JoystickDisplayer();
 	}
 	
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
-		vm.csvFilePath.bind(playerDisplayer.csvFilePath);
-		vm.txtFilePath.bind(this.txtFilePath);
-		vm.altitudeValue.bind(tableClocks.altitudeValue);
-		vm.pitchValue.bind(tableClocks.pitchValue);
-		vm.rollValue.bind(tableClocks.rollValue);
-		vm.rudderValue.bind(tableClocks.rudderValue);
-		vm.speedbrakeValue.bind(tableClocks.speedbrakeValue);
-		vm.yawValue.bind(tableClocks.yawValue);
-		vm.rudderValue.bind(joystickDisplayer.rudderValue);
-		vm.throttleValue.bind(joystickDisplayer.throttleValue);
-		vm.aileronValue.bind(joystickDisplayer.aileronValue);
-		vm.elevatorsValue.bind(joystickDisplayer.elevatorsValue);
+		
+		vm.bindToProperty("settings", this.txtFilePath);
+		vm.bindToProperty("csvTrain", this.csvTrainFile);
+		vm.bindToProperty("csvTest", playerDisplayer.csvTestFilePath);
+		
+		vm.bindToProperty("aileron", joystickDisplayer.aileronValue);
+		vm.bindToProperty("elevator", joystickDisplayer.elevatorsValue);
+		vm.bindToProperty("rudder", joystickDisplayer.rudderValue);
+		vm.bindToProperty("throttle", joystickDisplayer.throttleValue);
+		
+		vm.bindToProperty("altimeter", tableClocks.altimeterValue);
+		vm.bindToProperty("airspeed", tableClocks.airspeedValue);
+		vm.bindToProperty("heading", tableClocks.headingValue);
+		vm.bindToProperty("roll", tableClocks.rollValue);
+		vm.bindToProperty("pitch", tableClocks.pitchValue);
+		vm.bindToProperty("yaw", tableClocks.yawValue);
+		
 	}
-		//---------------FXML Objects--------------
-		@FXML
-		MenuItem editSetting;
-		
-		@FXML
-		AttributesViewDisplayer attributesView;
-		
-		@FXML
-		JoystickDisplayer joystickDisplayer;
-		
-		@FXML
-		TableClocksDisplayer tableClocks;
-		
-		@FXML
-		Player playerDisplayer;
-	/*
-	public void openCSVFile() {
-		FileChooser fc=new FileChooser();
-		fc.setTitle("open csv file");
-		fc.setInitialDirectory(new File("./resources"));
-		fc.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter
-				("csv file", "*.csv")
-				);
-		File chooser=fc.showOpenDialog(null);
-		if(chooser!=null)
-			csvFilePath.set(chooser.getPath());
-	}*/
-		
 	
+	//---------------FXML Objects--------------
+	@FXML
+	MenuItem editSetting;
+		
+	@FXML
+	AttributesViewDisplayer attributesView;
+		
+	@FXML
+	JoystickDisplayer joystickDisplayer;
+		
+	@FXML
+	TableClocksDisplayer tableClocks;
+		
+	@FXML
+	Player playerDisplayer;
+	
+	
+		
+		
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 	/*	
@@ -122,6 +111,7 @@ public class WindowController implements Initializable,Observer{
 		joystickDisplayer=new JoystickDisplayerController(attributes);
 		playerDisplayer = new Player();*/
 	}
+	
 	
 	public void loadTxtFile() {
 		FileChooser fc=new FileChooser();
@@ -168,21 +158,90 @@ public class WindowController implements Initializable,Observer{
 		}
 	}
 	
+	
+	public void loadCSVFile() {
+		FileChooser fc=new FileChooser();
+		fc.setTitle("open csv file");
+		fc.setInitialDirectory(new File("./resources"));
+		fc.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter
+				("csv file", "*.csv")
+				);
+		File chooser=fc.showOpenDialog(null);
+		/*if(chooser!=null)
+		{			
+			if() 
+			{
+				Alert message=new Alert(Alert.AlertType.ERROR);
+				message.setContentText("oops!"
+						+ " \n this file format is not valid \n and the file was'nt saved in the system");
+				message.show();
+				txtFilePath.set(new File("resources/last_train.csv").getAbsolutePath());
+			}
+		}
+		else 
+		{
+			csvTrainFile.set(chooser.getPath());
+			File lastTrainFile=new File(new File("resources/last_train.csv").getAbsolutePath());
+			File currentAttributes=new File(csvTrainFile.get());
+			try {
+				if(!lastTrainFile.exists())
+					lastTrainFile.createNewFile();
+				PrintWriter write=new PrintWriter(lastTrainFile);
+				BufferedReader read=new BufferedReader(new FileReader(currentAttributes));
+				String line=null;
+				while((line=read.readLine())!=null) {
+					write.println(line);
+					write.flush();
+				}
+				Alert message=new Alert(Alert.AlertType.CONFIRMATION);
+				message.setContentText("well done!"
+						+ " \n your csv file was saved in the system");
+				message.show();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}*/
+		csvTrainFile.set(chooser.getPath());
+		File lastTrainFile=new File(new File("resources/last_train.csv").getAbsolutePath());
+		File currentAttributes=new File(csvTrainFile.get());
+		try {
+			if(!lastTrainFile.exists())
+				lastTrainFile.createNewFile();
+			PrintWriter write=new PrintWriter(lastTrainFile);
+			BufferedReader read=new BufferedReader(new FileReader(currentAttributes));
+			String line=null;
+			while((line=read.readLine())!=null) {
+				write.println(line);
+				write.flush();
+			}
+			Alert message=new Alert(Alert.AlertType.CONFIRMATION);
+			message.setContentText("well done!"
+					+ " \n your csv file was saved in the system");
+			message.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		attributes=new ListOfAttributes(txtFilePath.get());
+		attributesView.loadAttributesToListView(attributes);
+		joystickDisplayer=new JoystickDisplayer();	
+	}
+	
+	
+	
 	private boolean checkValidateSettingFile(String txtFile) {
 		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
 		cellsAreApeared.put(0, false);
 		cellsAreApeared.put(1, false);
 		cellsAreApeared.put(2, false);
-		cellsAreApeared.put(3, false);
 		cellsAreApeared.put(5, false);
 		cellsAreApeared.put(6, false);
-		cellsAreApeared.put(14, false);
-		cellsAreApeared.put(15, false);
-		cellsAreApeared.put(16, false);
-		cellsAreApeared.put(17, false);
-		cellsAreApeared.put(18, false);
-		cellsAreApeared.put(19, false);
-		cellsAreApeared.put(39, false);
+		cellsAreApeared.put(20, false);
+		cellsAreApeared.put(24, false);
+		cellsAreApeared.put(25, false);
+		cellsAreApeared.put(28, false);
+		cellsAreApeared.put(29, false);
+		cellsAreApeared.put(36, false);
 		try {
 			BufferedReader read=new BufferedReader(new FileReader(new File(txtFile)));
 			String line=null;

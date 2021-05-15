@@ -22,14 +22,14 @@ import model.ListOfAttributes;
 
 public class PlayerDisplayerController  implements Initializable {
 		
-	public StringProperty csvFilePath=new SimpleStringProperty();
+	public StringProperty csvTestFilePath=new SimpleStringProperty();
 	
 	@FXML
 	public ComboBox<String> options = new ComboBox<>();
 	
 	public PlayerDisplayerController() {
 		options = new ComboBox<>();
-		csvFilePath = new SimpleStringProperty();
+		csvTestFilePath = new SimpleStringProperty();
 	}
 	
 
@@ -52,6 +52,6 @@ public class PlayerDisplayerController  implements Initializable {
 				);
 		File chooser=fc.showOpenDialog(null);
 		if(chooser!=null)
-			csvFilePath.set(chooser.getPath());
+			csvTestFilePath.set(chooser.getPath());
 	}
 }

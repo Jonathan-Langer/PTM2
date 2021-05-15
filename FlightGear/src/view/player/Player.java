@@ -12,7 +12,7 @@ import javafx.scene.layout.AnchorPane;
 public class Player extends AnchorPane {
 	
 	public StringProperty options=new SimpleStringProperty();
-	public StringProperty csvFilePath=new SimpleStringProperty(); 
+	public StringProperty csvTestFilePath=new SimpleStringProperty(); 
 	
 	public Player() {
 		super();
@@ -23,7 +23,7 @@ public class Player extends AnchorPane {
 			PlayerDisplayerController pds = new PlayerDisplayerController();
 			
 			options.set(pds.options.getValue());
-			csvFilePath = pds.csvFilePath;
+			csvTestFilePath = pds.csvTestFilePath;
 			this.getChildren().add(chuck);
 			
 			

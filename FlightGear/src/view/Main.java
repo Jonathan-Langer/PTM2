@@ -18,8 +18,9 @@ public class Main extends Application {
 			FXMLLoader fxl = new FXMLLoader();
 			BorderPane root = fxl.load(getClass().getResource("Window.fxml").openStream());
 			Scene scene = new Scene(root,1500,800);
-			MyModel m=new MyModel(); 
-			viewModel.ViewModel vm=new ViewModel(m);
+			MyModel m = new MyModel(); 
+			ViewModel vm = new ViewModel(m);
+			
 			m.addObserver(vm);
 			WindowController view=new WindowController();
 			view.setViewModel(vm);

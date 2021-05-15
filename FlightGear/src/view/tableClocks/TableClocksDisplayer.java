@@ -9,13 +9,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 public class TableClocksDisplayer extends Pane {
-	public DoubleProperty altitudeValue, speedbrakeValue,rudderValue,
+	public DoubleProperty altimeterValue, airspeedValue, headingValue,
 	rollValue,pitchValue,yawValue;
 	public TableClocksDisplayer() {
 		FXMLLoader loader=new FXMLLoader();
-		altitudeValue=new SimpleDoubleProperty();
-		speedbrakeValue=new SimpleDoubleProperty();
-		rudderValue=new SimpleDoubleProperty();
+		altimeterValue=new SimpleDoubleProperty();
+		airspeedValue=new SimpleDoubleProperty();
+		headingValue=new SimpleDoubleProperty();
 		rollValue=new SimpleDoubleProperty();
 		pitchValue=new SimpleDoubleProperty();
 		yawValue=new SimpleDoubleProperty();
