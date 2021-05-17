@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
+import model.ListOfAttributes;
 
 public class JoystickDisplayer extends AnchorPane {
 	public DoubleProperty aileronValue=new SimpleDoubleProperty();
@@ -23,12 +24,25 @@ public class JoystickDisplayer extends AnchorPane {
 			AnchorPane toDisplay=loader.load(getClass().getResource("Joystick.fxml").openStream());
 			//JoystickController controller=new JoystickController();
 			controller=new JoystickController();
-			controller.rudder.valueProperty().bind(rudderValue);
+			//controller.rudder.valueProperty().bind(rudderValue);
 			this.getChildren().add(toDisplay);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+	public JoystickDisplayer(ListOfAttributes attributes) {
+		super();
+		FXMLLoader loader=new FXMLLoader();
+		try {
+			AnchorPane toDisplay=loader.load(getClass().getResource("Joystick.fxml").openStream());
+			//JoystickController controller=new JoystickController();
+			controller=new JoystickController(attributes);
+			//controller.rudder.valueProperty().bind(rudderValue);
+			this.getChildren().add(toDisplay);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

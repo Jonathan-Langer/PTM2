@@ -57,7 +57,7 @@ public class WindowController implements Initializable,Observer{
 		csvTrainFile.set(new File("resources/last_train.csv").getAbsolutePath());
 		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView=new AttributesViewDisplayer(attributes);
-		joystickDisplayer=new JoystickDisplayer();
+		joystickDisplayer=new JoystickDisplayer(attributes);
 		playerDisplayer = new Player();
 		tableClocks=new TableClocksDisplayer();
 	}

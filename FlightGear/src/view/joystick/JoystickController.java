@@ -1,5 +1,6 @@
 package view.joystick;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -9,8 +10,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Slider;
+import model.ListOfAttributes;
 
 public class JoystickController implements Initializable {
+	
+	ListOfAttributes attributes;
 	
 	@FXML
 	Slider rudder;
@@ -19,18 +23,26 @@ public class JoystickController implements Initializable {
 	Slider throttle;
 	
 	public JoystickController() {
-		rudder = new Slider();
-		throttle = new Slider();
+		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
+		if(lastSetting.exists())
+			this.attributes=new ListOfAttributes(lastSetting.getAbsolutePath());
+		else
+			this.attributes=new ListOfAttributes();
+	}
+	public JoystickController(ListOfAttributes attributes) {
+		this.attributes=attributes;
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		rudder.setMin(-1);
-		rudder.setMax(1);
-		rudder.setValue(0);
-	}
-	public void setRudderValue(double newVal) {
-		if(rudder==null)
-			rudder=new Slider();
-		rudder.setValue(newVal);
+		for(String name:this.attributes.getList().keySet()) {
+			if(attributes.getList().get(name).getColInCSV()==2) {
+				rudder.setMin(attributes.getList().get(name).getMinValue());
+				rudder.setMax(attributes.getList().get(name).getMaxValue());
+			}
+			if(attributes.getList().get(name).getColInCSV()==6) {
+				throttle.setMin(attributes.getList().get(name).getMinValue());
+				throttle.setMax(attributes.getList().get(name).getMaxValue());
+			}
+		}
 	}
 }
