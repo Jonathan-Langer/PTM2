@@ -59,7 +59,7 @@ public class WindowController implements Initializable,Observer{
 		attributesView=new AttributesViewDisplayer(attributes);
 		joystickDisplayer=new JoystickDisplayer(attributes);
 		playerDisplayer = new Player();
-		tableClocks=new TableClocksDisplayer();
+		tableClocks=new TableClocksDisplayer(attributes);
 	}
 	
 	public void setViewModel(ViewModel vm) {
@@ -154,7 +154,7 @@ public class WindowController implements Initializable,Observer{
 			}
 			attributes=new ListOfAttributes(txtFilePath.get());
 			attributesView.loadAttributesToListView(attributes);
-			joystickDisplayer=new JoystickDisplayer();
+			joystickDisplayer=new JoystickDisplayer(attributes);
 		}
 	}
 	

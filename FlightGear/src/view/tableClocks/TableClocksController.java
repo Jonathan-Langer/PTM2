@@ -1,5 +1,6 @@
 package view.tableClocks;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -15,11 +16,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Stop;
+import model.ListOfAttributes;
 
 public class TableClocksController implements Initializable {
 	@FXML
 	StackPane altimeter,airspeed,heading,roll,pitch,yaw;
 	
+	ListOfAttributes attributes;
 	
 	public TableClocksController() {
 		altimeter=new StackPane(); //height of the flight
@@ -28,10 +31,24 @@ public class TableClocksController implements Initializable {
 		roll=new StackPane();
 		pitch=new StackPane();
 		yaw=new StackPane();
+		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
+		if(lastSetting.exists())
+			this.attributes=new ListOfAttributes(lastSetting.getAbsolutePath());
+		else
+			this.attributes=new ListOfAttributes();
+	}
+	public TableClocksController(ListOfAttributes attributes) {
+		altimeter=new StackPane(); //height of the flight
+		airspeed=new StackPane(); //speed of the flight
+		heading=new StackPane(); //direction of the flight
+		roll=new StackPane();
+		pitch=new StackPane();
+		yaw=new StackPane();
+		this.attributes=attributes;
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		Gauge altitude=GaugeBuilder.create()
+		Gauge altimeter=GaugeBuilder.create()
                 .minValue(0)
                 .maxValue(10)
                 .animated(true)
@@ -55,8 +72,8 @@ public class TableClocksController implements Initializable {
                 .unit("km")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
-		this.altimeter.getChildren().add(altitude);
-		Gauge speedbreak=GaugeBuilder.create()
+		this.altimeter.getChildren().add(altimeter);
+		Gauge airspeed=GaugeBuilder.create()
                 .minValue(0)
                 .maxValue(10)
                 .animated(true)
@@ -80,8 +97,8 @@ public class TableClocksController implements Initializable {
                 .unit("km/h")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
-		this.airspeed.getChildren().add(speedbreak);
-		Gauge rudder=GaugeBuilder.create()
+		this.airspeed.getChildren().add(airspeed);
+		Gauge heading=GaugeBuilder.create()
                 .minValue(0)
                 .maxValue(10)
                 .animated(true)
@@ -101,11 +118,11 @@ public class TableClocksController implements Initializable {
                 .tickLabelsVisible(true)
                 .tickLabelOrientation(TickLabelOrientation.HORIZONTAL)
                 .tickLabelLocation(TickLabelLocation.INSIDE)
-                .title("rudder")
+                .title("heading")
                 .unit("degrees")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
-		this.heading.getChildren().add(rudder);
+		this.heading.getChildren().add(heading);
 		Gauge roll=GaugeBuilder.create()
                 .minValue(0)
                 .maxValue(10)
@@ -181,5 +198,31 @@ public class TableClocksController implements Initializable {
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
 		this.pitch.getChildren().add(pitch);
+		
+		for(String name:this.attributes.getList().keySet()) {
+			if(attributes.getList().get(name).getColInCSV()==24) {
+				airspeed.setMinValue(attributes.getList().get(name).getMinValue());
+				airspeed.setMaxValue(attributes.getList().get(name).getMaxValue());
+			}
+			if(attributes.getList().get(name).getColInCSV()==25) {
+				altimeter.setMinValue(attributes.getList().get(name).getMinValue());
+				altimeter.setMaxValue(attributes.getList().get(name).getMaxValue());
+			}
+			if(attributes.getList().get(name).getColInCSV()==20) {
+				yaw.setMinValue(attributes.getList().get(name).getMinValue());
+				yaw.setMaxValue(attributes.getList().get(name).getMaxValue());
+			}
+			if(attributes.getList().get(name).getColInCSV()==28) {
+				roll.setMinValue(attributes.getList().get(name).getMinValue());
+				roll.setMaxValue(attributes.getList().get(name).getMaxValue());
+			}
+			if(attributes.getList().get(name).getColInCSV()==29) {
+				pitch.setMinValue(attributes.getList().get(name).getMinValue());
+				pitch.setMaxValue(attributes.getList().get(name).getMaxValue());
+			}
+			if(attributes.getList().get(name).getColInCSV()==36) {
+				heading.setMinValue(attributes.getList().get(name).getMinValue());
+				heading.setMaxValue(attributes.getList().get(name).getMaxValue());
+			}
 	}
-}
+}}
