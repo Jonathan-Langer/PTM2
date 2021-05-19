@@ -7,6 +7,8 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import view.attributesView.coordinateSystem.CoordinateSystemDisplayer?>
+<?import javafx.scene.control.Button?>
 
 <AnchorPane prefHeight="611.0" prefWidth="765.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.attributesView.AttributesViewController">
    <children>
@@ -16,29 +18,15 @@
             <Font size="31.0" />
          </font>
       </Label>
-      <LineChart fx:id="selectedPrameter" layoutX="245.0" layoutY="64.0" prefHeight="236.0" prefWidth="218.0">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
-      </LineChart>
-      <LineChart fx:id="correlatedPrameter" layoutX="538.0" layoutY="64.0" prefHeight="236.0" prefWidth="218.0">
-         <xAxis>
-            <CategoryAxis side="BOTTOM" />
-         </xAxis>
-         <yAxis>
-            <NumberAxis side="LEFT" />
-         </yAxis>
-      </LineChart>
-      <LineChart fx:id="detections" layoutX="245.0" layoutY="353.0" prefHeight="236.0" prefWidth="500.0">
-        <xAxis>
-          <CategoryAxis />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
-      </LineChart>
+      <CoordinateSystemDisplayer fx:id="selectedPrameter" layoutX="245.0" layoutY="10.0" prefHeight="236.0" prefWidth="218.0">
+      </CoordinateSystemDisplayer>
+      <CoordinateSystemDisplayer fx:id="correlatedPrameter" layoutX="560.0" layoutY="10.0" prefHeight="236.0" prefWidth="218.0">
+         
+      </CoordinateSystemDisplayer>
+      <CoordinateSystemDisplayer fx:id="detections" layoutX="402.5" layoutY="320.0"  prefHeight="236.0" prefWidth="500.0">
+        
+      </CoordinateSystemDisplayer>
+      
    </children>
+   
 </AnchorPane>

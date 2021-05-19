@@ -9,7 +9,7 @@ import view.joystick.JoystickController;
 
 public class AttributesViewDisplayer extends AnchorPane {
 	ListOfAttributes attributes;
-	AttributesViewController controller;
+	public AttributesViewController controller;
 	public AttributesViewDisplayer() {
 		super();
 		attributes=new ListOfAttributes();

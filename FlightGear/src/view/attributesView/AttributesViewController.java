@@ -11,6 +11,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.ListView;
 import model.ListOfAttributes;
+import view.attributesView.coordinateSystem.CoordinateSystemController;
+import view.attributesView.coordinateSystem.CoordinateSystemDisplayer;
 
 public class AttributesViewController implements Initializable {
 	ObservableList<String> list = FXCollections.observableArrayList();
@@ -20,18 +22,27 @@ public class AttributesViewController implements Initializable {
 	ListView<String> listAttributes=new ListView<String>();
 	
 	@FXML
-	LineChart<?, ?> selectedPrameter,correlatedPrameter,detections;
+	public CoordinateSystemDisplayer detections,selectedPrameter,correlatedPrameter;
 	
 	public AttributesViewController(ListOfAttributes attributes) {
 		this.attributes=attributes;
+		detections=new CoordinateSystemDisplayer();
+		selectedPrameter=new CoordinateSystemDisplayer();
+		correlatedPrameter=new CoordinateSystemDisplayer();
 	}
-	
+	public void toDelete() {
+		if(detections!=null)
+			detections.controller.addPoint(0, 0);
+	}
 	public AttributesViewController() {
 		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
 		if(lastSetting.exists())
 			this.attributes=new ListOfAttributes(lastSetting.getAbsolutePath());
 		else
 			this.attributes=new ListOfAttributes();
+		detections=new CoordinateSystemDisplayer();
+		selectedPrameter=new CoordinateSystemDisplayer();
+		correlatedPrameter=new CoordinateSystemDisplayer();
 	}
 	
 	@Override

@@ -61,7 +61,6 @@ public class WindowController implements Initializable,Observer{
 		playerDisplayer = new Player();
 		tableClocks=new TableClocksDisplayer(attributes);
 	}
-	
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
 		
