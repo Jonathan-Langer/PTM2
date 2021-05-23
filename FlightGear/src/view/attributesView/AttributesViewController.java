@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
 import model.ListOfAttributes;
 import view.attributesView.coordinateSystem.CoordinateSystemController;
 import view.attributesView.coordinateSystem.CoordinateSystemDisplayer;
@@ -32,7 +33,7 @@ public class AttributesViewController implements Initializable {
 	}
 	public void toDelete() {
 		if(detections!=null)
-			detections.controller.addPoint(0, 0);
+			detections.controller.addPoint(0, 0,Color.BLUE);
 	}
 	public AttributesViewController() {
 		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
