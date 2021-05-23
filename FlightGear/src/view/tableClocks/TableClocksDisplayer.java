@@ -12,6 +12,7 @@ import model.ListOfAttributes;
 public class TableClocksDisplayer extends Pane {
 	public DoubleProperty altimeterValue, airspeedValue, headingValue,
 	rollValue,pitchValue,yawValue;
+	public TableClocksController controller;
 	
 	public TableClocksDisplayer() {
 		FXMLLoader loader=new FXMLLoader();
@@ -23,24 +24,7 @@ public class TableClocksDisplayer extends Pane {
 		yawValue=new SimpleDoubleProperty();
 		try {
 			Pane toDisplay=loader.load(getClass().getResource("TableClocks.fxml").openStream());
-			TableClocksController controller=new TableClocksController();
-			this.getChildren().add(toDisplay);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	public TableClocksDisplayer(ListOfAttributes attributes) {
-		FXMLLoader loader=new FXMLLoader();
-		altimeterValue=new SimpleDoubleProperty();
-		airspeedValue=new SimpleDoubleProperty();
-		headingValue=new SimpleDoubleProperty();
-		rollValue=new SimpleDoubleProperty();
-		pitchValue=new SimpleDoubleProperty();
-		yawValue=new SimpleDoubleProperty();
-		try {
-			Pane toDisplay=loader.load(getClass().getResource("TableClocks.fxml").openStream());
-			TableClocksController controller=new TableClocksController(attributes);
+			controller=loader.getController();
 			this.getChildren().add(toDisplay);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

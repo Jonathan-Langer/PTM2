@@ -57,9 +57,9 @@ public class WindowController implements Initializable,Observer{
 		csvTrainFile.set(new File("resources/last_train.csv").getAbsolutePath());
 		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView=new AttributesViewDisplayer(attributes);
-		joystickDisplayer=new JoystickDisplayer(attributes);
+		joystickDisplayer=new JoystickDisplayer();
 		playerDisplayer = new Player();
-		tableClocks=new TableClocksDisplayer(attributes);
+		tableClocks=new TableClocksDisplayer();
 	}
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
@@ -152,8 +152,8 @@ public class WindowController implements Initializable,Observer{
 				}
 			}
 			attributes=new ListOfAttributes(txtFilePath.get());
-			attributesView.loadAttributesToListView(attributes);
-			joystickDisplayer=new JoystickDisplayer(attributes);
+			attributesView.controller.changeSetting(attributes);
+			joystickDisplayer=new JoystickDisplayer();
 		}
 	}
 	
@@ -222,7 +222,7 @@ public class WindowController implements Initializable,Observer{
 			e.printStackTrace();
 		}
 		attributes=new ListOfAttributes(txtFilePath.get());
-		attributesView.loadAttributesToListView(attributes);
+		attributesView.controller.changeSetting(attributes);
 		joystickDisplayer=new JoystickDisplayer();	
 	}
 	

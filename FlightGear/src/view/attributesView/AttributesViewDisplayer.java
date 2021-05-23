@@ -16,7 +16,7 @@ public class AttributesViewDisplayer extends AnchorPane {
 		FXMLLoader loader=new FXMLLoader();
 		try {
 			AnchorPane toDisplay=loader.load(getClass().getResource("AttributesView.fxml").openStream());
-			controller=new AttributesViewController(attributes);
+			controller=loader.getController();
 			this.getChildren().add(toDisplay);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -29,14 +29,11 @@ public class AttributesViewDisplayer extends AnchorPane {
 		FXMLLoader loader=new FXMLLoader();
 		try {
 			AnchorPane toDisplay=loader.load(getClass().getResource("AttributesView.fxml").openStream());
-			AttributesViewController controller=new AttributesViewController(attributes);
+			AttributesViewController controller=new AttributesViewController();
 			this.getChildren().add(toDisplay);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	public void loadAttributesToListView(ListOfAttributes attributes) {
-		controller.loadAttributesToListView(attributes);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import anomaly_detectors.Point;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
@@ -28,24 +29,35 @@ public class CoordinateSystemController implements Initializable {
 	List<Line> lines=new ArrayList<>();
 	List<Circle> circles=new ArrayList<>();
 	
+	public double getMaxValue() {
+		return maxValue;
+	}
+	public void setMaxValue(double maxValue) {
+		this.maxValue = maxValue;
+	}
+	public double getMinValue() {
+		return minValue;
+	}
+	public void setMinValue(double minValue) {
+		this.minValue = minValue;
+	}
 	public CoordinateSystemController() {
 		maxValue=100;
 		minValue=-100;
 		board=new AnchorPane();
 	}
-	public CoordinateSystemController(double max,double min) {
-		maxValue=max;
-		minValue=min;
-		board=new AnchorPane();
+	public void changeSetting(double newMaxVal,double newMinVal) {
+		maxValue=newMaxVal;
+		minValue=newMinVal;
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		height=board.getPrefHeight();
 		width=board.getPrefWidth();		
 	}
-	public void addPoint(double x,double y,Paint color) {
-		double displayX=(x/(maxValue-minValue))*width+width/2;
-		double displayY=height-(y/(maxValue-minValue))*height-height/2;
+	public void addPoint(Point p,Paint color) {
+		double displayX=(p.x/(maxValue-minValue))*width+width/2;
+		double displayY=height-(p.y/(maxValue-minValue))*height-height/2;
 		Circle toDisplay=new Circle();
 		toDisplay.setRadius(5);
 		toDisplay.setCenterX(displayX);
@@ -55,9 +67,9 @@ public class CoordinateSystemController implements Initializable {
 		board.getChildren().removeAll(points);
 		board.getChildren().addAll(points);
 	}
-	public void addLine(double m,double b,Paint color) {
-		double valueForMinX=m*minValue+b;
-		double valueForMaxX=m*maxValue+b;
+	public void addLine(anomaly_detectors.Line l,Paint color) {
+		double valueForMinX=l.a*minValue+l.b;
+		double valueForMaxX=l.a*maxValue+l.b;
 		Line toDisplay=new Line();
 		toDisplay.setStroke(color);
 		toDisplay.setStrokeWidth(1.0);
@@ -69,12 +81,12 @@ public class CoordinateSystemController implements Initializable {
 		board.getChildren().removeAll(lines);
 		board.getChildren().addAll(lines);
 	}
-	public void addCircle(double centerX,double centerY,double radius,Paint color) {
+	public void addCircle(Point center,double radius,Paint color) {
 		Circle toDisplay=new Circle();
-		toDisplay.setCenterX((centerX/(maxValue-minValue))*width+width/2);
-		toDisplay.setCenterY(height-(centerY/(maxValue-minValue))*height-height/2);
+		toDisplay.setCenterX((center.x/(maxValue-minValue))*width+width/2);
+		toDisplay.setCenterY(height-(center.y/(maxValue-minValue))*height-height/2);
 		toDisplay.setStroke(Color.GREENYELLOW);
-		double radiusDisplay=((centerX+radius)/(maxValue-minValue))*width+width/2-(((centerX)/(maxValue-minValue))*width+width/2);
+		double radiusDisplay=((center.x+radius)/(maxValue-minValue))*width+width/2-(((center.x)/(maxValue-minValue))*width+width/2);
 		toDisplay.setRadius(radiusDisplay);
 		toDisplay.setFill(Color.rgb(255, 255, 255, 0));
 		toDisplay.setStroke(color);

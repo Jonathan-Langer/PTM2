@@ -14,22 +14,9 @@ public class CoordinateSystemDisplayer extends Pane {
 		FXMLLoader loader=new FXMLLoader();
 		try {
 			Pane toDisplay=loader.load(getClass().getResource("CoordinateSystem.fxml").openStream());
-			controller=new CoordinateSystemController();
+			controller=loader.getController();
 			this.getChildren().add(toDisplay);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	public CoordinateSystemDisplayer(double max,double min) {
-		super();
-		FXMLLoader loader=new FXMLLoader();
-		try {
-			Pane toDisplay=loader.load(getClass().getResource("CoordinateSystem.fxml").openStream());
-			controller=new CoordinateSystemController(max,min);
-			this.getChildren().add(toDisplay);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

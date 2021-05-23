@@ -23,21 +23,7 @@ public class JoystickDisplayer extends AnchorPane {
 		try {
 			AnchorPane toDisplay=loader.load(getClass().getResource("Joystick.fxml").openStream());
 			//JoystickController controller=new JoystickController();
-			controller=new JoystickController();
-			//controller.rudder.valueProperty().bind(rudderValue);
-			this.getChildren().add(toDisplay);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	public JoystickDisplayer(ListOfAttributes attributes) {
-		super();
-		FXMLLoader loader=new FXMLLoader();
-		try {
-			AnchorPane toDisplay=loader.load(getClass().getResource("Joystick.fxml").openStream());
-			//JoystickController controller=new JoystickController();
-			controller=new JoystickController(attributes);
+			controller=loader.getController();
 			//controller.rudder.valueProperty().bind(rudderValue);
 			this.getChildren().add(toDisplay);
 		} catch (IOException e) {
