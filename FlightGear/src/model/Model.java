@@ -5,8 +5,8 @@ import anomaly_detectors.TimeSeriesAnomalyDetector;
 
 public interface Model {
 	
-	public void setTrainTimeSeries(String csvTrainFile);
-	public void setTestTimeSeries(String csvTestFile);
+	public void setTrainTimeSeries(String csvTrainFile) throws Exception;
+	public void setTestTimeSeries(String csvTestFile) throws Exception;
 	public void play(int startTime, int rate);
 	public void pause();
 	public void stop();
