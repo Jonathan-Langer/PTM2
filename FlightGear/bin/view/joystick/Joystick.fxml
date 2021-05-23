@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="398.0" prefWidth="499.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.joystick.JoystickController">
+	<children>
+		<Slider fx:id="rudder" blockIncrement="0.001" layoutX="151.0" layoutY="270.0" prefHeight="16.0" prefWidth="200.0" showTickLabels="true" showTickMarks="true" />
+		<Slider fx:id="throttle" blockIncrement="0.001" layoutX="108.0" layoutY="62.0" orientation="VERTICAL" prefHeight="190.0" prefWidth="16.0" showTickLabels="true" showTickMarks="true" />
+		<Circle layoutX="248.0" layoutY="161.0" radius="100.0" stroke="BLACK" strokeType="INSIDE">
+			<fill>
+				<LinearGradient endX="0.4618320829085722" endY="0.9274809351404205" startX="1.0" startY="0.5801527008755517">
+					<stops>
+						<Stop>
+							<color>
+								<Color green="0.7843137383460999" blue="1.0" />
+							</color>
+						</Stop>
+						<Stop offset="1.0">
+							<color>
+								<Color green="1.0" blue="0.699999988079071" />
+							</color>
+						</Stop>
+					</stops>
+				</LinearGradient>
+			</fill>
+		</Circle>
+		<Label layoutX="220.0" layoutY="311.0" text="Rudder">
+			<font>
+				<Font name="System Bold Italic" size="18.0" />
+			</font>
+		</Label>
+		<Label layoutX="44.0" layoutY="151.0" rotate="-90.0" text="Throttle">
+			<font>
+				<Font name="System Bold Italic" size="18.0" />
+			</font>
+		</Label>
+		<Label layoutX="211.0" layoutY="34.0" text="&lt;-Aileron-&gt;">
+			<font>
+				<Font size="14.0" />
+			</font>
+		</Label>
+		<Label layoutX="322.0" layoutY="154.0" rotate="90.0" text="&lt;-Elevator-&gt;">
+			<font>
+				<Font size="14.0" />
+			</font>
+		</Label>
+		<Circle focusTraversable="true" layoutX="248.0" layoutY="161.0" radius="51.0" stroke="#dd4343" strokeLineCap="ROUND" strokeWidth="3.0">
+			<effect>
+				<InnerShadow choke="0.53" height="40.62" radius="20.939999999999998" width="45.14" />
+			</effect>
+			<cursor>
+				<Cursor fx:constant="DEFAULT" />
+			</cursor>
+		</Circle>
+	</children>
+</AnchorPane>
