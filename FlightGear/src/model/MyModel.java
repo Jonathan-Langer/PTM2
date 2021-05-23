@@ -88,18 +88,25 @@ public class MyModel extends Observable implements Model {
 	
 	
 	@Override
-	public void setTrainTimeSeries(String csvTrainFile) {
+	public void setTrainTimeSeries(String csvTrainFile) throws Exception {
 		TimeSeries ts= checkValidation(csvTrainFile);
 		if(ts!=null)
 			train=ts;
+		else
+			throw new Exception("csv not valid");
+		setChanged();
+		notifyAll();
 	}
 	
 	@Override
-	public void setTestTimeSeries(String csvTestFile) {
+	public void setTestTimeSeries(String csvTestFile) throws Exception{
 		TimeSeries ts= checkValidation(csvTestFile);
 		if(ts!=null)
 			test=ts;
-		
+		else
+			throw new Exception("csv not valid");
+		setChanged();
+		notifyAll();
 	}
 
 	@Override
