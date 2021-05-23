@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
@@ -24,6 +25,9 @@ public class CoordinateSystemController implements Initializable {
 	double maxValue;
 	double minValue;
 	List<Circle> points=new ArrayList<>();
+	List<Line> lines=new ArrayList<>();
+	List<Circle> circles=new ArrayList<>();
+	
 	public CoordinateSystemController() {
 		maxValue=100;
 		minValue=-100;
@@ -39,31 +43,33 @@ public class CoordinateSystemController implements Initializable {
 		height=board.getPrefHeight();
 		width=board.getPrefWidth();		
 	}
-	public void addPoint(double x,double y) {
+	public void addPoint(double x,double y,Paint color) {
 		double displayX=(x/(maxValue-minValue))*width+width/2;
 		double displayY=height-(y/(maxValue-minValue))*height-height/2;
 		Circle toDisplay=new Circle();
-		toDisplay.setRadius(7);
+		toDisplay.setRadius(5);
 		toDisplay.setCenterX(displayX);
 		toDisplay.setCenterY(displayY);
-		toDisplay.setFill(Color.rgb(51, 89, 210));
+		toDisplay.setFill(color);
 		points.add(toDisplay);
 		board.getChildren().removeAll(points);
 		board.getChildren().addAll(points);
 	}
-	public void addLine(double m,double b) {
+	public void addLine(double m,double b,Paint color) {
 		double valueForMinX=m*minValue+b;
 		double valueForMaxX=m*maxValue+b;
 		Line toDisplay=new Line();
-		toDisplay.setStroke(Color.GREENYELLOW);
+		toDisplay.setStroke(color);
 		toDisplay.setStrokeWidth(1.0);
 		toDisplay.setStartX((minValue/(maxValue-minValue))*width+width/2);
 		toDisplay.setEndX((maxValue/(maxValue-minValue))*width+width/2);
 		toDisplay.setStartY((height-(valueForMinX/(maxValue-minValue))*height-height/2));
 		toDisplay.setEndY((height-(valueForMaxX/(maxValue-minValue))*height-height/2));
-		board.getChildren().add(toDisplay);
+		lines.add(toDisplay);
+		board.getChildren().removeAll(lines);
+		board.getChildren().addAll(lines);
 	}
-	public void addCircle(double centerX,double centerY,double radius) {
+	public void addCircle(double centerX,double centerY,double radius,Paint color) {
 		Circle toDisplay=new Circle();
 		toDisplay.setCenterX((centerX/(maxValue-minValue))*width+width/2);
 		toDisplay.setCenterY(height-(centerY/(maxValue-minValue))*height-height/2);
@@ -71,29 +77,15 @@ public class CoordinateSystemController implements Initializable {
 		double radiusDisplay=((centerX+radius)/(maxValue-minValue))*width+width/2-(((centerX)/(maxValue-minValue))*width+width/2);
 		toDisplay.setRadius(radiusDisplay);
 		toDisplay.setFill(Color.rgb(255, 255, 255, 0));
+		toDisplay.setStroke(color);
 		toDisplay.setStrokeWidth(2.0);
-		board.getChildren().add(toDisplay);
+		circles.add(toDisplay);
+		board.getChildren().removeAll(circles);
+		board.getChildren().addAll(circles);
 	}
-	public void addPointToWindow() {
-		Scanner s=new Scanner(System.in);
-		double x=s.nextDouble();
-		double y=s.nextDouble();
-		addPoint(x,y);
-		System.out.println("the point: ("+x+","+y+") is shown");
-	}
-	public void addLineToWindow() {
-		Scanner s=new Scanner(System.in);
-		double m=s.nextDouble();
-		double b=s.nextDouble();
-		addLine(m,b);
-		System.out.println("the line "+m+"x "+b+" is shown");
-	}
-	public void addCircleToWindow() {
-		Scanner s=new Scanner(System.in);
-		double x=s.nextDouble();
-		double y=s.nextDouble();
-		double r=s.nextDouble();
-		addCircle(x,y,r);
-		System.out.println("the circle (x- "+x+")^2 + (y-"+y+")^2 = "+r+"^2 is shown");
+	public void clear() {
+		board.getChildren().removeAll(points);
+		board.getChildren().removeAll(lines);
+		board.getChildren().removeAll(circles);
 	}
 }
