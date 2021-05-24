@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -16,7 +17,10 @@ import model.ListOfAttributes;
 public class JoystickController implements Initializable {
 	
 	ListOfAttributes attributes;
-	
+	DoubleProperty minAileron=new SimpleDoubleProperty();
+	DoubleProperty maxAileron=new SimpleDoubleProperty();
+	DoubleProperty minElevator=new SimpleDoubleProperty();
+	DoubleProperty maxElevator=new SimpleDoubleProperty();
 	@FXML
 	Slider rudder;
 	

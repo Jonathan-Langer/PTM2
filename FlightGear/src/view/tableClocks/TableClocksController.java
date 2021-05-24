@@ -21,7 +21,7 @@ import model.ListOfAttributes;
 public class TableClocksController implements Initializable {
 	@FXML
 	StackPane altimeter,airspeed,heading,roll,pitch,yaw;
-	public Gauge gAltimeter,gAirspeed,gHeading,gRoll,gPitch,gYaw;
+	Gauge gAltimeter,gAirspeed,gHeading,gRoll,gPitch,gYaw;
 	
 	ListOfAttributes attributes;
 	
@@ -42,8 +42,8 @@ public class TableClocksController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		gAltimeter=GaugeBuilder.create()
-                .minValue(0)
-                .maxValue(10)
+                /*.minValue(0)
+                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)
@@ -61,14 +61,14 @@ public class TableClocksController implements Initializable {
                 .tickLabelsVisible(true)
                 .tickLabelOrientation(TickLabelOrientation.HORIZONTAL)
                 .tickLabelLocation(TickLabelLocation.INSIDE)
-                .title("altitude")
+                .title("altimeter")
                 .unit("km")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
 		this.altimeter.getChildren().add(gAltimeter);
 		gAirspeed=GaugeBuilder.create()
-                .minValue(0)
-                .maxValue(10)
+				/*.minValue(0)
+                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)
@@ -92,8 +92,8 @@ public class TableClocksController implements Initializable {
                 .build();
 		this.airspeed.getChildren().add(gAirspeed);
 		gHeading=GaugeBuilder.create()
-                .minValue(0)
-                .maxValue(10)
+				/*.minValue(0)
+                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)
@@ -117,8 +117,8 @@ public class TableClocksController implements Initializable {
                 .build();
 		this.heading.getChildren().add(gHeading);
 		gRoll=GaugeBuilder.create()
-                .minValue(0)
-                .maxValue(10)
+				/*.minValue(0)
+                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)
@@ -142,10 +142,8 @@ public class TableClocksController implements Initializable {
                 .build();
 		this.roll.getChildren().add(gRoll);
 		gYaw=GaugeBuilder.create()
-                .minValue(0)
-                .maxValue(10)
-                .animated(true)
-                .autoScale(true)
+               .animated(true)
+				.autoScale(true)
                 .shadowsEnabled(true)
                 .ledColor(Color.rgb(250, 50, 0))
                 .gradientBarEnabled(true)
@@ -167,8 +165,8 @@ public class TableClocksController implements Initializable {
                 .build();
 		this.yaw.getChildren().add(gYaw);
 		gPitch=GaugeBuilder.create()
-                .minValue(0)
-                .maxValue(10)
+				/*.minValue(0)
+                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)
@@ -191,31 +189,4 @@ public class TableClocksController implements Initializable {
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
 		this.pitch.getChildren().add(gPitch);
-		
-		for(String name:this.attributes.getList().keySet()) {
-			if(attributes.getList().get(name).getColInCSV()==24) {
-				gAirspeed.setMinValue(attributes.getList().get(name).getMinValue());
-				gAirspeed.setMaxValue(attributes.getList().get(name).getMaxValue());
-			}
-			if(attributes.getList().get(name).getColInCSV()==25) {
-				gAltimeter.setMinValue(attributes.getList().get(name).getMinValue());
-				gAltimeter.setMaxValue(attributes.getList().get(name).getMaxValue());
-			}
-			if(attributes.getList().get(name).getColInCSV()==20) {
-				gYaw.setMinValue(attributes.getList().get(name).getMinValue());
-				gYaw.setMaxValue(attributes.getList().get(name).getMaxValue());
-			}
-			if(attributes.getList().get(name).getColInCSV()==28) {
-				gRoll.setMinValue(attributes.getList().get(name).getMinValue());
-				gRoll.setMaxValue(attributes.getList().get(name).getMaxValue());
-			}
-			if(attributes.getList().get(name).getColInCSV()==29) {
-				gPitch.setMinValue(attributes.getList().get(name).getMinValue());
-				gPitch.setMaxValue(attributes.getList().get(name).getMaxValue());
-			}
-			if(attributes.getList().get(name).getColInCSV()==36) {
-				gHeading.setMinValue(attributes.getList().get(name).getMinValue());
-				gHeading.setMaxValue(attributes.getList().get(name).getMaxValue());
-			}
-	}
 }}

@@ -9,6 +9,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import java.util.*;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import model.Model;
 import model.MyModel;
 
@@ -20,12 +23,18 @@ public class ViewModel extends Observable implements Observer{
 	StringProperty csvTestFilePath;
 	
 	public Map<String, Property> properties = new HashMap<>();
-	
+
+	//--------values for gauge table----------
 	DoubleProperty altimeterValue, airspeedValue, headingValue,
-	rollValue,pitchValue,yawValue;//values of table clocks
-	
+	rollValue,pitchValue,yawValue;
+	DoubleProperty minAltimeter,maxAltimeter,minAirspeed,maxAirspeed,minHeading,maxHeading,
+	minRoll,maxRoll,minPitch,maxPitch,minYaw,maxYaw;
+
+	//----------values for joystick-----------
 	DoubleProperty aileronValue, elevatorsValue
-	,throttleValue, rudderValue;//values of joystick
+	,throttleValue, rudderValue;
+	DoubleProperty minAileron,maxAileron,minElevator,maxElevator,minThrottle,maxThrottle,
+	minRudder,maxRudder;
 	
 	public Model m;
 	
@@ -36,16 +45,36 @@ public class ViewModel extends Observable implements Observer{
 		csvTestFilePath = new SimpleStringProperty();
 		
 		throttleValue = new SimpleDoubleProperty();
-		rudderValue=new SimpleDoubleProperty();
+		rudderValue=new SimpleDoubleProperty(1);
 		aileronValue=new SimpleDoubleProperty();
 		elevatorsValue=new SimpleDoubleProperty();
+		minThrottle=new SimpleDoubleProperty();
+		maxThrottle=new SimpleDoubleProperty();
+		minAileron=new SimpleDoubleProperty();
+		maxAileron=new SimpleDoubleProperty();
+		minRudder=new SimpleDoubleProperty();
+		maxRudder=new SimpleDoubleProperty(2);
+		minElevator=new SimpleDoubleProperty();
+		maxElevator=new SimpleDoubleProperty();
 		
-		altimeterValue = new SimpleDoubleProperty();
+		altimeterValue = new SimpleDoubleProperty(10);
 		airspeedValue = new SimpleDoubleProperty();
 		headingValue = new SimpleDoubleProperty();
 		rollValue=new SimpleDoubleProperty();
 		pitchValue=new SimpleDoubleProperty();
 		yawValue=new SimpleDoubleProperty();
+		minAltimeter = new SimpleDoubleProperty(10);
+		maxAltimeter = new SimpleDoubleProperty(10);
+		minAirspeed = new SimpleDoubleProperty();
+		maxAirspeed = new SimpleDoubleProperty();
+		minHeading = new SimpleDoubleProperty();
+		maxHeading = new SimpleDoubleProperty(10);
+		minRoll = new SimpleDoubleProperty();
+		maxRoll = new SimpleDoubleProperty();
+		minPitch = new SimpleDoubleProperty();
+		maxPitch = new SimpleDoubleProperty();
+		minYaw = new SimpleDoubleProperty();
+		maxYaw = new SimpleDoubleProperty();
 		
 		properties.put("settingsFile", this.txtFilePath);
 		properties.put("csvTrain", this.csvTrainFilePath);
@@ -57,22 +86,54 @@ public class ViewModel extends Observable implements Observer{
 		properties.put("roll", this.rollValue);
 		properties.put("pitch", this.pitchValue);
 		properties.put("yaw", this.yawValue);
+		properties.put("minAltimeter",this.minAltimeter);
+		properties.put("maxAltimeter",this.maxAltimeter);
+		properties.put("minAirspeed",this.minAirspeed);
+		properties.put("maxAirspeed",this.minAltimeter);
+		properties.put("minHeading",this.minHeading);
+		properties.put("maxHeading",this.maxHeading);
+		properties.put("minRoll",this.minRoll);
+		properties.put("maxRoll",this.maxRoll);
+		properties.put("minPitch",this.minPitch);
+		properties.put("maxPitch",this.maxPitch);
+		properties.put("minYaw",this.minYaw);
+		properties.put("maxYaw",this.maxYaw);
 		
 		properties.put("aileron", this.aileronValue);
-		properties.put("elevators", this.elevatorsValue);
+		properties.put("elevator", this.elevatorsValue);
 		properties.put("rudder", this.rudderValue);
 		properties.put("throttle", this.throttleValue);
+		properties.put("minAileron",this.minAileron);
+		properties.put("maxAileron",this.maxAileron);
+		properties.put("minElevator",this.minElevator);
+		properties.put("maxElevator",this.maxElevator);
+		properties.put("minRudder",this.minRudder);
+		properties.put("maxRudder",this.maxRudder);
+		properties.put("minThrottle",this.minThrottle);
+		properties.put("maxThrottle",this.maxThrottle);
 		
 	}
 	
-	public boolean bindToProperty(String name, Property p) {
-		if(!(properties.containsKey(name))) 
+	public boolean bindToProperty(String name, Property p,String direction) {
+		//if the direction is VM2V: property_from_view.bind(property_form_view_model)
+		//if the direction is V2VM: property_from_view_model.bind(property_from_view)
+		if((!(properties.containsKey(name)))||(!(direction.equals("V2VM")||direction.equals("VM2V")))){
+			System.out.println("false");
 			return false;
-		
+		}
 		Property prop = properties.get(name);
 		properties.remove(name);
-		prop.bind(p);
+		if(direction.equals("V2VM")){	//the View change the ViewModel
+			prop.bind(p);
+			p.setValue(p.getValue());
+		}
+		else{	//the ViewModel change the View
+			p.bind(prop);
+			prop.setValue(prop.getValue());
+		}
+
 		properties.put(name, prop);
+
 		return true;
 	}
 	

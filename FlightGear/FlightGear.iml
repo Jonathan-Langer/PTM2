@@ -22,7 +22,9 @@
           <root url="jar://$MODULE_DIR$/jarsToInstall/Medusa/Medusa-8.0.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <SOURCES>
+          <root url="jar://$USER_HOME$/.ideaLibSources/Medusa-8.0-sources.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
     <orderEntry type="library" name="lib" level="project" />

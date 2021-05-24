@@ -64,22 +64,41 @@ public class WindowController implements Initializable,Observer{
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
 		
-		vm.bindToProperty("settingsFile", this.txtFilePath);
-		vm.bindToProperty("csvTrain", this.csvTrainFile);
-		vm.bindToProperty("csvTest", playerDisplayer.csvTestFilePath);
+		vm.bindToProperty("settingsFile", this.txtFilePath,"V2VM");
+		vm.bindToProperty("csvTrain", this.csvTrainFile,"V2VM");
+		vm.bindToProperty("csvTest", playerDisplayer.csvTestFilePath,"V2VM");
 		
-		vm.bindToProperty("aileron", joystickDisplayer.aileronValue);
-		vm.bindToProperty("elevator", joystickDisplayer.elevatorsValue);
-		vm.bindToProperty("rudder", joystickDisplayer.rudderValue);
-		vm.bindToProperty("throttle", joystickDisplayer.throttleValue);
-		
-		vm.bindToProperty("altimeter", tableClocks.altimeterValue);
-		vm.bindToProperty("airspeed", tableClocks.airspeedValue);
-		vm.bindToProperty("heading", tableClocks.headingValue);
-		vm.bindToProperty("roll", tableClocks.rollValue);
-		vm.bindToProperty("pitch", tableClocks.pitchValue);
-		vm.bindToProperty("yaw", tableClocks.yawValue);
-		
+		vm.bindToProperty("aileron", joystickDisplayer.aileronValue,"VM2V");
+		vm.bindToProperty("elevator", joystickDisplayer.elevatorsValue,"VM2V");
+		vm.bindToProperty("rudder", joystickDisplayer.rudderValue,"VM2V");
+		vm.bindToProperty("throttle", joystickDisplayer.throttleValue,"VM2V");
+		vm.bindToProperty("minAileron",joystickDisplayer.minAileron,"VM2V");
+		vm.bindToProperty("maxAileron",joystickDisplayer.maxAileron,"VM2V");
+		vm.bindToProperty("minElevator",joystickDisplayer.minElevator,"VM2V");
+		vm.bindToProperty("maxElevator", joystickDisplayer.maxElevator, "VM2V");
+		vm.bindToProperty("minRudder", joystickDisplayer.minRudder, "VM2V");
+		vm.bindToProperty("maxRudder", joystickDisplayer.maxRudder, "VM2V");
+		vm.bindToProperty("minThrottle", joystickDisplayer.minThrottle, "VM2V");
+		vm.bindToProperty("maxThrottle", joystickDisplayer.maxThrottle, "VM2V");
+
+		vm.bindToProperty("altimeter", tableClocks.altimeterValue,"VM2V");
+		vm.bindToProperty("airspeed", tableClocks.airspeedValue,"VM2V");
+		vm.bindToProperty("heading", tableClocks.headingValue,"VM2V");
+		vm.bindToProperty("roll", tableClocks.rollValue,"VM2V");
+		vm.bindToProperty("pitch", tableClocks.pitchValue,"VM2V");
+		vm.bindToProperty("yaw", tableClocks.yawValue,"VM2V");
+		vm.bindToProperty("minAltimeter",tableClocks.minAltimeter,"VM2V");
+		vm.bindToProperty("maxAltimeter", tableClocks.maxAltimeter, "VM2V");
+		vm.bindToProperty("minAirspeed", tableClocks.minAirspeed, "VM2V");
+		vm.bindToProperty("maxAirspeed", tableClocks.maxAirspeed, "VM2V");
+		vm.bindToProperty("minHeading", tableClocks.minHeading, "VM2V");
+		vm.bindToProperty("maxHeading", tableClocks.maxHeading, "VM2V");
+		vm.bindToProperty("minRoll",tableClocks.minRoll,"VM2V");
+		vm.bindToProperty("maxRoll",tableClocks.maxRoll,"VM2V");
+		vm.bindToProperty("minPitch",tableClocks.minPitch,"VM2V");
+		vm.bindToProperty("maxPitch",tableClocks.maxPitch,"VM2V");
+		vm.bindToProperty("minYaw",tableClocks.minYaw,"VM2V");
+		vm.bindToProperty("maxYaw",tableClocks.maxYaw,"VM2V");
 	}
 	
 	//---------------FXML Objects--------------

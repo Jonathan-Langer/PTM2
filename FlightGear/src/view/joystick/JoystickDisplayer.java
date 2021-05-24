@@ -15,14 +15,25 @@ import javafx.scene.layout.AnchorPane;
 import model.ListOfAttributes;
 
 public class JoystickDisplayer extends AnchorPane {
-	public DoubleProperty aileronValue=new SimpleDoubleProperty();
-	public DoubleProperty elevatorsValue=new SimpleDoubleProperty();
-	public DoubleProperty rudderValue=new SimpleDoubleProperty();
-	public DoubleProperty throttleValue=new SimpleDoubleProperty();
+	public DoubleProperty aileronValue,elevatorsValue,rudderValue,throttleValue;
+	public DoubleProperty minAileron,maxAileron,minElevator,maxElevator,minThrottle,maxThrottle,
+	minRudder,maxRudder;
 	public JoystickController controller;
 
 	public JoystickDisplayer() {
 		super();
+		throttleValue = new SimpleDoubleProperty(0.9);
+		rudderValue=new SimpleDoubleProperty(0.5);
+		aileronValue=new SimpleDoubleProperty();
+		elevatorsValue=new SimpleDoubleProperty();
+		minThrottle=new SimpleDoubleProperty(-1);
+		maxThrottle=new SimpleDoubleProperty(1);
+		minAileron=new SimpleDoubleProperty(-1);
+		maxAileron=new SimpleDoubleProperty(1);
+		minRudder=new SimpleDoubleProperty(-1);
+		maxRudder=new SimpleDoubleProperty(1);
+		minElevator=new SimpleDoubleProperty(-1);
+		maxElevator=new SimpleDoubleProperty(1);
 		FXMLLoader loader=new FXMLLoader();
 		try {
 			AnchorPane toDisplay=loader.load(getClass().getResource("Joystick.fxml").openStream());
@@ -46,6 +57,16 @@ public class JoystickDisplayer extends AnchorPane {
 					controller.elevatorVal.setText(Double.toString(x));
 				}
 			});
+			aileronValue.setValue(0.7);
+			elevatorsValue.setValue(-0.2);
+			controller.rudder.minProperty().bind(minRudder);
+			controller.rudder.maxProperty().bind(maxRudder);
+			controller.throttle.minProperty().bind(minThrottle);
+			controller.throttle.maxProperty().bind(maxThrottle);
+			controller.minAileron.bind(minAileron);
+			controller.maxAileron.bind(maxAileron);
+			controller.minElevator.bind(maxElevator);
+			controller.maxElevator.bind(maxElevator);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
