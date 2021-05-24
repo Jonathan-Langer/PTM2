@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import anomaly_detectors.Point;
+import com.sun.javafx.scene.paint.GradientUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
@@ -95,9 +96,15 @@ public class CoordinateSystemController implements Initializable {
 		board.getChildren().removeAll(circles);
 		board.getChildren().addAll(circles);
 	}
+	public void addSetPoints(List<Point> listPoints,Paint color){
+		listPoints.forEach((p)->addPoint(p,color));
+	}
 	public void clear() {
 		board.getChildren().removeAll(points);
 		board.getChildren().removeAll(lines);
 		board.getChildren().removeAll(circles);
+		points.removeAll(points);
+		lines.removeAll(lines);
+		circles.removeAll(circles);
 	}
 }

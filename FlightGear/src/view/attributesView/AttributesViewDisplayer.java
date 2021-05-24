@@ -23,17 +23,4 @@ public class AttributesViewDisplayer extends AnchorPane {
 			e.printStackTrace();
 		}
 	}
-	public AttributesViewDisplayer(ListOfAttributes attributes) {
-		super();
-		this.attributes=attributes;
-		FXMLLoader loader=new FXMLLoader();
-		try {
-			AnchorPane toDisplay=loader.load(getClass().getResource("AttributesView.fxml").openStream());
-			AttributesViewController controller=new AttributesViewController();
-			this.getChildren().add(toDisplay);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

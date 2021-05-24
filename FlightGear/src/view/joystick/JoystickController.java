@@ -9,6 +9,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import model.ListOfAttributes;
 
@@ -21,7 +22,8 @@ public class JoystickController implements Initializable {
 	
 	@FXML
 	Slider throttle;
-	
+	@FXML
+	Label aileronVal, elevatorVal;
 	public JoystickController() {
 		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
 		if(lastSetting.exists())

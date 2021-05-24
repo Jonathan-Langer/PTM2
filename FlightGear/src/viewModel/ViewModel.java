@@ -19,7 +19,7 @@ public class ViewModel extends Observable implements Observer{
 	StringProperty csvTrainFilePath;
 	StringProperty csvTestFilePath;
 	
-	Map<String, Property> properties = new HashMap<>();
+	public Map<String, Property> properties = new HashMap<>();
 	
 	DoubleProperty altimeterValue, airspeedValue, headingValue,
 	rollValue,pitchValue,yawValue;//values of table clocks
@@ -47,7 +47,7 @@ public class ViewModel extends Observable implements Observer{
 		pitchValue=new SimpleDoubleProperty();
 		yawValue=new SimpleDoubleProperty();
 		
-		properties.put("settings", this.txtFilePath);
+		properties.put("settingsFile", this.txtFilePath);
 		properties.put("csvTrain", this.csvTrainFilePath);
 		properties.put("csvTest", this.csvTestFilePath);
 		
