@@ -40,9 +40,9 @@ public class ViewModel extends Observable implements Observer{
 	
 	public ViewModel(Model m) {
 		this.m=m;
-		txtFilePath=new SimpleStringProperty();
-		csvTrainFilePath=new SimpleStringProperty();
-		csvTestFilePath = new SimpleStringProperty();
+		txtFilePath=new SimpleStringProperty("");
+		csvTrainFilePath=new SimpleStringProperty("");
+		csvTestFilePath = new SimpleStringProperty("");
 		
 		throttleValue = new SimpleDoubleProperty();
 		rudderValue=new SimpleDoubleProperty(1);
@@ -121,10 +121,30 @@ public class ViewModel extends Observable implements Observer{
 			System.out.println("false");
 			return false;
 		}
+//		if(name.equals("settingsFile")){
+//			StringProperty tmp=(StringProperty) p;
+//			tmp.set(tmp.getValue());
+//			tmp.addListener(new ChangeListener<String>() {
+//				@Override
+//				public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+//					String str=tmp.getValue();
+//					txtFilePath.setValue(str);
+//				}
+//			});
+//			tmp.set(tmp.getValue());
+//			return true;
+//		}
 		Property prop = properties.get(name);
 		properties.remove(name);
+
 		if(direction.equals("V2VM")){	//the View change the ViewModel
-			prop.bind(p);
+			p.addListener(new ChangeListener() {
+				@Override
+				public void changed(ObservableValue observableValue, Object o, Object t1) {
+					Object obj=p.getValue();
+					prop.setValue(obj);
+				}
+			});
 			p.setValue(p.getValue());
 		}
 		else{	//the ViewModel change the View
@@ -136,7 +156,10 @@ public class ViewModel extends Observable implements Observer{
 
 		return true;
 	}
-	
+	public void initializePropertyToView(){
+		aileronValue.setValue(100);
+		pitchValue.setValue(3);
+	}
 	@Override
 	public void update(Observable o, Object arg) {
 		

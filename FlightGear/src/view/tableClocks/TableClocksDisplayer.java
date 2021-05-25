@@ -89,7 +89,14 @@ public class TableClocksDisplayer extends Pane {
 					controller.gHeading.setMaxValue(x);
 				}
 			});
-			controller.gPitch.valueProperty().bind(pitchValue);
+			//controller.gPitch.valueProperty().bind(pitchValue);
+			pitchValue.addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+					double x=pitchValue.getValue();
+					controller.gPitch.setValue(x);
+				}
+			});
 			minPitch.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {

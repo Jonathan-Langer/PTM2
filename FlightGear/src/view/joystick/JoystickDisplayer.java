@@ -57,8 +57,8 @@ public class JoystickDisplayer extends AnchorPane {
 					controller.elevatorVal.setText(Double.toString(x));
 				}
 			});
-			aileronValue.setValue(0.7);
-			elevatorsValue.setValue(-0.2);
+			//aileronValue.setValue(0.7);
+			//elevatorsValue.setValue(-0.2);
 			controller.rudder.minProperty().bind(minRudder);
 			controller.rudder.maxProperty().bind(maxRudder);
 			controller.throttle.minProperty().bind(minThrottle);

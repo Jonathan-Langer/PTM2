@@ -80,4 +80,7 @@
 	<bottom>
 		<Player fx:id="playerDisplayer" />
 	</bottom>
+	<left>
+		<Button onAction="#toDelete"></Button>
+	</left>
 </BorderPane>

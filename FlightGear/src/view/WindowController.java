@@ -7,6 +7,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.util.*;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import view.attributesView.AttributesViewDisplayer;
 import view.joystick.JoystickDisplayer;
 import view.player.*;
@@ -61,12 +63,25 @@ public class WindowController implements Initializable,Observer{
 		playerDisplayer = new Player();
 		tableClocks=new TableClocksDisplayer();
 	}
+	public void toDelete(){
+		if(vm!=null)
+			vm.initializePropertyToView();
+	}
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
-		
+
 		vm.bindToProperty("settingsFile", this.txtFilePath,"V2VM");
+		String s=txtFilePath.getValue();
+		txtFilePath.set("a");
+		txtFilePath.set(s);
 		vm.bindToProperty("csvTrain", this.csvTrainFile,"V2VM");
+		s=csvTrainFile.getValue();
+		csvTrainFile.set("a");
+		csvTrainFile.set(s);
 		vm.bindToProperty("csvTest", playerDisplayer.csvTestFilePath,"V2VM");
+		s=playerDisplayer.csvTestFilePath.getValue();
+		playerDisplayer.csvTestFilePath.set("a");
+		playerDisplayer.csvTestFilePath.set(s);
 		
 		vm.bindToProperty("aileron", joystickDisplayer.aileronValue,"VM2V");
 		vm.bindToProperty("elevator", joystickDisplayer.elevatorsValue,"VM2V");
@@ -99,8 +114,9 @@ public class WindowController implements Initializable,Observer{
 		vm.bindToProperty("maxPitch",tableClocks.maxPitch,"VM2V");
 		vm.bindToProperty("minYaw",tableClocks.minYaw,"VM2V");
 		vm.bindToProperty("maxYaw",tableClocks.maxYaw,"VM2V");
+
+		//vm.initializePropertyToView();
 	}
-	
 	//---------------FXML Objects--------------
 	@FXML
 	MenuItem editSetting;
