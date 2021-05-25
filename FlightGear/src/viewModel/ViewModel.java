@@ -49,7 +49,7 @@ public class ViewModel extends Observable implements Observer{
 		aileronValue=new SimpleDoubleProperty();
 		elevatorsValue=new SimpleDoubleProperty();
 		minThrottle=new SimpleDoubleProperty();
-		maxThrottle=new SimpleDoubleProperty();
+		maxThrottle=new SimpleDoubleProperty(1);
 		minAileron=new SimpleDoubleProperty();
 		maxAileron=new SimpleDoubleProperty();
 		minRudder=new SimpleDoubleProperty();
@@ -57,18 +57,18 @@ public class ViewModel extends Observable implements Observer{
 		minElevator=new SimpleDoubleProperty();
 		maxElevator=new SimpleDoubleProperty();
 		
-		altimeterValue = new SimpleDoubleProperty(10);
+		altimeterValue = new SimpleDoubleProperty();
 		airspeedValue = new SimpleDoubleProperty();
 		headingValue = new SimpleDoubleProperty();
 		rollValue=new SimpleDoubleProperty();
 		pitchValue=new SimpleDoubleProperty();
 		yawValue=new SimpleDoubleProperty();
-		minAltimeter = new SimpleDoubleProperty(10);
-		maxAltimeter = new SimpleDoubleProperty(10);
+		minAltimeter = new SimpleDoubleProperty();
+		maxAltimeter = new SimpleDoubleProperty();
 		minAirspeed = new SimpleDoubleProperty();
 		maxAirspeed = new SimpleDoubleProperty();
 		minHeading = new SimpleDoubleProperty();
-		maxHeading = new SimpleDoubleProperty(10);
+		maxHeading = new SimpleDoubleProperty();
 		minRoll = new SimpleDoubleProperty();
 		maxRoll = new SimpleDoubleProperty();
 		minPitch = new SimpleDoubleProperty();
@@ -111,7 +111,6 @@ public class ViewModel extends Observable implements Observer{
 		properties.put("maxRudder",this.maxRudder);
 		properties.put("minThrottle",this.minThrottle);
 		properties.put("maxThrottle",this.maxThrottle);
-		
 	}
 	
 	public boolean bindToProperty(String name, Property p,String direction) {
@@ -158,11 +157,88 @@ public class ViewModel extends Observable implements Observer{
 	}
 	public void initializePropertyToView(){
 		aileronValue.setValue(100);
-		pitchValue.setValue(3);
+		pitchValue.setValue(92);
+		rollValue.setValue(34);
+		yawValue.setValue(50);
+		altimeterValue.setValue(20);
+		headingValue.setValue(73.5);
+		airspeedValue.setValue(38);
 	}
 	@Override
 	public void update(Observable o, Object arg) {
-		
+		if(arg instanceof String){
+			String s=(String)arg;
+			String[] arr=s.split(" ");
+			double toUpdate=Double.parseDouble(arr[1]);
+			if(arr[0].equals("aileronMin"))
+				minAileron.setValue(toUpdate);
+			if(arr[0].equals("aileronMax:"))
+				maxAileron.setValue(toUpdate);
+			if(arr[0].equals("aileronVal:"))
+				aileronValue.setValue(toUpdate);
+			if(arr[0].equals("elevatorMin"))
+				minElevator.setValue(toUpdate);
+			if(arr[0].equals("elevatorMax:"))
+				maxElevator.setValue(toUpdate);
+			if(arr[0].equals("elevatorVal:"))
+				elevatorsValue.setValue(toUpdate);
+			if(arr[0].equals("rudderMin:"))
+				minRudder.setValue(toUpdate);
+			if(arr[0].equals("rudderMax:"))
+				maxRudder.setValue(toUpdate);
+			if(arr[0].equals("rudderVal:"))
+				rudderValue.setValue(toUpdate);
+			if(arr[0].equals("throttleMin:"))
+				minThrottle.setValue(toUpdate);
+			if(arr[0].equals("throttleMax:"))
+				maxThrottle.setValue(toUpdate);
+			if(arr[0].equals("throttleVal:"))
+				throttleValue.setValue(toUpdate);
+			if(arr[0].equals("yawMin:"))
+				minYaw.setValue(toUpdate);
+			if(arr[0].equals("yawMax:"))
+				maxYaw.setValue(toUpdate);
+			if(arr[0].equals("yawVal:"))
+				yawValue.setValue(toUpdate);
+			if(arr[0].equals("airspeedMin:"))
+				minAirspeed.setValue(toUpdate);
+			if(arr[0].equals("airspeedMax:"))
+				maxAirspeed.setValue(toUpdate);
+			if(arr[0].equals("airspeedVal:"))
+				airspeedValue.setValue(toUpdate);
+			/*if(arr[0].equals("altimeterMin:"))
+				minAltimeter.setValue(toUpdate);*/
+			if(arr[0].equals("altimeterMax:"))
+				maxAltimeter.setValue(toUpdate);
+			if(arr[0].equals("altimeterVal:"))
+				altimeterValue.setValue(toUpdate);
+			if(arr[0].equals("rollMin:"))
+				minRoll.setValue(toUpdate);
+			if(arr[0].equals("rollMax:"))
+				maxRoll.setValue(toUpdate);
+			if(arr[0].equals("rollVal:"))
+				rollValue.setValue(toUpdate);
+			if(arr[0].equals("pitchMin:"))
+				minPitch.setValue(toUpdate);
+			if(arr[0].equals("pitchMax:"))
+				maxPitch.setValue(toUpdate);
+			if(arr[0].equals("pitchVal:"))
+				pitchValue.setValue(toUpdate);
+			if(arr[0].equals("headingMin:"))
+				minHeading.setValue(toUpdate);
+			if(arr[0].equals("headingMax:"))
+				maxHeading.setValue(toUpdate);
+			if(arr[0].equals("headingVal:"))
+				headingValue.setValue(toUpdate);
+		}
 	}
-
+	public boolean checkValidateSettingFile(String txtFile){
+		return m.checkValidateSettingFile(txtFile);
+	}
+	public void saveLastSettingFile(){
+		m.saveLastSettingFile(txtFilePath.getValue());
+	}
+	public void applyValues(){
+		m.applyValuesMinMax();
+	}
 }

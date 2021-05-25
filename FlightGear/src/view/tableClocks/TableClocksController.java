@@ -22,8 +22,7 @@ public class TableClocksController implements Initializable {
 	@FXML
 	StackPane altimeter,airspeed,heading,roll,pitch,yaw;
 	Gauge gAltimeter,gAirspeed,gHeading,gRoll,gPitch,gYaw;
-	
-	ListOfAttributes attributes;
+
 	
 	public TableClocksController() {
 		altimeter=new StackPane(); //height of the flight
@@ -32,18 +31,11 @@ public class TableClocksController implements Initializable {
 		roll=new StackPane();
 		pitch=new StackPane();
 		yaw=new StackPane();
-		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
-		if(lastSetting.exists())
-			this.attributes=new ListOfAttributes(lastSetting.getAbsolutePath());
-		else
-			this.attributes=new ListOfAttributes();
 	}
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		gAltimeter=GaugeBuilder.create()
-                /*.minValue(0)
-                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)
@@ -67,8 +59,6 @@ public class TableClocksController implements Initializable {
                 .build();
 		this.altimeter.getChildren().add(gAltimeter);
 		gAirspeed=GaugeBuilder.create()
-				/*.minValue(0)
-                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)
@@ -86,14 +76,12 @@ public class TableClocksController implements Initializable {
                 .tickLabelsVisible(true)
                 .tickLabelOrientation(TickLabelOrientation.HORIZONTAL)
                 .tickLabelLocation(TickLabelLocation.INSIDE)
-                .title("speed-break")
+                .title("airspeed")
                 .unit("km/h")
                 .foregroundBaseColor(Gauge.DARK_COLOR)
                 .build();
 		this.airspeed.getChildren().add(gAirspeed);
 		gHeading=GaugeBuilder.create()
-				/*.minValue(0)
-                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)
@@ -117,8 +105,6 @@ public class TableClocksController implements Initializable {
                 .build();
 		this.heading.getChildren().add(gHeading);
 		gRoll=GaugeBuilder.create()
-				/*.minValue(0)
-                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)
@@ -165,8 +151,6 @@ public class TableClocksController implements Initializable {
                 .build();
 		this.yaw.getChildren().add(gYaw);
 		gPitch=GaugeBuilder.create()
-				/*.minValue(0)
-                .maxValue(10)*/
                 .animated(true)
                 .autoScale(true)
                 .shadowsEnabled(true)

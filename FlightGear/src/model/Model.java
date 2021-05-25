@@ -13,5 +13,9 @@ public interface Model {
 	
 	public void setAnomalyDetector(TimeSeriesAnomalyDetector ad);
 	public void start(); //run in the background
+
+	public boolean checkValidateSettingFile(String txtFile);
+	public void saveLastSettingFile(String currentTxtFile);
+	public void applyValuesMinMax();
 	
 }

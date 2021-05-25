@@ -41,8 +41,12 @@ public class JoystickDisplayer extends AnchorPane {
 			controller=loader.getController();
 			//controller.rudder.valueProperty().bind(rudderValue);
 			this.getChildren().add(toDisplay);
-			controller.rudder.valueProperty().bind(rudderValue);
-			controller.throttle.valueProperty().bind(throttleValue);
+			throttleValue=controller.throttle.valueProperty();
+			minThrottle=controller.throttle.minProperty();
+			maxThrottle=controller.throttle.maxProperty();
+			rudderValue=controller.rudder.valueProperty();
+			minRudder=controller.rudder.minProperty();
+			maxRudder=controller.rudder.maxProperty();
 			aileronValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -50,6 +54,8 @@ public class JoystickDisplayer extends AnchorPane {
 					controller.aileronVal.setText(Double.toString(x));
 				}
 			});
+			minAileron=controller.minAileron;
+			maxAileron=controller.maxAileron;
 			elevatorsValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -57,16 +63,8 @@ public class JoystickDisplayer extends AnchorPane {
 					controller.elevatorVal.setText(Double.toString(x));
 				}
 			});
-			//aileronValue.setValue(0.7);
-			//elevatorsValue.setValue(-0.2);
-			controller.rudder.minProperty().bind(minRudder);
-			controller.rudder.maxProperty().bind(maxRudder);
-			controller.throttle.minProperty().bind(minThrottle);
-			controller.throttle.maxProperty().bind(maxThrottle);
-			controller.minAileron.bind(minAileron);
-			controller.maxAileron.bind(maxAileron);
-			controller.minElevator.bind(maxElevator);
-			controller.maxElevator.bind(maxElevator);
+			minElevator=controller.minElevator;
+			maxElevator=controller.maxElevator;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

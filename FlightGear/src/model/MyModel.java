@@ -8,16 +8,23 @@ import java.util.function.Consumer;
 
 import anomaly_detectors.TimeSeries;
 import anomaly_detectors.TimeSeriesAnomalyDetector;
+import javafx.scene.control.Alert;
 
 public class MyModel extends Observable implements Model {
 
 	TimeSeries train,test;
 	TimeSeriesAnomalyDetector detector;
 	ListOfAttributes atrList;
-	
+	String txtLast;
+
+	public MyModel() {
+		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
+		atrList=new ListOfAttributes(txtLast);
+	}
+
 	Thread t;
 	Process p;
-	
+	@Override
 	public boolean checkValidateSettingFile(String txtFile) {
 		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
 		cellsAreApeared.put(0, false);
@@ -55,14 +62,101 @@ public class MyModel extends Observable implements Model {
 					}
 				}
 			}
+			line=read.readLine();
 			read.close();
+			if(line!=null)
+				return false;
 			return true;
 		} catch (IOException e) {
 			return false;
 		}
  
 	}
-	
+
+	@Override
+	public void saveLastSettingFile(String currentTxtFile) {
+		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
+		File currentAttributes=new File(currentTxtFile);
+		try {
+			if(!lastSetting.exists())
+				lastSetting.createNewFile();
+			PrintWriter write=new PrintWriter(lastSetting);
+			BufferedReader read=new BufferedReader(new FileReader(currentAttributes));
+			String line=null;
+			while((line=read.readLine())!=null) {
+				write.println(line);
+				write.flush();
+			}
+			write.close();
+			read.close();
+			atrList=new ListOfAttributes(txtLast);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void applyValuesMinMax() {
+		if(atrList!=null){
+			for(String key:atrList.getAttributesNames()){
+				AttributeSettings a=atrList.getList().get(key);
+				setChanged();
+				if(a.getColInCSV()==0){
+					notifyObservers("aileronMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("aileronMax: "+a.getMaxValue());
+				}
+				if(a.getColInCSV()==1){
+					notifyObservers("elevatorMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("elevatorMax: "+a.getMaxValue());
+				}
+				if(a.getColInCSV()==2){
+					notifyObservers("rudderMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("rudderMax: "+a.getMaxValue());
+				}
+				if(a.getColInCSV()==6){
+					notifyObservers("throttleMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("throttleMax: "+a.getMaxValue());
+				}
+				if(a.getColInCSV()==20){
+					notifyObservers("yawMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("yawMax: "+a.getMaxValue());
+				}
+				if(a.getColInCSV()==24){
+					notifyObservers("airspeedMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("airspeedMax: "+a.getMaxValue());
+				}
+				if(a.getColInCSV()==25){
+					notifyObservers("altimeterMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("altimeterMax: "+a.getMaxValue());
+				}
+				if(a.getColInCSV()==28){
+					notifyObservers("rollMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("rollMax: "+a.getMaxValue());
+				}
+				if(a.getColInCSV()==29){
+					notifyObservers("pitchMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("pitchMax: "+a.getMaxValue());
+				}
+				if(a.getColInCSV()==36){
+					notifyObservers("headingMin: "+a.getMinValue());
+					setChanged();
+					notifyObservers("headingMax: "+a.getMaxValue());
+				}
+
+			}
+		}
+	}
+
+
 	public TimeSeries checkValidation(String csv) {
 		TimeSeries ts=new TimeSeries(csv);
 		int atrLen=0;

@@ -63,10 +63,6 @@ public class WindowController implements Initializable,Observer{
 		playerDisplayer = new Player();
 		tableClocks=new TableClocksDisplayer();
 	}
-	public void toDelete(){
-		if(vm!=null)
-			vm.initializePropertyToView();
-	}
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
 
@@ -82,7 +78,7 @@ public class WindowController implements Initializable,Observer{
 		s=playerDisplayer.csvTestFilePath.getValue();
 		playerDisplayer.csvTestFilePath.set("a");
 		playerDisplayer.csvTestFilePath.set(s);
-		
+
 		vm.bindToProperty("aileron", joystickDisplayer.aileronValue,"VM2V");
 		vm.bindToProperty("elevator", joystickDisplayer.elevatorsValue,"VM2V");
 		vm.bindToProperty("rudder", joystickDisplayer.rudderValue,"VM2V");
@@ -103,7 +99,7 @@ public class WindowController implements Initializable,Observer{
 		vm.bindToProperty("pitch", tableClocks.pitchValue,"VM2V");
 		vm.bindToProperty("yaw", tableClocks.yawValue,"VM2V");
 		vm.bindToProperty("minAltimeter",tableClocks.minAltimeter,"VM2V");
-		vm.bindToProperty("maxAltimeter", tableClocks.maxAltimeter, "VM2V");
+		vm.bindToProperty("maxAltimeter", tableClocks.maxAltimeter, "VM2V");    //make exception
 		vm.bindToProperty("minAirspeed", tableClocks.minAirspeed, "VM2V");
 		vm.bindToProperty("maxAirspeed", tableClocks.maxAirspeed, "VM2V");
 		vm.bindToProperty("minHeading", tableClocks.minHeading, "VM2V");
@@ -115,7 +111,7 @@ public class WindowController implements Initializable,Observer{
 		vm.bindToProperty("minYaw",tableClocks.minYaw,"VM2V");
 		vm.bindToProperty("maxYaw",tableClocks.maxYaw,"VM2V");
 
-		//vm.initializePropertyToView();
+		vm.applyValues();
 	}
 	//---------------FXML Objects--------------
 	@FXML
@@ -157,7 +153,7 @@ public class WindowController implements Initializable,Observer{
 				);
 		File chooser=fc.showOpenDialog(null);
 		if(chooser!=null) {
-			if(!checkValidateSettingFile(chooser.getPath())) {
+			if(!vm.checkValidateSettingFile(chooser.getPath())) {
 				Alert message=new Alert(Alert.AlertType.ERROR);
 				message.setContentText("oops!"
 						+ " \n this file format is not valid \n and the file was'nt saved in the system");
@@ -166,27 +162,15 @@ public class WindowController implements Initializable,Observer{
 			}
 			else {
 				txtFilePath.set(chooser.getPath());
-				File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
-				File currentAttributes=new File(txtFilePath.get());
-				try {
-					if(!lastSetting.exists())
-						lastSetting.createNewFile();
-					PrintWriter write=new PrintWriter(lastSetting);
-					BufferedReader read=new BufferedReader(new FileReader(currentAttributes));
-					String line=null;
-					while((line=read.readLine())!=null) {
-						write.println(line);
-						write.flush();
-					}
-					Alert message=new Alert(Alert.AlertType.CONFIRMATION);
-					message.setContentText("well done!"
-							+ " \n your txt file was saved in the system");
-					message.show();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				vm.saveLastSettingFile();
+				Alert message=new Alert(Alert.AlertType.CONFIRMATION);
+				message.setContentText("well done!"
+						+ " \n your txt file was saved in the system");
+				message.show();
 			}
+			attributes=new ListOfAttributes(txtFilePath.getValue());
 			attributesView.controller.changeSetting(attributes);
+			vm.applyValues();
 			//joystickDisplayer.controller.
 		}
 	}
@@ -259,54 +243,6 @@ public class WindowController implements Initializable,Observer{
 		attributesView.controller.changeSetting(attributes);
 		joystickDisplayer=new JoystickDisplayer();	
 	}
-	
-	
-	
-	private boolean checkValidateSettingFile(String txtFile) {
-		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
-		cellsAreApeared.put(0, false);
-		cellsAreApeared.put(1, false);
-		cellsAreApeared.put(2, false);
-		cellsAreApeared.put(5, false);
-		cellsAreApeared.put(6, false);
-		cellsAreApeared.put(20, false);
-		cellsAreApeared.put(24, false);
-		cellsAreApeared.put(25, false);
-		cellsAreApeared.put(28, false);
-		cellsAreApeared.put(29, false);
-		cellsAreApeared.put(36, false);
-		try {
-			BufferedReader read=new BufferedReader(new FileReader(new File(txtFile)));
-			String line=null;
-			while((line=read.readLine())!=null) {
-				String[] data=line.split(",");
-				if(data.length==4) {
-					if(!cellsAreApeared.containsKey(Integer.parseInt(data[1]))) {
-						read.close();
-						return false;
-					}
-				}
-				else {
-					if(data.length==2) {
-						if(!(data[0].equals("ip")||data[0].equals("port")||data[0].equals("rate"))) {
-							read.close();
-							return false;
-						}
-					}
-					else {
-						read.close();
-						return false;
-					}
-				}
-			}
-			read.close();
-			return true;
-		} catch (IOException e) {
-			return false;
-		}
-	}
-	
-	
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
