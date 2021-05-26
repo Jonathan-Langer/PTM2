@@ -45,7 +45,7 @@ public class ViewModel extends Observable implements Observer{
 		csvTestFilePath = new SimpleStringProperty("");
 		
 		throttleValue = new SimpleDoubleProperty();
-		rudderValue=new SimpleDoubleProperty(1);
+		rudderValue=new SimpleDoubleProperty();
 		aileronValue=new SimpleDoubleProperty();
 		elevatorsValue=new SimpleDoubleProperty();
 		minThrottle=new SimpleDoubleProperty();
@@ -89,7 +89,7 @@ public class ViewModel extends Observable implements Observer{
 		properties.put("minAltimeter",this.minAltimeter);
 		properties.put("maxAltimeter",this.maxAltimeter);
 		properties.put("minAirspeed",this.minAirspeed);
-		properties.put("maxAirspeed",this.minAltimeter);
+		properties.put("maxAirspeed",this.maxAirspeed);
 		properties.put("minHeading",this.minHeading);
 		properties.put("maxHeading",this.maxHeading);
 		properties.put("minRoll",this.minRoll);
@@ -111,6 +111,12 @@ public class ViewModel extends Observable implements Observer{
 		properties.put("maxRudder",this.maxRudder);
 		properties.put("minThrottle",this.minThrottle);
 		properties.put("maxThrottle",this.maxThrottle);
+		maxAirspeed.addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+				System.out.println("change "+maxAirspeed.getValue());
+			}
+		});
 	}
 	
 	public boolean bindToProperty(String name, Property p,String direction) {
@@ -154,15 +160,6 @@ public class ViewModel extends Observable implements Observer{
 		properties.put(name, prop);
 
 		return true;
-	}
-	public void initializePropertyToView(){
-		aileronValue.setValue(100);
-		pitchValue.setValue(92);
-		rollValue.setValue(34);
-		yawValue.setValue(50);
-		altimeterValue.setValue(20);
-		headingValue.setValue(73.5);
-		airspeedValue.setValue(38);
 	}
 	@Override
 	public void update(Observable o, Object arg) {
@@ -238,7 +235,7 @@ public class ViewModel extends Observable implements Observer{
 	public void saveLastSettingFile(){
 		m.saveLastSettingFile(txtFilePath.getValue());
 	}
-	public void applyValues(){
+	public void applyValuesMinMax(){
 		m.applyValuesMinMax();
 	}
 }

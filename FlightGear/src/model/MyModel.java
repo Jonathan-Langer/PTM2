@@ -48,6 +48,16 @@ public class MyModel extends Observable implements Model {
 						read.close();
 						return false;
 					}
+					if(Double.parseDouble(data[2])>Double.parseDouble(data[3])){
+						read.close();
+						return false;
+					}
+					if(cellsAreApeared.get(Integer.parseInt(data[1]))){
+						read.close();
+						return false;
+					}
+					else
+						cellsAreApeared.put(Integer.parseInt(data[1]),true);
 				}
 				else {
 					if(data.length==2) {

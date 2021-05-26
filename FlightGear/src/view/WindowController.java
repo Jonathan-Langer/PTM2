@@ -111,7 +111,7 @@ public class WindowController implements Initializable,Observer{
 		vm.bindToProperty("minYaw",tableClocks.minYaw,"VM2V");
 		vm.bindToProperty("maxYaw",tableClocks.maxYaw,"VM2V");
 
-		vm.applyValues();
+		vm.applyValuesMinMax();
 	}
 	//---------------FXML Objects--------------
 	@FXML
@@ -170,7 +170,7 @@ public class WindowController implements Initializable,Observer{
 			}
 			attributes=new ListOfAttributes(txtFilePath.getValue());
 			attributesView.controller.changeSetting(attributes);
-			vm.applyValues();
+			vm.applyValuesMinMax();
 			//joystickDisplayer.controller.
 		}
 	}
