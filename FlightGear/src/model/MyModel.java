@@ -217,24 +217,8 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public void saveLastSettingFile(String currentTxtFile) {
-		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
-		File currentAttributes=new File(currentTxtFile);
-		try {
-			if(!lastSetting.exists())
-				lastSetting.createNewFile();
-			PrintWriter write=new PrintWriter(lastSetting);
-			BufferedReader read=new BufferedReader(new FileReader(currentAttributes));
-			String line=null;
-			while((line=read.readLine())!=null) {
-				write.println(line);
-				write.flush();
-			}
-			write.close();
-			read.close();
-			atrList=new ListOfAttributes(txtLast);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		copyFile(currentTxtFile, new File("resources/last_setting.txt").getAbsolutePath());
+		atrList=new ListOfAttributes(txtLast);
 	}
 
 	@Override
@@ -298,9 +282,11 @@ public class MyModel extends Observable implements Model {
 		}
 	}
 
-
+	
 	public TimeSeries checkValidation(String csv) {
 		TimeSeries ts=new TimeSeries(csv);
+		if(ts.isEmpty())
+			return null;
 		int atrLen=0;
 		for(String s : ts.getTitles()) {
 			if(ts.getLine(s).size()!=ts.getSize()) //if all cols are in same length
@@ -321,30 +307,54 @@ public class MyModel extends Observable implements Model {
 		
 		return ts;
 	}
-	
+
 	
 	@Override
-	public void setTrainTimeSeries(String csvTrainFile) throws Exception {
+	public boolean setTrainTimeSeries(String csvTrainFile) {
 		TimeSeries ts= checkValidation(csvTrainFile);
-		if(ts!=null)
+		if(ts!=null) {
 			train=ts;
-		else
-			throw new Exception("csv not valid");
-		setChanged();
-		notifyAll();
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
-	public void setTestTimeSeries(String csvTestFile) throws Exception{
+	public boolean setTestTimeSeries(String csvTestFile){
 		TimeSeries ts= checkValidation(csvTestFile);
-		if(ts!=null)
+		if(ts!=null) {
 			test=ts;
-		else
-			throw new Exception("csv not valid");
-		setChanged();
-		notifyAll();
+			return true;
+		}
+		return false;
 	}
 
+	
+	public void saveLastCsvTrainFile(String currentCsvTrainFile) {
+		copyFile(currentCsvTrainFile, new File("resources/last_train.txt").getAbsolutePath());
+	}
+	
+	public void copyFile(String originalPath, String copyPath) {
+		File lastFile=new File(copyPath);
+		File currentFile=new File(originalPath);
+		try {
+			if(!lastFile.exists())
+				lastFile.createNewFile();
+			PrintWriter write=new PrintWriter(lastFile);
+			BufferedReader read=new BufferedReader(new FileReader(currentFile));
+			String line=null;
+			while((line=read.readLine())!=null) {
+				write.println(line);
+				write.flush();
+			}
+			write.close();
+			read.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 	@Override
 	public void play(int startTime, int rate) {
 		// TODO Auto-generated method stub

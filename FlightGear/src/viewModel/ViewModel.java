@@ -16,7 +16,6 @@ import model.Model;
 import model.MyModel;
 
 public class ViewModel extends Observable implements Observer{
-
 	
 	StringProperty txtFilePath;
 	StringProperty csvTrainFilePath;
@@ -219,4 +218,22 @@ public class ViewModel extends Observable implements Observer{
 	public void applyValuesMinMax(){
 		m.applyValuesMinMax();
 	}
+	
+	public boolean setTrainTimeSeries(String csvTrainFile) {
+		if(!m.setTrainTimeSeries(csvTrainFile))
+			return false;
+		return true;
+	}
+	
+	public void saveLastCsvTrainFile(){
+		m.saveLastCsvTrainFile(csvTrainFilePath.getValue());
+	}
+	
+	public boolean setTestTimeSeries(String csvTestFile) {
+		if(!m.setTrainTimeSeries(csvTestFile))
+			return false;
+		csvTestFilePath.setValue(csvTestFile);
+		return true;
+	}
+	
 }

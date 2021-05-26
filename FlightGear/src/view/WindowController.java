@@ -50,13 +50,14 @@ import javafx.scene.shape.Circle;
 public class WindowController implements Initializable,Observer{
 	
 	StringProperty txtFilePath=new SimpleStringProperty();
-	StringProperty csvTrainFile=new SimpleStringProperty();
+	StringProperty csvTrainFilePath=new SimpleStringProperty();
 	ListOfAttributes attributes;
 	ViewModel vm;
 
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
-		csvTrainFile.set(new File("resources/last_train.csv").getAbsolutePath());
+		csvTrainFilePath.set(new File("resources/last_train.csv").getAbsolutePath());
+		vm.setTrainTimeSeries(csvTrainFilePath.get());
 		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView=new AttributesViewDisplayer();
 		joystickDisplayer=new JoystickDisplayer();
@@ -70,10 +71,10 @@ public class WindowController implements Initializable,Observer{
 		String s=txtFilePath.getValue();
 		txtFilePath.set("a");
 		txtFilePath.set(s);
-		vm.bindToProperty("csvTrain", this.csvTrainFile,"V2VM");
-		s=csvTrainFile.getValue();
-		csvTrainFile.set("a");
-		csvTrainFile.set(s);
+		vm.bindToProperty("csvTrain", this.csvTrainFilePath,"V2VM");
+		s=csvTrainFilePath.getValue();
+		csvTrainFilePath.set("a");
+		csvTrainFilePath.set(s);
 		vm.bindToProperty("csvTest", playerDisplayer.csvTestFilePath,"V2VM");
 		s=playerDisplayer.csvTestFilePath.getValue();
 		playerDisplayer.csvTestFilePath.set("a");
@@ -185,64 +186,31 @@ public class WindowController implements Initializable,Observer{
 				("csv file", "*.csv")
 				);
 		File chooser=fc.showOpenDialog(null);
-		/*if(chooser!= null)
+		
+		if(chooser!= null)
 		{			
-			if() 
+			if(!vm.setTrainTimeSeries(chooser.getPath())) 
 			{
 				Alert message=new Alert(Alert.AlertType.ERROR);
 				message.setContentText("oops!"
 						+ " \n this file format is not valid \n and the file was'nt saved in the system");
 				message.show();
-				txtFilePath.set(new File("resources/last_train.csv").getAbsolutePath());
 			}
-		}
-		else 
-		{
-			csvTrainFile.set(chooser.getPath());
-			File lastTrainFile=new File(new File("resources/last_train.csv").getAbsolutePath());
-			File currentAttributes=new File(csvTrainFile.get());
-			try {
-				if(!lastTrainFile.exists())
-					lastTrainFile.createNewFile();
-				PrintWriter write=new PrintWriter(lastTrainFile);
-				BufferedReader read=new BufferedReader(new FileReader(currentAttributes));
-				String line=null;
-				while((line=read.readLine())!=null) {
-					write.println(line);
-					write.flush();
-				}
+			else {
+				vm.saveLastCsvTrainFile();
 				Alert message=new Alert(Alert.AlertType.CONFIRMATION);
 				message.setContentText("well done!"
 						+ " \n your csv file was saved in the system");
 				message.show();
-			} catch (IOException e) {
-				e.printStackTrace();
+				csvTrainFilePath.set(chooser.getPath());
 			}
-		}*/
-		csvTrainFile.set(chooser.getPath());
-		File lastTrainFile=new File(new File("resources/last_train.csv").getAbsolutePath());
-		File currentAttributes=new File(csvTrainFile.get());
-		try {
-			if(!lastTrainFile.exists())
-				lastTrainFile.createNewFile();
-			PrintWriter write=new PrintWriter(lastTrainFile);
-			BufferedReader read=new BufferedReader(new FileReader(currentAttributes));
-			String line=null;
-			while((line=read.readLine())!=null) {
-				write.println(line);
-				write.flush();
-			}
-			Alert message=new Alert(Alert.AlertType.CONFIRMATION);
-			message.setContentText("well done!"
-					+ " \n your csv file was saved in the system");
-			message.show();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
+
 		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView.controller.changeSetting(attributes);
 		joystickDisplayer=new JoystickDisplayer();	
 	}
+	
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub

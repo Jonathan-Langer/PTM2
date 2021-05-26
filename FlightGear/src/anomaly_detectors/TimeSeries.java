@@ -49,6 +49,8 @@ public class TimeSeries {
 		}
 		
 	}
+	 
+	public boolean isEmpty() { return titles==null;}
 	
 	public void addTitle(String s, ArrayList<Float> i) {
 		titles.add(s);
