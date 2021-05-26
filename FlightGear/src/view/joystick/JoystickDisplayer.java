@@ -51,7 +51,7 @@ public class JoystickDisplayer extends AnchorPane {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
 					double x=aileronValue.getValue();
-					controller.aileronVal.setText(Double.toString(x));
+					controller.aileronVal.setText(""+x);
 				}
 			});
 			minAileron=controller.minAileron;

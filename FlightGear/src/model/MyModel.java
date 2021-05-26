@@ -16,6 +16,107 @@ public class MyModel extends Observable implements Model {
 	TimeSeriesAnomalyDetector detector;
 	ListOfAttributes atrList;
 	String txtLast;
+	double aileronVal,elevatorVal,rudderVal,throttleVal,altimeterVal,airspeedVal,headingVal,rollVal,pitchVal,yawVal;
+
+	public double getAileronVal() {
+		return aileronVal;
+	}
+
+	public void setAileronVal(double aileronVal) {
+		this.aileronVal = aileronVal;
+		setChanged();
+		notifyObservers("aileronVal: "+aileronVal);
+	}
+
+	public double getElevatorVal() {
+		return elevatorVal;
+	}
+
+	public void setElevatorVal(double elevatorVal) {
+		this.elevatorVal = elevatorVal;
+		setChanged();
+		notifyObservers("elevatorVal: "+elevatorVal);
+	}
+
+	public double getRudderVal() {
+		return rudderVal;
+	}
+
+	public void setRudderVal(double rudderVal) {
+		this.rudderVal = rudderVal;
+		setChanged();
+		notifyObservers("rudderVal: "+rudderVal);
+	}
+
+	public double getThrottleVal() {
+		return throttleVal;
+	}
+
+	public void setThrottleVal(double throttleVal) {
+		this.throttleVal = throttleVal;
+		setChanged();
+		notifyObservers("throttleVal: "+throttleVal);
+	}
+
+	public double getAltimeterVal() {
+		return altimeterVal;
+	}
+
+	public void setAltimeterVal(double altimeterVal) {
+		this.altimeterVal = altimeterVal;
+		setChanged();
+		notifyObservers("altimeterVal: "+altimeterVal);
+	}
+
+	public double getAirspeedVal() {
+		return airspeedVal;
+	}
+
+	public void setAirspeedVal(double airspeedVal) {
+		this.airspeedVal = airspeedVal;
+		setChanged();
+		notifyObservers("airspeedVal: "+airspeedVal);
+	}
+
+	public double getHeadingVal() {
+		return headingVal;
+	}
+
+	public void setHeadingVal(double headingVal) {
+		this.headingVal = headingVal;
+		setChanged();
+		notifyObservers("headingVal: "+headingVal);
+	}
+
+	public double getRollVal() {
+		return rollVal;
+	}
+
+	public void setRollVal(double rollVal) {
+		this.rollVal = rollVal;
+		setChanged();
+		notifyObservers("rollVal: "+rollVal);
+	}
+
+	public double getPitchVal() {
+		return pitchVal;
+	}
+
+	public void setPitchVal(double pitchVal) {
+		this.pitchVal = pitchVal;
+		setChanged();
+		notifyObservers("pitchVal: "+pitchVal);
+	}
+
+	public double getYawVal() {
+		return yawVal;
+	}
+
+	public void setYawVal(double yawVal) {
+		this.yawVal = yawVal;
+		setChanged();
+		notifyObservers("yawVal: "+yawVal);
+	}
 
 	public MyModel() {
 		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();

@@ -111,12 +111,6 @@ public class ViewModel extends Observable implements Observer{
 		properties.put("maxRudder",this.maxRudder);
 		properties.put("minThrottle",this.minThrottle);
 		properties.put("maxThrottle",this.maxThrottle);
-		maxAirspeed.addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-				System.out.println("change "+maxAirspeed.getValue());
-			}
-		});
 	}
 	
 	public boolean bindToProperty(String name, Property p,String direction) {
@@ -126,19 +120,6 @@ public class ViewModel extends Observable implements Observer{
 			System.out.println("false");
 			return false;
 		}
-//		if(name.equals("settingsFile")){
-//			StringProperty tmp=(StringProperty) p;
-//			tmp.set(tmp.getValue());
-//			tmp.addListener(new ChangeListener<String>() {
-//				@Override
-//				public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-//					String str=tmp.getValue();
-//					txtFilePath.setValue(str);
-//				}
-//			});
-//			tmp.set(tmp.getValue());
-//			return true;
-//		}
 		Property prop = properties.get(name);
 		properties.remove(name);
 
