@@ -263,7 +263,7 @@ public class MyModel extends Observable implements Model {
 					setChanged();
 					notifyObservers("throttleMax: "+a.getMaxValue());
 				}
-				if(a.getColInCSV()==20){
+				if(a.getColInCSV()==20) {
 					notifyObservers("yawMin: "+a.getMinValue());
 					setChanged();
 					notifyObservers("yawMax: "+a.getMaxValue());
