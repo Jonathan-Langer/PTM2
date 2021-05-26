@@ -106,9 +106,7 @@ public class MyModel extends Observable implements Model {
 			}
 			line=read.readLine();
 			read.close();
-			if(line!=null)
-				return false;
-			return true;
+			return line == null;
 		} catch (IOException e) {
 			return false;
 		}
