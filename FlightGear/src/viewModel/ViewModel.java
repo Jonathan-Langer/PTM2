@@ -206,8 +206,8 @@ public class ViewModel extends Observable implements Observer{
 				maxAirspeed.setValue(toUpdate);
 			if(arr[0].equals("airspeedVal:"))
 				airspeedValue.setValue(toUpdate);
-			/*if(arr[0].equals("altimeterMin:"))
-				minAltimeter.setValue(toUpdate);*/
+			if(arr[0].equals("altimeterMin:"))
+				minAltimeter.setValue(toUpdate);
 			if(arr[0].equals("altimeterMax:"))
 				maxAltimeter.setValue(toUpdate);
 			if(arr[0].equals("altimeterVal:"))
