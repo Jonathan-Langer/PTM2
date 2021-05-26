@@ -185,7 +185,7 @@ public class WindowController implements Initializable,Observer{
 				("csv file", "*.csv")
 				);
 		File chooser=fc.showOpenDialog(null);
-		/*if(chooser!=null)
+		/*if(chooser!= null)
 		{			
 			if() 
 			{
