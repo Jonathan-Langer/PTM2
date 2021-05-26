@@ -29,6 +29,7 @@ public class MyModel extends Observable implements Model {
 		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
 		HashMap<String, Boolean> specialSettingsApeared = new HashMap<>();
 
+		//for the ip, port and rate
 		specialSettingsApeared.put("ip", false);
 		specialSettingsApeared.put("port", false);
 		specialSettingsApeared.put("rate", false);
