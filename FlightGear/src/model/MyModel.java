@@ -27,10 +27,15 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public boolean checkValidateSettingFile(String txtFile) {
 		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
+		HashMap<String, Boolean> specialSettingsApeared = new HashMap<>();
+
+		specialSettingsApeared.put("ip", false);
+		specialSettingsApeared.put("port", false);
+		specialSettingsApeared.put("rate", false);
+
 		cellsAreApeared.put(0, false);
 		cellsAreApeared.put(1, false);
 		cellsAreApeared.put(2, false);
-		cellsAreApeared.put(5, false);
 		cellsAreApeared.put(6, false);
 		cellsAreApeared.put(20, false);
 		cellsAreApeared.put(24, false);
@@ -42,35 +47,62 @@ public class MyModel extends Observable implements Model {
 			BufferedReader read=new BufferedReader(new FileReader(new File(txtFile)));
 			String line=null;
 			while((line=read.readLine())!=null) {
-				String[] data=line.split(",");
-				if(data.length==4) {
-					if(!cellsAreApeared.containsKey(Integer.parseInt(data[1]))) {
+				String[] data = line.split(",");
+				if (data.length == 4) {
+					if (!cellsAreApeared.containsKey(Integer.parseInt(data[1]))) {
 						read.close();
 						return false;
 					}
-					if(Double.parseDouble(data[2])>Double.parseDouble(data[3])){
+					if (Double.parseDouble(data[2]) > Double.parseDouble(data[3])) {
 						read.close();
 						return false;
 					}
-					if(cellsAreApeared.get(Integer.parseInt(data[1]))){
+					if (cellsAreApeared.get(Integer.parseInt(data[1]))) {
 						read.close();
 						return false;
-					}
-					else
-						cellsAreApeared.put(Integer.parseInt(data[1]),true);
-				}
-				else {
-					if(data.length==2) {
-						if(!(data[0].equals("ip")||data[0].equals("port")||data[0].equals("rate"))) {
+					} else
+						cellsAreApeared.put(Integer.parseInt(data[1]), true);
+				} else {
+					if (data.length == 2) {
+						if (!(data[0].equals("ip") || data[0].equals("port") || data[0].equals("rate"))) {
 							read.close();
 							return false;
+						} else {
+							if (data[0].equals("ip")) {
+								if (specialSettingsApeared.get("ip").equals(true)) {
+									read.close();
+									return false;
+								}
+								else
+									specialSettingsApeared.put("ip", true);
+							}
+							if (data[0].equals("port")) {
+								if (specialSettingsApeared.get("port").equals(true)) {
+									read.close();
+									return false;
+								}
+								else
+									specialSettingsApeared.put("port", true);
+							}
+							if (data[0].equals("rate")) {
+								if (specialSettingsApeared.get("rate").equals(true)) {
+									read.close();
+									return false;
+								}
+								else
+									specialSettingsApeared.put("rate", true);
+							}
 						}
 					}
-					else {
-						read.close();
-						return false;
-					}
 				}
+			}
+			for (Integer c: cellsAreApeared.keySet()) {
+				if(!cellsAreApeared.get(c))
+					return false;
+			}
+			for(String s : specialSettingsApeared.keySet()) {
+				if(!specialSettingsApeared.get(s))
+					return false;
 			}
 			line=read.readLine();
 			read.close();
