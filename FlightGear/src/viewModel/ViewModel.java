@@ -22,7 +22,7 @@ public class ViewModel extends Observable implements Observer{
 	StringProperty csvTrainFilePath;
 	StringProperty csvTestFilePath;
 	
-	public Map<String, Property> properties = new HashMap<>();
+	Map<String, Property> properties = new HashMap<>();
 
 	//--------values for gauge table----------
 	DoubleProperty altimeterValue, airspeedValue, headingValue,
@@ -238,5 +238,8 @@ public class ViewModel extends Observable implements Observer{
 	}
 	public void initValues(){
 		m.setValues(0);
+	}
+	public void play(){
+
 	}
 }

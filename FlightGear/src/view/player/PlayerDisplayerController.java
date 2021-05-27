@@ -1,8 +1,11 @@
 package view.player;
 
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Slider;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -28,7 +31,9 @@ public class PlayerDisplayerController  implements Initializable {
 	Slider timeLine;
 	@FXML
 	public ComboBox<String> options = new ComboBox<>();
-	
+	@FXML
+	public FontAwesomeIcon playIcon,pauseIcon,stopIcon,forwardIcon,rewindIcon;
+
 	public PlayerDisplayerController() {
 		options = new ComboBox<>();
 		csvTestFilePath = new SimpleStringProperty();
@@ -43,7 +48,83 @@ public class PlayerDisplayerController  implements Initializable {
 			if(options.getValue()==null)
 				options.setValue("1");
 			timeLine.setValue(0);
-		
+			playIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
+				playIcon.setFill(Color.rgb(3,187,116));
+				pauseIcon.setFill(Color.BLACK);
+				stopIcon.setFill(Color.BLACK);
+				forwardIcon.setFill(Color.BLACK);
+				rewindIcon.setFill(Color.BLACK);
+			});
+			pauseIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
+				playIcon.setFill(Color.BLACK);
+				pauseIcon.setFill(Color.rgb(210,65,65));
+				stopIcon.setFill(Color.BLACK);
+				forwardIcon.setFill(Color.BLACK);
+				rewindIcon.setFill(Color.BLACK);
+			});
+			stopIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
+				playIcon.setFill(Color.BLACK);
+				pauseIcon.setFill(Color.BLACK);
+				stopIcon.setFill(Color.rgb(114,12,12));
+				forwardIcon.setFill(Color.BLACK);
+				rewindIcon.setFill(Color.BLACK);
+				timeLine.setValue(0);
+			});
+			forwardIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
+				int x=-1;
+				if(playIcon.getFill()!=Color.BLACK)
+					x=0;
+				else
+					if(stopIcon.getFill()!=Color.BLACK)
+						x=1;
+					else
+						if(pauseIcon.getFill()!=Color.BLACK)
+							x=2;
+				playIcon.setFill(Color.BLACK);
+				pauseIcon.setFill(Color.BLACK);
+				stopIcon.setFill(Color.BLACK);
+				forwardIcon.setFill(Color.rgb(50,74,224));
+				rewindIcon.setFill(Color.BLACK);
+					if(x==0)
+						playIcon.setFill(Color.rgb(3,187,116));
+					else
+					if(x==1)
+						stopIcon.setFill(Color.rgb(114,12,12));
+					else
+					if(x==2)
+						pauseIcon.setFill(Color.rgb(210,65,65));
+					forwardIcon.setFill(Color.BLACK);
+			});
+			rewindIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
+				int x=-1;
+				if(playIcon.getFill()!=Color.BLACK)
+					x=0;
+				else
+				if(stopIcon.getFill()!=Color.BLACK)
+					x=1;
+				else
+				if(pauseIcon.getFill()!=Color.BLACK)
+					x=2;
+				playIcon.setFill(Color.BLACK);
+				pauseIcon.setFill(Color.BLACK);
+				stopIcon.setFill(Color.BLACK);
+				forwardIcon.setFill(Color.BLACK);
+				rewindIcon.setFill(Color.rgb(50,74,224));
+				try {
+					Thread.sleep(500);
+					if(x==0)
+						playIcon.setFill(Color.rgb(3,187,116));
+					else
+					if(x==1)
+						stopIcon.setFill(Color.rgb(114,12,12));
+					else
+					if(x==2)
+						pauseIcon.setFill(Color.rgb(210,65,65));
+					rewindIcon.setFill(Color.BLACK);
+				} catch (InterruptedException interruptedException) {
+					interruptedException.printStackTrace();
+				}
+			});
 	}
 	public void openCSVFile() {
 		FileChooser fc=new FileChooser();

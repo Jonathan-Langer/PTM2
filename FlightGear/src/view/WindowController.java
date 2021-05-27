@@ -9,6 +9,8 @@ import java.util.*;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import view.attributesView.AttributesViewDisplayer;
 import view.joystick.JoystickDisplayer;
 import view.player.*;
@@ -140,6 +142,14 @@ public class WindowController implements Initializable,Observer{
 			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
 				vm.setTestTimeSeries(playerDisplayer.csvTestFilePath.getValue());
 				vm.initValues();
+			}
+		});
+		playerDisplayer.controller.playIcon.fillProperty().addListener(new ChangeListener<Paint>() {
+			@Override
+			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
+				if(playerDisplayer.controller.playIcon.getFill()!= Color.BLACK){
+					vm.play();
+				}
 			}
 		});
 	}

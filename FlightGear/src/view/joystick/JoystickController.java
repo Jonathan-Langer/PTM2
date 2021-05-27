@@ -54,4 +54,11 @@ public class JoystickController implements Initializable {
 			}
 		});
 	}
+	public void toDelete(){
+		Scanner s=new Scanner(System.in);
+		System.out.print("aileron: ");
+		aileronVal.setText(s.next());
+		System.out.print("elevator: ");
+		elevatorVal.setText(s.next());
+	}
 }

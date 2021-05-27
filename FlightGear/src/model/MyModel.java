@@ -2,6 +2,7 @@ package model;
 
 
 import java.io.*;
+import java.net.Socket;
 import java.util.Observable;
 import java.util.*;
 import java.util.function.Consumer;
@@ -18,6 +19,9 @@ public class MyModel extends Observable implements Model {
 	ListOfAttributes atrList;
 	String txtLast;
 	double aileronVal,elevatorVal,rudderVal,throttleVal,altimeterVal,airspeedVal,headingVal,rollVal,pitchVal,yawVal;
+	int port=-1;
+	String ip="";
+	int rate=-1;
 
 	public double getAileronVal() {
 		return aileronVal;
@@ -124,8 +128,6 @@ public class MyModel extends Observable implements Model {
 		atrList=new ListOfAttributes(txtLast);
 	}
 
-	Thread t;
-	Process p;
 	@Override
 	public boolean checkValidateSettingFile(String txtFile) {
 		if(txtFile==null)
@@ -285,7 +287,9 @@ public class MyModel extends Observable implements Model {
 					setChanged();
 					notifyObservers("headingMax: "+a.getMaxValue());
 				}
-
+				ip=atrList.ip;
+				port= atrList.port;
+				rate=atrList.rate;
 			}
 		}
 	}
@@ -400,7 +404,13 @@ public class MyModel extends Observable implements Model {
 	
 	@Override
 	public void play(int startTime, int rate) {
-		// TODO Auto-generated method stub
+		try {
+			Socket fg=new Socket("localhost",5400);
+			PrintWriter writeToFlightGear=new PrintWriter(fg.getOutputStream());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
