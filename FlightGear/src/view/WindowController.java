@@ -67,7 +67,7 @@ public class WindowController implements Initializable,Observer{
 	}
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
-
+		
 		vm.bindToProperty("settingsFile", this.txtFilePath,"V2VM");
 		String s=txtFilePath.getValue();
 		txtFilePath.set("a");
@@ -114,6 +114,7 @@ public class WindowController implements Initializable,Observer{
 		vm.bindToProperty("maxYaw",tableClocks.maxYaw,"VM2V");
 		vm.currentTime.bindBidirectional(playerDisplayer.currentTime);
 		vm.applyValuesMinMax();
+		
 		vm.setTrainTimeSeries(csvTrainFilePath.get());
 	}
 	//---------------FXML Objects--------------
@@ -140,7 +141,12 @@ public class WindowController implements Initializable,Observer{
 		playerDisplayer.csvTestFilePath.addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-				vm.setTestTimeSeries(playerDisplayer.csvTestFilePath.getValue());
+				if(!vm.setTestTimeSeries(playerDisplayer.csvTestFilePath.getValue())) {
+					Alert message=new Alert(Alert.AlertType.ERROR);
+					message.setContentText("oops!"
+							+ " \n this file format is not valid");
+					message.show();
+				}
 				vm.initValues();
 			}
 		});

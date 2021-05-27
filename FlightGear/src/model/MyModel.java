@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.Observable;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import anomaly_detectors.TimeSeries;
 import anomaly_detectors.TimeSeriesAnomalyDetector;
@@ -296,65 +297,34 @@ public class MyModel extends Observable implements Model {
 
 	
 	public TimeSeries checkValidationCSV(String csv) {
-		if(csv==null)
-			return null;
-		if(!csv.endsWith(".csv"))
-			return null;
-		File file=new File(csv);
-		if(!file.exists())
-			return null;
 		TimeSeries ts=new TimeSeries(csv);
 		if(ts.isEmpty())
 			return null;
 		int atrLen=0;
-		/*for(String s : ts.getTitles()) {
-			if(ts.getLine(s).size()!=ts.getLine(ts.getTitles().get(0)).size()) //if all cols are in same length
+		ArrayList<Float> thisLine;
+		
+		Map<Integer, AttributeSettings> atrCols=
+				atrList.getList().values().stream().
+				collect(Collectors.toMap
+						(atr->atr.colInCSV,atr->atr));
+		
+		for(int i=0; i<ts.getSize(); i++) {
+			thisLine=ts.getLine(ts.getTitles().get(i));
+			if(thisLine.size()!=ts.getSize()) //if all cols are in same length
 				return null;
-			if(atrList.contains(s)) { //check if the col in the csv matches to 
-									//the col that is written in the settings file 
-				if(ts.getTitles().indexOf(s)!=atrList.getList().get(s).getColInCSV())
-					return null;
+			if(atrCols.containsKey(i)) {//this col must be in csv
 				atrLen++;
-				for(float f : ts.getLine(s)) { //if all values are between the min and max that was defind in the setting file
-					if(f>atrList.getList().get(s).getMaxValue()||f<atrList.getList().get(s).getMinValue())
+				for(float f : thisLine) { //if all values are between the min and max that was defined in the setting file
+					if(f>atrCols.get(i).getMaxValue()||f<atrCols.get(i).getMinValue())
 						return null;
 				}
 			}
-		}*/
-		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
-		cellsAreApeared.put(0, false);
-		cellsAreApeared.put(1, false);
-		cellsAreApeared.put(2, false);
-		cellsAreApeared.put(6, false);
-		cellsAreApeared.put(20, false);
-		cellsAreApeared.put(24, false);
-		cellsAreApeared.put(25, false);
-		cellsAreApeared.put(28, false);
-		cellsAreApeared.put(29, false);
-		cellsAreApeared.put(36, false);
-		for(String s:ts.getTitles()){
-			if(ts.getLine(s).size()!=ts.getLine(ts.getTitles().get(0)).size()) //if all cols are in same length
-				return null;
-			if(atrList.contains(s)){
-				AttributeSettings a=atrList.attributesConnection.get(s);
-				int coll=a.colInCSV;
-				if(!cellsAreApeared.get(coll)){
-					float[] arr=ts.getLineAsArray(coll);
-					for(float f : arr) { //if all values are between the min and max that was defind in the setting file
-						if(f>a.getMaxValue()||f<a.getMinValue())
-							return null;
-					}
-					atrLen++;
-					cellsAreApeared.put(coll,true);
-				}
-			}
 		}
-		if(atrLen!=atrList.getLength()) // if all the names in the csv apeearing int he setting file
+		if(atrLen!=atrList.getLength()) // if all the settings appear in the setting file
 			return null;
 		
 		return ts;
 	}
-
 	
 	@Override
 	public boolean setTrainTimeSeries(String csvTrainFile) {

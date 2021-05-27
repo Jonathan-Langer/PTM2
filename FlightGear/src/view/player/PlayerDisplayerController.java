@@ -126,6 +126,7 @@ public class PlayerDisplayerController  implements Initializable {
 				}
 			});
 	}
+
 	public void openCSVFile() {
 		FileChooser fc=new FileChooser();
 		fc.setTitle("open csv file");
