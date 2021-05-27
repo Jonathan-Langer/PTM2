@@ -1,6 +1,7 @@
 package view.player;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 
@@ -23,7 +24,8 @@ import model.ListOfAttributes;
 public class PlayerDisplayerController  implements Initializable {
 		
 	public StringProperty csvTestFilePath=new SimpleStringProperty();
-	
+	@FXML
+	Slider timeLine;
 	@FXML
 	public ComboBox<String> options = new ComboBox<>();
 	
@@ -40,6 +42,7 @@ public class PlayerDisplayerController  implements Initializable {
 			options.setItems(list);
 			if(options.getValue()==null)
 				options.setValue("1");
+			timeLine.setValue(0);
 		
 	}
 	public void openCSVFile() {
@@ -51,7 +54,9 @@ public class PlayerDisplayerController  implements Initializable {
 				("csv file", "*.csv")
 				);
 		File chooser=fc.showOpenDialog(null);
-		if(chooser!=null)
+		if(chooser!=null){
 			csvTestFilePath.set(chooser.getPath());
+			timeLine.valueProperty().set(0);
+		}
 	}
 }

@@ -22,24 +22,22 @@ public class JoystickDisplayer extends AnchorPane {
 
 	public JoystickDisplayer() {
 		super();
-		throttleValue = new SimpleDoubleProperty(0.9);
-		rudderValue=new SimpleDoubleProperty(0.5);
+		throttleValue = new SimpleDoubleProperty();
+		rudderValue=new SimpleDoubleProperty();
 		aileronValue=new SimpleDoubleProperty();
 		elevatorsValue=new SimpleDoubleProperty();
-		minThrottle=new SimpleDoubleProperty(-1);
-		maxThrottle=new SimpleDoubleProperty(1);
-		minAileron=new SimpleDoubleProperty(-1);
-		maxAileron=new SimpleDoubleProperty(1);
-		minRudder=new SimpleDoubleProperty(-1);
-		maxRudder=new SimpleDoubleProperty(1);
-		minElevator=new SimpleDoubleProperty(-1);
-		maxElevator=new SimpleDoubleProperty(1);
+		minThrottle=new SimpleDoubleProperty();
+		maxThrottle=new SimpleDoubleProperty();
+		minAileron=new SimpleDoubleProperty();
+		maxAileron=new SimpleDoubleProperty();
+		minRudder=new SimpleDoubleProperty();
+		maxRudder=new SimpleDoubleProperty();
+		minElevator=new SimpleDoubleProperty();
+		maxElevator=new SimpleDoubleProperty();
 		FXMLLoader loader=new FXMLLoader();
 		try {
 			AnchorPane toDisplay=loader.load(getClass().getResource("Joystick.fxml").openStream());
-			//JoystickController controller=new JoystickController();
 			controller=loader.getController();
-			//controller.rudder.valueProperty().bind(rudderValue);
 			this.getChildren().add(toDisplay);
 			throttleValue=controller.throttle.valueProperty();
 			minThrottle=controller.throttle.minProperty();
@@ -51,7 +49,7 @@ public class JoystickDisplayer extends AnchorPane {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
 					double x=aileronValue.getValue();
-					controller.aileronVal.setText(""+x);
+					controller.aileronVal.setText(Double.toString(x));
 				}
 			});
 			minAileron=controller.minAileron;

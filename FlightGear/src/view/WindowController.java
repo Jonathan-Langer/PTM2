@@ -57,7 +57,6 @@ public class WindowController implements Initializable,Observer{
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
 		csvTrainFilePath.set(new File("resources/last_train.csv").getAbsolutePath());
-		vm.setTrainTimeSeries(csvTrainFilePath.get());
 		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView=new AttributesViewDisplayer();
 		joystickDisplayer=new JoystickDisplayer();
@@ -111,8 +110,9 @@ public class WindowController implements Initializable,Observer{
 		vm.bindToProperty("maxPitch",tableClocks.maxPitch,"VM2V");
 		vm.bindToProperty("minYaw",tableClocks.minYaw,"VM2V");
 		vm.bindToProperty("maxYaw",tableClocks.maxYaw,"VM2V");
-
+		vm.currentTime.bindBidirectional(playerDisplayer.currentTime);
 		vm.applyValuesMinMax();
+		vm.setTrainTimeSeries(csvTrainFilePath.get());
 	}
 	//---------------FXML Objects--------------
 	@FXML
@@ -135,12 +135,13 @@ public class WindowController implements Initializable,Observer{
 		
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-	/*	
-		attributesView.loadAttributesToListView(attributes);
-		attributesView.addEventFilter(MouseEvent.ANY,
-				(e)->attributesView.toDisplay.requestFocus());
-		joystickDisplayer=new JoystickDisplayerController(attributes);
-		playerDisplayer = new Player();*/
+		playerDisplayer.csvTestFilePath.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				vm.setTestTimeSeries(playerDisplayer.csvTestFilePath.getValue());
+				vm.initValues();
+			}
+		});
 	}
 	
 	
@@ -189,7 +190,7 @@ public class WindowController implements Initializable,Observer{
 		
 		if(chooser!= null)
 		{			
-			if(!vm.setTrainTimeSeries(chooser.getPath())) 
+			if(!vm.setTrainTimeSeries(chooser.getPath()))
 			{
 				Alert message=new Alert(Alert.AlertType.ERROR);
 				message.setContentText("oops!"

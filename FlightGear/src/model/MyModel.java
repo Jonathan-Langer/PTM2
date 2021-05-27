@@ -12,6 +12,7 @@ import javafx.scene.control.Alert;
 
 public class MyModel extends Observable implements Model {
 
+	double currentTime;
 	TimeSeries train,test;
 	TimeSeriesAnomalyDetector detector;
 	ListOfAttributes atrList;
@@ -127,6 +128,13 @@ public class MyModel extends Observable implements Model {
 	Process p;
 	@Override
 	public boolean checkValidateSettingFile(String txtFile) {
+		if(txtFile==null)
+			return false;
+		if(!txtFile.endsWith(".txt"))
+			return false;
+		File f=new File(txtFile);
+		if(!f.exists())
+			return false;
 		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
 		HashMap<String, Boolean> specialSettingsApeared = new HashMap<>();
 
@@ -283,13 +291,20 @@ public class MyModel extends Observable implements Model {
 	}
 
 	
-	public TimeSeries checkValidation(String csv) {
+	public TimeSeries checkValidationCSV(String csv) {
+		if(csv==null)
+			return null;
+		if(!csv.endsWith(".csv"))
+			return null;
+		File file=new File(csv);
+		if(!file.exists())
+			return null;
 		TimeSeries ts=new TimeSeries(csv);
 		if(ts.isEmpty())
 			return null;
 		int atrLen=0;
-		for(String s : ts.getTitles()) {
-			if(ts.getLine(s).size()!=ts.getSize()) //if all cols are in same length
+		/*for(String s : ts.getTitles()) {
+			if(ts.getLine(s).size()!=ts.getLine(ts.getTitles().get(0)).size()) //if all cols are in same length
 				return null;
 			if(atrList.contains(s)) { //check if the col in the csv matches to 
 									//the col that is written in the settings file 
@@ -299,6 +314,34 @@ public class MyModel extends Observable implements Model {
 				for(float f : ts.getLine(s)) { //if all values are between the min and max that was defind in the setting file
 					if(f>atrList.getList().get(s).getMaxValue()||f<atrList.getList().get(s).getMinValue())
 						return null;
+				}
+			}
+		}*/
+		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
+		cellsAreApeared.put(0, false);
+		cellsAreApeared.put(1, false);
+		cellsAreApeared.put(2, false);
+		cellsAreApeared.put(6, false);
+		cellsAreApeared.put(20, false);
+		cellsAreApeared.put(24, false);
+		cellsAreApeared.put(25, false);
+		cellsAreApeared.put(28, false);
+		cellsAreApeared.put(29, false);
+		cellsAreApeared.put(36, false);
+		for(String s:ts.getTitles()){
+			if(ts.getLine(s).size()!=ts.getLine(ts.getTitles().get(0)).size()) //if all cols are in same length
+				return null;
+			if(atrList.contains(s)){
+				AttributeSettings a=atrList.attributesConnection.get(s);
+				int coll=a.colInCSV;
+				if(!cellsAreApeared.get(coll)){
+					float[] arr=ts.getLineAsArray(coll);
+					for(float f : arr) { //if all values are between the min and max that was defind in the setting file
+						if(f>a.getMaxValue()||f<a.getMinValue())
+							return null;
+					}
+					atrLen++;
+					cellsAreApeared.put(coll,true);
 				}
 			}
 		}
@@ -311,7 +354,7 @@ public class MyModel extends Observable implements Model {
 	
 	@Override
 	public boolean setTrainTimeSeries(String csvTrainFile) {
-		TimeSeries ts= checkValidation(csvTrainFile);
+		TimeSeries ts= checkValidationCSV(csvTrainFile);
 		if(ts!=null) {
 			train=ts;
 			return true;
@@ -321,7 +364,7 @@ public class MyModel extends Observable implements Model {
 	
 	@Override
 	public boolean setTestTimeSeries(String csvTestFile){
-		TimeSeries ts= checkValidation(csvTestFile);
+		TimeSeries ts= checkValidationCSV(csvTestFile);
 		if(ts!=null) {
 			test=ts;
 			return true;
@@ -384,7 +427,36 @@ public class MyModel extends Observable implements Model {
 		// TODO Auto-generated method stub
 
 	}
-
-
-
+	@Override
+	public void setValues(int timeStep){
+		if(test!=null){
+			if (timeStep < 0 || test.getLineAsArray(0).length >= timeStep) {
+				double aileron=test.getLineAsArray(0)[timeStep];
+				double elevator=test.getLineAsArray(1)[timeStep];
+				double throttle=test.getLineAsArray(6)[timeStep];
+				double rudder=test.getLineAsArray(2)[timeStep];
+				double altimeter=test.getLineAsArray(25)[timeStep];
+				double airspeed=test.getLineAsArray(24)[timeStep];
+				double heading=test.getLineAsArray(36)[timeStep];
+				double roll=test.getLineAsArray(28)[timeStep];
+				double pitch=test.getLineAsArray(29)[timeStep];
+				double yaw=test.getLineAsArray(20)[timeStep];
+				setAileronVal(aileron);
+				setElevatorVal(elevator);
+				setThrottleVal(throttle);
+				setRudderVal(rudder);
+				setAltimeterVal(altimeter);
+				setAirspeedVal(airspeed);
+				setHeadingVal(heading);
+				setRollVal(roll);
+				setPitchVal(pitch);
+				setYawVal(yaw);
+			}
+		}
+	}
+	public void setCurrentTime(double currentTime){
+		this.currentTime=currentTime;
+		setChanged();
+		notifyObservers("currentTime: "+currentTime);
+	}
 }

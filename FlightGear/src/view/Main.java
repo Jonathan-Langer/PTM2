@@ -24,15 +24,11 @@ public class Main extends Application {
 			WindowController view=fxl.getController();
 			vm.addObserver(view);
 			view.setViewModel(vm);
-			m.setAileronVal(0);//	problematic
 			Scene scene = new Scene(root,1500,800);
 			primaryStage.setTitle("Flight Gear Simulator");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			//WindowController wc = fxl.getController();
-			//wc.setViewModel(vm);
-			//vm.addObserver(wc);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

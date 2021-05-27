@@ -16,7 +16,8 @@ import model.Model;
 import model.MyModel;
 
 public class ViewModel extends Observable implements Observer{
-	
+	public DoubleProperty currentTime;
+
 	StringProperty txtFilePath;
 	StringProperty csvTrainFilePath;
 	StringProperty csvTestFilePath;
@@ -39,6 +40,8 @@ public class ViewModel extends Observable implements Observer{
 	
 	public ViewModel(Model m) {
 		this.m=m;
+		currentTime=new SimpleDoubleProperty();
+
 		txtFilePath=new SimpleStringProperty("");
 		csvTrainFilePath=new SimpleStringProperty("");
 		csvTestFilePath = new SimpleStringProperty("");
@@ -115,10 +118,8 @@ public class ViewModel extends Observable implements Observer{
 	public boolean bindToProperty(String name, Property p,String direction) {
 		//if the direction is VM2V: property_from_view.bind(property_form_view_model)
 		//if the direction is V2VM: property_from_view_model.bind(property_from_view)
-		if((!(properties.containsKey(name)))||(!(direction.equals("V2VM")||direction.equals("VM2V")))){
-			System.out.println("false");
+		if((!(properties.containsKey(name)))||(!(direction.equals("V2VM")||direction.equals("VM2V"))))
 			return false;
-		}
 		Property prop = properties.get(name);
 		properties.remove(name);
 
@@ -147,13 +148,15 @@ public class ViewModel extends Observable implements Observer{
 			String s=(String)arg;
 			String[] arr=s.split(" ");
 			double toUpdate=Double.parseDouble(arr[1]);
-			if(arr[0].equals("aileronMin"))
+			if(arr[0].equals("currentTime:"))
+				currentTime.set(toUpdate);
+			if(arr[0].equals("aileronMin:"))
 				minAileron.setValue(toUpdate);
 			if(arr[0].equals("aileronMax:"))
 				maxAileron.setValue(toUpdate);
 			if(arr[0].equals("aileronVal:"))
 				aileronValue.setValue(toUpdate);
-			if(arr[0].equals("elevatorMin"))
+			if(arr[0].equals("elevatorMin:"))
 				minElevator.setValue(toUpdate);
 			if(arr[0].equals("elevatorMax:"))
 				maxElevator.setValue(toUpdate);
@@ -215,9 +218,7 @@ public class ViewModel extends Observable implements Observer{
 	public void saveLastSettingFile(){
 		m.saveLastSettingFile(txtFilePath.getValue());
 	}
-	public void applyValuesMinMax(){
-		m.applyValuesMinMax();
-	}
+	public void applyValuesMinMax(){ m.applyValuesMinMax();}
 	
 	public boolean setTrainTimeSeries(String csvTrainFile) {
 		if(!m.setTrainTimeSeries(csvTrainFile))
@@ -230,10 +231,12 @@ public class ViewModel extends Observable implements Observer{
 	}
 	
 	public boolean setTestTimeSeries(String csvTestFile) {
-		if(!m.setTrainTimeSeries(csvTestFile))
+		if(!m.setTestTimeSeries(csvTestFile))//shnik put setTrain but i think she is wrong
 			return false;
 		csvTestFilePath.setValue(csvTestFile);
 		return true;
 	}
-	
+	public void initValues(){
+		m.setValues(0);
+	}
 }
