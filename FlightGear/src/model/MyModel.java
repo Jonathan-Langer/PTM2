@@ -377,11 +377,22 @@ public class MyModel extends Observable implements Model {
 		try {
 			Socket fg=new Socket("localhost",5400);
 			PrintWriter writeToFlightGear=new PrintWriter(fg.getOutputStream());
-
-		} catch (IOException e) {
+			for(int i=startTime;i<startTime+rate;i++){
+				String line="";
+				for(int j=0;j<test.getTitles().size();j++)
+					if(j!=0)
+						line=line+","+test.getLineAsArray(j)[i];
+					else
+						line=line+test.getLineAsArray(j)[i];
+				writeToFlightGear.println(line);
+				writeToFlightGear.flush();
+				Thread.sleep(100);//replace the number 100 with (long)(1000.0/(float)rate)
+				fg.close();
+				writeToFlightGear.close();
+			}
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@Override
