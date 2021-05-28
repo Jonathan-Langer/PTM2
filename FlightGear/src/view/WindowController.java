@@ -77,9 +77,9 @@ public class WindowController implements Initializable,Observer{
 		csvTrainFilePath.set("a");
 		csvTrainFilePath.set(s);
 		vm.bindToProperty("csvTest", playerDisplayer.csvTestFilePath,"V2VM");
-		s=playerDisplayer.csvTestFilePath.getValue();
+		/*s=playerDisplayer.csvTestFilePath.getValue();
 		playerDisplayer.csvTestFilePath.set("a");
-		playerDisplayer.csvTestFilePath.set(s);
+		playerDisplayer.csvTestFilePath.set(s);*/
 
 		vm.bindToProperty("aileron", joystickDisplayer.aileronValue,"VM2V");
 		vm.bindToProperty("elevator", joystickDisplayer.elevatorsValue,"VM2V");
