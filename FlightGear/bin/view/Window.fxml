@@ -67,11 +67,23 @@
 		<MenuBar BorderPane.alignment="CENTER">
 			<menus>
 				<Menu mnemonicParsing="false" text="Settings">
-			<items>
+					<items>
 						<MenuItem mnemonicParsing="false" onAction="#loadTxtFile"
 							text="Upload a new setting file" />
 						<MenuItem mnemonicParsing="false"
 							text="Upload a new csv train file" onAction="#loadCSVFile" />
+					</items>
+				</Menu>
+				<Menu mnemonicParsing="false" text="Anomaly Detectors">
+					<items>
+						<MenuItem fx:id="linearRegression" mnemonicParsing="false"
+								  text="linear regression Algorithm" onAction="#setLinearRegressionDetection" />
+						<MenuItem fx:id="zScore" mnemonicParsing="false"
+								  text="zScore Algorithm" onAction="#setzScoreDetection" />
+						<MenuItem fx:id="hybrid" mnemonicParsing="false"
+								  text="Hybrid Algorithm" onAction="#setHybridDetection" />
+						<MenuItem fx:id="classFile" mnemonicParsing="false"
+								  text="Other..." onAction="#loadCSVFile" />
 					</items>
 				</Menu>
 			</menus>
