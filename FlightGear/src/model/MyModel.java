@@ -6,10 +6,13 @@ import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Observable;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import anomaly_detectors.TimeSeries;
@@ -471,9 +474,13 @@ public class MyModel extends Observable implements Model {
 	}
 	
 	public String[] getPaths(String path,String name) {
-		String[] ret = path.split("bin/");
-		ret[0]+="bin/";
-		String[] packagePath = ret[1].split("/");
+		Character backs = 92;
+		String backslash = (backs).toString();
+		String bin="bin"+backslash;
+		String[] ret = path.split("bin");
+		ret[0]+=bin;
+		System.out.println(ret[1]);
+		String[] packagePath = ret[1].split("\");
 		ret[1]="";
 		for(String s:packagePath)
 			ret[1]+=s+".";
