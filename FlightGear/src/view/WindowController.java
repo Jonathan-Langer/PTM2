@@ -147,7 +147,13 @@ public class WindowController implements Initializable,Observer{
 							+ " \n this file format is not valid");
 					message.show();
 				}
-				vm.initValues();
+				else{
+					vm.initValues();
+					Alert message=new Alert(Alert.AlertType.CONFIRMATION);
+					message.setContentText("well done!"
+							+ " \n the test file has been saved in the system");
+					message.show();
+				}
 			}
 		});
 		playerDisplayer.controller.playIcon.fillProperty().addListener(new ChangeListener<Paint>() {

@@ -231,7 +231,7 @@ public class ViewModel extends Observable implements Observer{
 	}
 	
 	public boolean setTestTimeSeries(String csvTestFile) {
-		if(!m.setTestTimeSeries(csvTestFile))//shnik put setTrain but i think she is wrong
+		if(!m.setTestTimeSeries(csvTestFile))
 			return false;
 		csvTestFilePath.setValue(csvTestFile);
 		return true;

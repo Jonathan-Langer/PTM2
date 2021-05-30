@@ -5,6 +5,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,10 @@ public class MyModel extends Observable implements Model {
 	int port=-1;
 	String ip="";
 	int rate=-1;
+	Socket fg=null;
+	PrintWriter writeToFlightGear=null;
+	ArrayBlockingQueue<Runnable> tasks=new ArrayBlockingQueue<>(6);
+	volatile boolean stop=false;
 
 	public double getAileronVal() {
 		return aileronVal;
@@ -310,7 +315,7 @@ public class MyModel extends Observable implements Model {
 		
 		for(int i=0; i<ts.getSize(); i++) {
 			thisLine=ts.getLine(ts.getTitles().get(i));
-			if(thisLine.size()!=ts.getSize()) //if all cols are in same length
+			if(thisLine.size()!=ts.getLength()) //if all cols are in same length
 				return null;
 			if(atrCols.containsKey(i)) {//this col must be in csv
 				atrLen++;
@@ -375,22 +380,34 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void play(int startTime, int rate) {
 		try {
-			Socket fg=new Socket("localhost",5400);
-			PrintWriter writeToFlightGear=new PrintWriter(fg.getOutputStream());
-			for(int i=startTime;i<startTime+rate;i++){
-				String line="";
-				for(int j=0;j<test.getTitles().size();j++)
-					if(j!=0)
-						line=line+","+test.getLineAsArray(j)[i];
-					else
-						line=line+test.getLineAsArray(j)[i];
-				writeToFlightGear.println(line);
-				writeToFlightGear.flush();
-				Thread.sleep(100);//replace the number 100 with (long)(1000.0/(float)rate)
-				fg.close();
-				writeToFlightGear.close();
-			}
-		} catch (IOException | InterruptedException e) {
+			tasks.put(()->{
+				if(fg==null||writeToFlightGear==null)
+					start();
+				for(int i=startTime;i<startTime+rate;i++) {
+					String line = "";
+					for (int j = 0; j < test.getTitles().size(); j++)
+						if (j != 0)
+							line = line + "," + test.getLineAsArray(j)[i];
+						else
+							line = line + test.getLineAsArray(j)[i];
+					writeToFlightGear.println(line);
+					writeToFlightGear.flush();
+					try {
+						Thread.sleep(100);//replace the number 100 with (long)(1000.0/(float)rate)
+					} catch (InterruptedException e) {
+						System.out.println("didn't succeed to connect to the flight gear simulator");
+					}
+					if(startTime+rate>test.getLength()){
+						try {
+							fg.close();
+						} catch (IOException e) {
+							System.out.println("didn't succeed to connect to the flight gear simulator");
+							writeToFlightGear.close();
+						}
+					}
+				}
+			});
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -415,13 +432,17 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-
+		try {
+			fg=new Socket("localhost",5400);
+			writeToFlightGear=new PrintWriter(fg.getOutputStream());
+		} catch (IOException e) {
+			System.out.println("the connection with simulator doesn't succeed");
+		}
 	}
 	@Override
 	public void setValues(int timeStep){
 		if(test!=null){
-			if (timeStep < 0 || test.getLineAsArray(0).length >= timeStep) {
+			if (timeStep < 0 || test.getLength()>= timeStep) {
 				double aileron=test.getLineAsArray(0)[timeStep];
 				double elevator=test.getLineAsArray(1)[timeStep];
 				double throttle=test.getLineAsArray(6)[timeStep];
