@@ -7,8 +7,9 @@ public interface Model {
 	
 	public boolean setTrainTimeSeries(String csvTrainFile);
 	public boolean setTestTimeSeries(String csvTestFile);
-	public void setCurrentTime(double currentTime);
+	public void setCurrentTime(int currentTime);
 	public void saveLastCsvTrainFile(String csvTrainFile);
+	public int getLength();
 	public void play(int startTime, int rate);
 	public void pause();
 	public void stop();

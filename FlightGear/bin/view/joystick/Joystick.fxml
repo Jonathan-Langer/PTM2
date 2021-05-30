@@ -49,7 +49,7 @@
 				<Font size="14.0" />
 			</font>
 		</Label>
-		<Label layoutX="348.0" layoutY="154.0" rotate="90.0" text="&lt;-Elevator-&gt;">
+		<Label layoutX="352.0" layoutY="153.0" rotate="90.0" text="&lt;-Elevator-&gt;">
 			<font>
 				<Font size="14.0" />
 			</font>
@@ -62,12 +62,12 @@
 				<Cursor fx:constant="DEFAULT" />
 			</cursor>
 		</Circle>
-      <Label fx:id="aileronVal" alignment="CENTER" layoutX="232.0" layoutY="36.0" prefHeight="20.0" prefWidth="35.0" text="0" textAlignment="RIGHT">
+      <Label fx:id="aileronVal" alignment="CENTER" layoutX="191.0" layoutY="36.0" prefHeight="20.0" prefWidth="116.0" text="0" textAlignment="RIGHT">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="elevatorVal" alignment="CENTER" layoutX="350.0" layoutY="156.0" prefWidth="27.0" rotate="90.0" text="0">
+      <Label fx:id="elevatorVal" alignment="CENTER" layoutX="305.0" layoutY="153.0" prefHeight="20.0" prefWidth="116.0" rotate="90.0" text="0">
          <font>
             <Font size="14.0" />
          </font>

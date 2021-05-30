@@ -2,10 +2,7 @@ package view.player;
 
 import java.io.IOException;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +15,11 @@ public class Player extends AnchorPane {
 	public StringProperty csvTestFilePath;
 	public DoubleProperty currentTime;
 	public PlayerDisplayerController controller;
-	
+	int length;
+	boolean sliderMoved=true;
+
+	public void setLength(int l){length=l;}
+
 	public Player() {
 		super();
 		try {
@@ -35,7 +36,33 @@ public class Player extends AnchorPane {
 
 			speedPlayer.set(controller.options.getValue());
 			csvTestFilePath=controller.csvTestFilePath;
-			currentTime=controller.timeLine.valueProperty();
+			//currentTime=controller.timeLine.valueProperty();
+			currentTime=new SimpleDoubleProperty();
+			currentTime.addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+					double minValue=controller.timeLine.getMin();
+					double maxValue=controller.timeLine.getMax();
+					sliderMoved=false;
+					controller.timeLine.valueProperty().setValue(minValue+((maxValue-minValue)*currentTime.getValue()/length));
+				}
+			});
+			controller.timeLine.valueProperty().addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+					if(sliderMoved) {
+						double minValue = controller.timeLine.getMin();
+						double maxValue = controller.timeLine.getMax();
+
+						currentTime.setValue(
+								(Math.round((Math.round(controller.timeLine.valueProperty().getValue()) - minValue)
+										* length
+										/ (maxValue - minValue))));
+					}
+					else
+						sliderMoved=true;
+				}
+			});
 			this.getChildren().add(toDisplay);
 		} catch (IOException e) {
 			e.printStackTrace();

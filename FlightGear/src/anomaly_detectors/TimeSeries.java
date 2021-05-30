@@ -72,7 +72,10 @@ public class TimeSeries {
 			retArr[j]=info.get(i).get(j).floatValue();
 		return retArr;
 	}
-	
+
+	public ArrayList<Float> getLineAsList(int i){
+		return info.get(i);
+	}
 	public ArrayList<String> getTitles() {return titles;}
 
 	public ArrayList<ArrayList<Float>> getInfo() {return info;}

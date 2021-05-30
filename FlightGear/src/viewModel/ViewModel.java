@@ -3,6 +3,9 @@ package viewModel;
 import java.util.Observable;
 import java.util.Observer;
 
+import anomaly_detectors.HybridAnomalyDetector;
+import anomaly_detectors.SimpleAnomalyDetector;
+import anomaly_detectors.ZScoreAnomalyDetector;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -239,7 +242,18 @@ public class ViewModel extends Observable implements Observer{
 	public void initValues(){
 		m.setValues(0);
 	}
+
+	public int getLength() {return m.getLength();}
+
 	public void play(){
 
+	}
+	public void setAnomalyDetector(String detector){
+		if(detector.equals("linear regression"))
+			m.setAnomalyDetector(new SimpleAnomalyDetector());
+		if(detector.equals("zScore"))
+			m.setAnomalyDetector(new ZScoreAnomalyDetector());
+		if(detector.equals("hybrid"))
+			m.setAnomalyDetector(new HybridAnomalyDetector());
 	}
 }

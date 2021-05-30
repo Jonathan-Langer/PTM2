@@ -15,7 +15,7 @@ import javafx.scene.control.Alert;
 
 public class MyModel extends Observable implements Model {
 
-	double currentTime;
+	int currentTime=0;
 	TimeSeries train,test;
 	TimeSeriesAnomalyDetector detector;
 	ListOfAttributes atrList;
@@ -28,6 +28,7 @@ public class MyModel extends Observable implements Model {
 	PrintWriter writeToFlightGear=null;
 	ArrayBlockingQueue<Runnable> tasks=new ArrayBlockingQueue<>(6);
 	volatile boolean stop=false;
+	Thread t;
 
 	public double getAileronVal() {
 		return aileronVal;
@@ -132,8 +133,27 @@ public class MyModel extends Observable implements Model {
 	public MyModel() {
 		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
 		atrList=new ListOfAttributes(txtLast);
+		t=new Thread(()->{
+			System.out.println("start");
+			while(!stop)
+			{
+				try{
+					tasks.take().run();
+				}catch(InterruptedException e){}
+			}
+				System.out.println("end");
+		});
+		//t.start();
 	}
 
+	public void endQueue(){
+		try {
+			tasks.put(()->stop=true);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+	}
 	@Override
 	public boolean checkValidateSettingFile(String txtFile) {
 		if(txtFile==null)
@@ -336,6 +356,8 @@ public class MyModel extends Observable implements Model {
 		TimeSeries ts= checkValidationCSV(csvTrainFile);
 		if(ts!=null) {
 			train=ts;
+			if(detector!=null)
+				detector.learnNormal(train);
 			return true;
 		}
 		return false;
@@ -383,13 +405,13 @@ public class MyModel extends Observable implements Model {
 			tasks.put(()->{
 				if(fg==null||writeToFlightGear==null)
 					start();
-				for(int i=startTime;i<startTime+rate;i++) {
+				for(int i=startTime;i<startTime+rate&&i<test.getLength();i++) {
 					String line = "";
 					for (int j = 0; j < test.getTitles().size(); j++)
 						if (j != 0)
-							line = line + "," + test.getLineAsArray(j)[i];
+							line = line + "," + test.getLineAsList(j).get(i);
 						else
-							line = line + test.getLineAsArray(j)[i];
+							line = line + test.getLineAsList(j).get(i);
 					writeToFlightGear.println(line);
 					writeToFlightGear.flush();
 					try {
@@ -426,8 +448,10 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public void setAnomalyDetector(TimeSeriesAnomalyDetector ad) {
-		// TODO Auto-generated method stub
-
+		if(ad!=null){
+			detector=ad;
+			detector.learnNormal(train);
+		}
 	}
 
 	@Override
@@ -443,16 +467,16 @@ public class MyModel extends Observable implements Model {
 	public void setValues(int timeStep){
 		if(test!=null){
 			if (timeStep < 0 || test.getLength()>= timeStep) {
-				double aileron=test.getLineAsArray(0)[timeStep];
-				double elevator=test.getLineAsArray(1)[timeStep];
-				double throttle=test.getLineAsArray(6)[timeStep];
-				double rudder=test.getLineAsArray(2)[timeStep];
-				double altimeter=test.getLineAsArray(25)[timeStep];
-				double airspeed=test.getLineAsArray(24)[timeStep];
-				double heading=test.getLineAsArray(36)[timeStep];
-				double roll=test.getLineAsArray(28)[timeStep];
-				double pitch=test.getLineAsArray(29)[timeStep];
-				double yaw=test.getLineAsArray(20)[timeStep];
+				double aileron=test.getLineAsList(0).get(timeStep);
+				double elevator=test.getLineAsList(1).get(timeStep);
+				double throttle=test.getLineAsList(6).get(timeStep);
+				double rudder=test.getLineAsList(2).get(timeStep);
+				double altimeter=test.getLineAsList(25).get(timeStep);
+				double airspeed=test.getLineAsList(24).get(timeStep);
+				double heading=test.getLineAsList(36).get(timeStep);
+				double roll=test.getLineAsList(28).get(timeStep);
+				double pitch=test.getLineAsList(29).get(timeStep);
+				double yaw=test.getLineAsList(20).get(timeStep);
 				setAileronVal(aileron);
 				setElevatorVal(elevator);
 				setThrottleVal(throttle);
@@ -466,9 +490,14 @@ public class MyModel extends Observable implements Model {
 			}
 		}
 	}
-	public void setCurrentTime(double currentTime){
+	@Override
+	public void setCurrentTime(int currentTime){
 		this.currentTime=currentTime;
 		setChanged();
 		notifyObservers("currentTime: "+currentTime);
+	}
+
+	public int getLength(){
+		return this.test.getLength();
 	}
 }

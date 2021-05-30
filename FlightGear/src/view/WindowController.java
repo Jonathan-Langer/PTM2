@@ -55,7 +55,8 @@ public class WindowController implements Initializable,Observer{
 	StringProperty csvTrainFilePath=new SimpleStringProperty();
 	ListOfAttributes attributes;
 	ViewModel vm;
-
+	@FXML
+	MenuItem linearRegression,zScore,hybrid,classFile;
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
 		csvTrainFilePath.set(new File("resources/last_train.csv").getAbsolutePath());
@@ -149,6 +150,7 @@ public class WindowController implements Initializable,Observer{
 				}
 				else{
 					vm.initValues();
+					playerDisplayer.setLength(vm.getLength());
 					Alert message=new Alert(Alert.AlertType.CONFIRMATION);
 					message.setContentText("well done!"
 							+ " \n the test file has been saved in the system");
@@ -165,8 +167,31 @@ public class WindowController implements Initializable,Observer{
 			}
 		});
 	}
-	
-	
+
+	public void setLinearRegressionDetection(){
+		if(vm!=null){
+			vm.setAnomalyDetector("linear regression");
+			Alert message=new Alert(Alert.AlertType.CONFIRMATION);
+			message.setContentText("well done!"
+					+ " the anomaly detector has been set to linear regression algorithm");
+			message.show();
+		}
+	}
+	public void setzScoreDetection(){
+		vm.setAnomalyDetector("zScore");
+		Alert message=new Alert(Alert.AlertType.CONFIRMATION);
+		message.setContentText("well done!"
+				+ " the anomaly detector has been set to zScore algorithm");
+		message.show();
+	}
+	public void setHybridDetection(){
+		vm.setAnomalyDetector("hybrid");
+		Alert message=new Alert(Alert.AlertType.CONFIRMATION);
+		message.setContentText("well done!"
+				+ " the anomaly detector has been set to hybrid algorithm");
+		message.show();
+	}
+
 	public void loadTxtFile() {
 		FileChooser fc=new FileChooser();
 		fc.setTitle("open txt setting file");
@@ -198,8 +223,8 @@ public class WindowController implements Initializable,Observer{
 			//joystickDisplayer.controller.
 		}
 	}
-	
-	
+
+
 	public void loadCSVFile() {
 		FileChooser fc=new FileChooser();
 		fc.setTitle("open csv file");
@@ -209,9 +234,9 @@ public class WindowController implements Initializable,Observer{
 				("csv file", "*.csv")
 				);
 		File chooser=fc.showOpenDialog(null);
-		
+
 		if(chooser!= null)
-		{			
+		{
 			if(!vm.setTrainTimeSeries(chooser.getPath()))
 			{
 				Alert message=new Alert(Alert.AlertType.ERROR);
@@ -221,6 +246,7 @@ public class WindowController implements Initializable,Observer{
 			}
 			else {
 				vm.saveLastCsvTrainFile();
+				playerDisplayer.setLength(vm.getLength());
 				Alert message=new Alert(Alert.AlertType.CONFIRMATION);
 				message.setContentText("well done!"
 						+ " \n your csv file was saved in the system");

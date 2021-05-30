@@ -139,7 +139,6 @@ public class PlayerDisplayerController  implements Initializable {
 		if(chooser!=null){
 			csvTestFilePath.set(chooser.getPath());
 			timeLine.valueProperty().set(0);
-
 		}
 	}
 }
