@@ -2,7 +2,10 @@ package model;
 
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.Socket;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Observable;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -447,11 +450,35 @@ public class MyModel extends Observable implements Model {
 	}
 
 	@Override
-	public void setAnomalyDetector(TimeSeriesAnomalyDetector ad) {
-		if(ad!=null){
-			detector=ad;
-			detector.learnNormal(train);
+	public boolean setAnomalyDetector(String path,String name) {
+		String[] paths=getPaths(path,name);
+		URLClassLoader urlClassLoader;
+		try {
+			urlClassLoader = URLClassLoader.newInstance(
+					new URL[] {new URL("file://"+paths[0])});
+		Class<?> c=urlClassLoader.loadClass(paths[1]);
+		if(c==null)
+			return false;
+		detector=(TimeSeriesAnomalyDetector)c.newInstance();
+		detector.learnNormal(train);
 		}
+		catch (MalformedURLException e) {e.printStackTrace(); return false;}
+		catch (ClassNotFoundException e) {e.printStackTrace(); return false;}
+		catch (InstantiationException e) {e.printStackTrace(); return false;}
+		catch (IllegalAccessException e) {e.printStackTrace(); return false;}
+		System.out.println("done:)))");
+		return true;
+	}
+	
+	public String[] getPaths(String path,String name) {
+		String[] ret = path.split("bin/");
+		ret[0]+="bin/";
+		String[] packagePath = ret[1].split("/");
+		ret[1]="";
+		for(String s:packagePath)
+			ret[1]+=s+".";
+		ret[1]+=name;
+		return ret;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ package view;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.*;
 
@@ -168,30 +169,39 @@ public class WindowController implements Initializable,Observer{
 		});
 	}
 
-	public void setLinearRegressionDetection(){
-		if(vm!=null){
-			vm.setAnomalyDetector("linear regression");
-			Alert message=new Alert(Alert.AlertType.CONFIRMATION);
-			message.setContentText("well done!"
-					+ " the anomaly detector has been set to linear regression algorithm");
+	public void loadClassFile(){
+		FileChooser fc=new FileChooser();
+		fc.setTitle("open anomaly detector class file");
+		fc.setInitialDirectory(new File("./bin"));
+		fc.getExtensionFilters().addAll(
+				new FileChooser.ExtensionFilter
+				("class file", "*.class")
+				);
+		File chooser=fc.showOpenDialog(null);
+		if(chooser!=null) {
+			if(vm.setAnomalyDetector(chooser.getParent(),chooser.getName())) {
+				//file is valid
+				Alert message=new Alert(Alert.AlertType.CONFIRMATION);
+				message.setContentText("well done!"
+						+ " \n the anomaly detector class file has been saved in the system");
+				message.show();
+			}
+			else {
+				Alert message=new Alert(Alert.AlertType.ERROR);
+				message.setContentText("oops!"
+						+ " \n please choose a valid class file that implements the interface TimeSeriesAnomalyDetector");
+				message.show();
+			}
+		}
+		else {
+			Alert message=new Alert(Alert.AlertType.ERROR);
+			message.setContentText("oops!"
+					+ " \n please choose a class file");
 			message.show();
 		}
+		//TimeSeriesAnomalyDetector
 	}
-	public void setzScoreDetection(){
-		vm.setAnomalyDetector("zScore");
-		Alert message=new Alert(Alert.AlertType.CONFIRMATION);
-		message.setContentText("well done!"
-				+ " the anomaly detector has been set to zScore algorithm");
-		message.show();
-	}
-	public void setHybridDetection(){
-		vm.setAnomalyDetector("hybrid");
-		Alert message=new Alert(Alert.AlertType.CONFIRMATION);
-		message.setContentText("well done!"
-				+ " the anomaly detector has been set to hybrid algorithm");
-		message.show();
-	}
-
+	
 	public void loadTxtFile() {
 		FileChooser fc=new FileChooser();
 		fc.setTitle("open txt setting file");

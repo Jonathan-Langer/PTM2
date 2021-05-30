@@ -1,5 +1,7 @@
 package model;
 
+import java.net.URLClassLoader;
+
 import anomaly_detectors.TimeSeries;
 import anomaly_detectors.TimeSeriesAnomalyDetector;
 
@@ -14,7 +16,7 @@ public interface Model {
 	public void pause();
 	public void stop();
 	
-	public void setAnomalyDetector(TimeSeriesAnomalyDetector ad);
+	public boolean setAnomalyDetector(String path,String name);
 	public void start(); //run in the background
 
 	public boolean checkValidateSettingFile(String txtFile);

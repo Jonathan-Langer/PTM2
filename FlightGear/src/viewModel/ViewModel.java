@@ -248,12 +248,7 @@ public class ViewModel extends Observable implements Observer{
 	public void play(){
 
 	}
-	public void setAnomalyDetector(String detector){
-		if(detector.equals("linear regression"))
-			m.setAnomalyDetector(new SimpleAnomalyDetector());
-		if(detector.equals("zScore"))
-			m.setAnomalyDetector(new ZScoreAnomalyDetector());
-		if(detector.equals("hybrid"))
-			m.setAnomalyDetector(new HybridAnomalyDetector());
+	public boolean setAnomalyDetector(String path,String name){
+		return m.setAnomalyDetector(path, name);
 	}
 }
