@@ -7,8 +7,6 @@ import java.util.*;
 import java.util.Random;
 
 public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
-
-
 	private class WelzlAlgorithm{
 		private Random rand = new Random();
 		

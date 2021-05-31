@@ -2,6 +2,8 @@ package model;
 
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 import anomaly_detectors.TimeSeries;
 import anomaly_detectors.TimeSeriesAnomalyDetector;
 import javafx.scene.control.Alert;
+import viewModel.ViewModel;
 
 public class MyModel extends Observable implements Model {
 
@@ -459,10 +462,10 @@ public class MyModel extends Observable implements Model {
 		try {
 			urlClassLoader = URLClassLoader.newInstance(
 					new URL[] {new URL("file://"+paths[0])});
-		Class<?> c=urlClassLoader.loadClass(paths[1]);
-		if(c==null)
-			return false;
-		detector=(TimeSeriesAnomalyDetector)c.newInstance();
+			Class<?> c=urlClassLoader.loadClass(paths[1]);
+			if(c==null)
+				return false;
+			detector=(TimeSeriesAnomalyDetector)c.newInstance();
 		}
 		catch (MalformedURLException e) {e.printStackTrace(); return false;}
 		catch (ClassNotFoundException e) {e.printStackTrace(); return false;}
