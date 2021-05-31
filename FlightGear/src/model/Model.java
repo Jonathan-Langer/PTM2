@@ -22,5 +22,6 @@ public interface Model {
 	public boolean checkValidateSettingFile(String txtFile);
 	public void saveLastSettingFile(String currentTxtFile);
 	public void applyValuesMinMax();
+	public void applyNames();
 	public void setValues(int timeStep);
 }

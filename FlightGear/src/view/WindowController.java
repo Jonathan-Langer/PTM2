@@ -51,19 +51,38 @@ import model.MyModel;
 import javafx.scene.shape.Circle;
 
 public class WindowController implements Initializable,Observer{
-	
+	HashMap<StringProperty,String> namesAttribute=new HashMap<>();
 	StringProperty txtFilePath=new SimpleStringProperty();
 	StringProperty csvTrainFilePath=new SimpleStringProperty();
-	ListOfAttributes attributes;
 	ViewModel vm;
+	StringProperty aileronName,elevatorName,throttleName,rudderName,altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
 		csvTrainFilePath.set(new File("resources/last_train.csv").getAbsolutePath());
-		attributes=new ListOfAttributes(txtFilePath.get());
 		attributesView=new AttributesViewDisplayer();
 		joystickDisplayer=new JoystickDisplayer();
 		playerDisplayer = new Player();
 		tableClocks=new TableClocksDisplayer();
+		aileronName=new SimpleStringProperty("");
+		elevatorName=new SimpleStringProperty("");
+		rudderName=new SimpleStringProperty("");
+		throttleName=new SimpleStringProperty("");
+		altimeterName=new SimpleStringProperty("");
+		airspeedName=new SimpleStringProperty("");
+		headingName=new SimpleStringProperty("");
+		rollName=new SimpleStringProperty("");
+		pitchName=new SimpleStringProperty("");
+		yawName=new SimpleStringProperty("");
+		namesAttribute.put(aileronName,aileronName.getValue());
+		namesAttribute.put(elevatorName,elevatorName.getValue());
+		namesAttribute.put(rudderName,rudderName.getValue());
+		namesAttribute.put(throttleName,throttleName.getValue());
+		namesAttribute.put(altimeterName,altimeterName.getValue());
+		namesAttribute.put(airspeedName,airspeedName.getValue());
+		namesAttribute.put(headingName,headingName.getValue());
+		namesAttribute.put(rollName,rollName.getValue());
+		namesAttribute.put(pitchName,pitchName.getValue());
+		namesAttribute.put(yawName,yawName.getValue());
 	}
 	public void setViewModel(ViewModel vm) {
 		this.vm=vm;
@@ -80,7 +99,16 @@ public class WindowController implements Initializable,Observer{
 		/*s=playerDisplayer.csvTestFilePath.getValue();
 		playerDisplayer.csvTestFilePath.set("a");
 		playerDisplayer.csvTestFilePath.set(s);*/
-
+		vm.bindToProperty("aileronName",aileronName,"VM2V");
+		vm.bindToProperty("elevatorName",elevatorName,"VM2V");
+		vm.bindToProperty("rudderName",rudderName,"VM2V");
+		vm.bindToProperty("throttleName",throttleName,"VM2V");
+		vm.bindToProperty("altimeterName",altimeterName,"VM2V");
+		vm.bindToProperty("airspeedName",airspeedName,"VM2V");
+		vm.bindToProperty("headingName",headingName,"VM2V");
+		vm.bindToProperty("rollName",rollName,"VM2V");
+		vm.bindToProperty("pitchName",pitchName,"VM2V");
+		vm.bindToProperty("yawName",yawName,"VM2V");
 		vm.bindToProperty("aileron", joystickDisplayer.aileronValue,"VM2V");
 		vm.bindToProperty("elevator", joystickDisplayer.elevatorsValue,"VM2V");
 		vm.bindToProperty("rudder", joystickDisplayer.rudderValue,"VM2V");
@@ -114,7 +142,8 @@ public class WindowController implements Initializable,Observer{
 		vm.bindToProperty("maxYaw",tableClocks.maxYaw,"VM2V");
 		vm.currentTime.bindBidirectional(playerDisplayer.currentTime);
 		vm.applyValuesMinMax();
-		
+		vm.applyNames();
+		attributesView.controller.applySetting(namesAttribute.values());
 		vm.setTrainTimeSeries(csvTrainFilePath.get());
 	}
 	//---------------FXML Objects--------------
@@ -163,6 +192,86 @@ public class WindowController implements Initializable,Observer{
 				if(playerDisplayer.controller.playIcon.getFill()!= Color.BLACK){
 					vm.play();
 				}
+			}
+		});
+		aileronName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				joystickDisplayer.aileronName.setValue(aileronName.getValue());
+				namesAttribute.put(aileronName,aileronName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		elevatorName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				joystickDisplayer.elevatorName.setValue(elevatorName.getValue());
+				namesAttribute.put(elevatorName,elevatorName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		rudderName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				joystickDisplayer.rudderName.setValue(rudderName.getValue());
+				namesAttribute.put(rudderName,rudderName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		throttleName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				joystickDisplayer.throttleName.setValue(throttleName.getValue());
+				namesAttribute.put(throttleName,throttleName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		altimeterName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				tableClocks.altimeterName.setValue(altimeterName.getValue());
+				namesAttribute.put(altimeterName,altimeterName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		airspeedName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				tableClocks.airspeedName.setValue(airspeedName.getValue());
+				namesAttribute.put(airspeedName,airspeedName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		headingName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				tableClocks.headingName.setValue(headingName.getValue());
+				namesAttribute.put(headingName,headingName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		rollName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				tableClocks.rollName.setValue(rollName.getValue());
+				namesAttribute.put(rollName,rollName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		pitchName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				tableClocks.pitchName.setValue(pitchName.getValue());
+				namesAttribute.put(pitchName,pitchName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		yawName.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				tableClocks.yawName.setValue(yawName.getValue());
+				namesAttribute.put(yawName,yawName.getValue());
+				//attributesView.controller.applySetting(namesAttribute.values());
 			}
 		});
 	}
@@ -225,10 +334,9 @@ public class WindowController implements Initializable,Observer{
 						+ " \n your txt file was saved in the system");
 				message.show();
 			}
-			attributes=new ListOfAttributes(txtFilePath.getValue());
-			attributesView.controller.changeSetting(attributes);
 			vm.applyValuesMinMax();
-			//joystickDisplayer.controller.
+			vm.applyNames();
+			attributesView.controller.applySetting(namesAttribute.values());
 		}
 	}
 
@@ -262,10 +370,7 @@ public class WindowController implements Initializable,Observer{
 				csvTrainFilePath.set(chooser.getPath());
 			}
 		}
-
-		attributes=new ListOfAttributes(txtFilePath.get());
-		attributesView.controller.changeSetting(attributes);
-		joystickDisplayer=new JoystickDisplayer();	
+		joystickDisplayer=new JoystickDisplayer();
 	}
 	
 	@Override

@@ -25,6 +25,8 @@ public class JoystickController implements Initializable {
 	double heightToMove,widthToMove;
 	double centerX,centerY;
 	@FXML
+	Label throttleTitle,rudderTitle,aileronTitle,elevatorTitle;
+	@FXML
 	Slider rudder;
 	@FXML
 	Circle insideCircle,outsideCircle;

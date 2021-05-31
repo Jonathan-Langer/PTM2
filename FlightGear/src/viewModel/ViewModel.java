@@ -24,7 +24,9 @@ public class ViewModel extends Observable implements Observer{
 	StringProperty txtFilePath;
 	StringProperty csvTrainFilePath;
 	StringProperty csvTestFilePath;
-	
+
+	StringProperty aileronName,elevatorName,throttleName,rudderName,altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
+
 	Map<String, Property> properties = new HashMap<>();
 
 	//--------values for gauge table----------
@@ -48,7 +50,18 @@ public class ViewModel extends Observable implements Observer{
 		txtFilePath=new SimpleStringProperty("");
 		csvTrainFilePath=new SimpleStringProperty("");
 		csvTestFilePath = new SimpleStringProperty("");
-		
+
+		aileronName=new SimpleStringProperty("");
+		elevatorName=new SimpleStringProperty("");
+		rudderName=new SimpleStringProperty("");
+		throttleName=new SimpleStringProperty("");
+		altimeterName=new SimpleStringProperty("");
+		airspeedName=new SimpleStringProperty("");
+		headingName=new SimpleStringProperty("");
+		rollName=new SimpleStringProperty("");
+		pitchName=new SimpleStringProperty("");
+		yawName=new SimpleStringProperty("");
+
 		throttleValue = new SimpleDoubleProperty();
 		rudderValue=new SimpleDoubleProperty();
 		aileronValue=new SimpleDoubleProperty();
@@ -84,6 +97,17 @@ public class ViewModel extends Observable implements Observer{
 		properties.put("settingsFile", this.txtFilePath);
 		properties.put("csvTrain", this.csvTrainFilePath);
 		properties.put("csvTest", this.csvTestFilePath);
+
+		properties.put("aileronName",this.aileronName);
+		properties.put("elevatorName",this.elevatorName);
+		properties.put("rudderName",this.rudderName);
+		properties.put("throttleName",this.throttleName);
+		properties.put("altimeterName",this.altimeterName);
+		properties.put("airspeedName",this.airspeedName);
+		properties.put("headingName",this.headingName);
+		properties.put("rollName",this.rollName);
+		properties.put("pitchName",this.pitchName);
+		properties.put("yawName",this.yawName);
 		
 		properties.put("altimeter", this.altimeterValue);
 		properties.put("airspeed", this.airspeedValue);
@@ -150,69 +174,94 @@ public class ViewModel extends Observable implements Observer{
 		if(arg instanceof String){
 			String s=(String)arg;
 			String[] arr=s.split(" ");
-			double toUpdate=Double.parseDouble(arr[1]);
-			if(arr[0].equals("currentTime:"))
-				currentTime.set(toUpdate);
-			if(arr[0].equals("aileronMin:"))
-				minAileron.setValue(toUpdate);
-			if(arr[0].equals("aileronMax:"))
-				maxAileron.setValue(toUpdate);
-			if(arr[0].equals("aileronVal:"))
-				aileronValue.setValue(toUpdate);
-			if(arr[0].equals("elevatorMin:"))
-				minElevator.setValue(toUpdate);
-			if(arr[0].equals("elevatorMax:"))
-				maxElevator.setValue(toUpdate);
-			if(arr[0].equals("elevatorVal:"))
-				elevatorsValue.setValue(toUpdate);
-			if(arr[0].equals("rudderMin:"))
-				minRudder.setValue(toUpdate);
-			if(arr[0].equals("rudderMax:"))
-				maxRudder.setValue(toUpdate);
-			if(arr[0].equals("rudderVal:"))
-				rudderValue.setValue(toUpdate);
-			if(arr[0].equals("throttleMin:"))
-				minThrottle.setValue(toUpdate);
-			if(arr[0].equals("throttleMax:"))
-				maxThrottle.setValue(toUpdate);
-			if(arr[0].equals("throttleVal:"))
-				throttleValue.setValue(toUpdate);
-			if(arr[0].equals("yawMin:"))
-				minYaw.setValue(toUpdate);
-			if(arr[0].equals("yawMax:"))
-				maxYaw.setValue(toUpdate);
-			if(arr[0].equals("yawVal:"))
-				yawValue.setValue(toUpdate);
-			if(arr[0].equals("airspeedMin:"))
-				minAirspeed.setValue(toUpdate);
-			if(arr[0].equals("airspeedMax:"))
-				maxAirspeed.setValue(toUpdate);
-			if(arr[0].equals("airspeedVal:"))
-				airspeedValue.setValue(toUpdate);
-			if(arr[0].equals("altimeterMin:"))
-				minAltimeter.setValue(toUpdate);
-			if(arr[0].equals("altimeterMax:"))
-				maxAltimeter.setValue(toUpdate);
-			if(arr[0].equals("altimeterVal:"))
-				altimeterValue.setValue(toUpdate);
-			if(arr[0].equals("rollMin:"))
-				minRoll.setValue(toUpdate);
-			if(arr[0].equals("rollMax:"))
-				maxRoll.setValue(toUpdate);
-			if(arr[0].equals("rollVal:"))
-				rollValue.setValue(toUpdate);
-			if(arr[0].equals("pitchMin:"))
-				minPitch.setValue(toUpdate);
-			if(arr[0].equals("pitchMax:"))
-				maxPitch.setValue(toUpdate);
-			if(arr[0].equals("pitchVal:"))
-				pitchValue.setValue(toUpdate);
-			if(arr[0].equals("headingMin:"))
-				minHeading.setValue(toUpdate);
-			if(arr[0].equals("headingMax:"))
-				maxHeading.setValue(toUpdate);
-			if(arr[0].equals("headingVal:"))
-				headingValue.setValue(toUpdate);
+			if(arr[0].contains("Name")){
+				String toUpdate=arr[1];
+				if(arr[0].equals("aileronName:"))
+					aileronName.setValue(toUpdate);
+				if(arr[0].equals("elevatorsName:"))
+					elevatorName.setValue(toUpdate);
+				if(arr[0].equals("throttleName:"))
+					throttleName.setValue(toUpdate);
+				if(arr[0].equals("rudderName:"))
+					rudderName.setValue(toUpdate);
+				if(arr[0].equals("altimeterName:"))
+					altimeterName.setValue(toUpdate);
+				if(arr[0].equals("airspeedName:"))
+					airspeedName.setValue(toUpdate);
+				if(arr[0].equals("headingName:"))
+					headingName.setValue(toUpdate);
+				if(arr[0].equals("rollName:"))
+					rollName.setValue(toUpdate);
+				if(arr[0].equals("pitchName:"))
+					pitchName.setValue(toUpdate);
+				if(arr[0].equals("yawName:"))
+					yawName.setValue(toUpdate);
+			}
+			else{
+				double toUpdate=Double.parseDouble(arr[1]);
+				if(arr[0].equals("currentTime:"))
+					currentTime.setValue(toUpdate);
+				if(arr[0].equals("aileronMin:"))
+					minAileron.setValue(toUpdate);
+				if(arr[0].equals("aileronMax:"))
+					maxAileron.setValue(toUpdate);
+				if(arr[0].equals("aileronVal:"))
+					aileronValue.setValue(toUpdate);
+				if(arr[0].equals("elevatorMin:"))
+					minElevator.setValue(toUpdate);
+				if(arr[0].equals("elevatorMax:"))
+					maxElevator.setValue(toUpdate);
+				if(arr[0].equals("elevatorVal:"))
+					elevatorsValue.setValue(toUpdate);
+				if(arr[0].equals("rudderMin:"))
+					minRudder.setValue(toUpdate);
+				if(arr[0].equals("rudderMax:"))
+					maxRudder.setValue(toUpdate);
+				if(arr[0].equals("rudderVal:"))
+					rudderValue.setValue(toUpdate);
+				if(arr[0].equals("throttleMin:"))
+					minThrottle.setValue(toUpdate);
+				if(arr[0].equals("throttleMax:"))
+					maxThrottle.setValue(toUpdate);
+				if(arr[0].equals("throttleVal:"))
+					throttleValue.setValue(toUpdate);
+				if(arr[0].equals("yawMin:"))
+					minYaw.setValue(toUpdate);
+				if(arr[0].equals("yawMax:"))
+					maxYaw.setValue(toUpdate);
+				if(arr[0].equals("yawVal:"))
+					yawValue.setValue(toUpdate);
+				if(arr[0].equals("airspeedMin:"))
+					minAirspeed.setValue(toUpdate);
+				if(arr[0].equals("airspeedMax:"))
+					maxAirspeed.setValue(toUpdate);
+				if(arr[0].equals("airspeedVal:"))
+					airspeedValue.setValue(toUpdate);
+				if(arr[0].equals("altimeterMin:"))
+					minAltimeter.setValue(toUpdate);
+				if(arr[0].equals("altimeterMax:"))
+					maxAltimeter.setValue(toUpdate);
+				if(arr[0].equals("altimeterVal:"))
+					altimeterValue.setValue(toUpdate);
+				if(arr[0].equals("rollMin:"))
+					minRoll.setValue(toUpdate);
+				if(arr[0].equals("rollMax:"))
+					maxRoll.setValue(toUpdate);
+				if(arr[0].equals("rollVal:"))
+					rollValue.setValue(toUpdate);
+				if(arr[0].equals("pitchMin:"))
+					minPitch.setValue(toUpdate);
+				if(arr[0].equals("pitchMax:"))
+					maxPitch.setValue(toUpdate);
+				if(arr[0].equals("pitchVal:"))
+					pitchValue.setValue(toUpdate);
+				if(arr[0].equals("headingMin:"))
+					minHeading.setValue(toUpdate);
+				if(arr[0].equals("headingMax:"))
+					maxHeading.setValue(toUpdate);
+				if(arr[0].equals("headingVal:"))
+					headingValue.setValue(toUpdate);
+			}
 		}
 	}
 	public boolean checkValidateSettingFile(String txtFile){
@@ -222,7 +271,7 @@ public class ViewModel extends Observable implements Observer{
 		m.saveLastSettingFile(txtFilePath.getValue());
 	}
 	public void applyValuesMinMax(){ m.applyValuesMinMax();}
-	
+	public void applyNames(){m.applyNames();}
 	public boolean setTrainTimeSeries(String csvTrainFile) {
 		if(!m.setTrainTimeSeries(csvTrainFile))
 			return false;

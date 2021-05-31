@@ -30,6 +30,7 @@ public class MyModel extends Observable implements Model {
 	ListOfAttributes atrList;
 	String txtLast;
 	double aileronVal,elevatorVal,rudderVal,throttleVal,altimeterVal,airspeedVal,headingVal,rollVal,pitchVal,yawVal;
+	String aileronName,elevatorName,rudderName,throttleName,altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
 	int port=-1;
 	String ip="";
 	int rate=-1;
@@ -138,6 +139,65 @@ public class MyModel extends Observable implements Model {
 		setChanged();
 		notifyObservers("yawVal: "+yawVal);
 	}
+	public void setAileronName(String aileronName) {
+		this.aileronName = aileronName;
+		setChanged();
+		notifyObservers("aileronName: "+aileronName);
+	}
+
+	public void setElevatorName(String elevatorName) {
+		this.elevatorName = elevatorName;
+		setChanged();
+		notifyObservers("elevatorsName: "+elevatorName);
+	}
+
+	public void setRudderName(String rudderName) {
+		this.rudderName = rudderName;
+		setChanged();
+		notifyObservers("rudderName: "+rudderName);
+	}
+
+	public void setThrottleName(String throttleName) {
+		this.throttleName = throttleName;
+		setChanged();
+		notifyObservers("throttleName: "+throttleName);
+	}
+
+	public void setAltimeterName(String altimeterName) {
+		this.altimeterName = altimeterName;
+		setChanged();
+		notifyObservers("altimeterName: "+altimeterName);
+	}
+
+	public void setAirspeedName(String airspeedName) {
+		this.airspeedName = airspeedName;
+		setChanged();
+		notifyObservers("airspeedName: "+airspeedName);
+	}
+
+	public void setHeadingName(String headingName) {
+		this.headingName = headingName;
+		setChanged();
+		notifyObservers("headingName: "+headingName);
+	}
+
+	public void setRollName(String rollName) {
+		this.rollName = rollName;
+		setChanged();
+		notifyObservers("rollName: "+rollName);
+	}
+
+	public void setPitchName(String pitchName) {
+		this.pitchName = pitchName;
+		setChanged();
+		notifyObservers("pitchName: "+pitchName);
+	}
+
+	public void setYawName(String yawName) {
+		this.yawName = yawName;
+		setChanged();
+		notifyObservers("yawName: "+yawName);
+	}
 
 	public MyModel() {
 		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
@@ -161,7 +221,6 @@ public class MyModel extends Observable implements Model {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
 	}
 	@Override
 	public boolean checkValidateSettingFile(String txtFile) {
@@ -329,6 +388,35 @@ public class MyModel extends Observable implements Model {
 		}
 	}
 
+	@Override
+	public void applyNames(){
+		if(atrList!=null){
+			for(String key:atrList.getAttributesNames()){
+				AttributeSettings a=atrList.getList().get(key);
+				if(a.getColInCSV()==0){
+					setAileronName(key);
+				}
+				if(a.getColInCSV()==1)
+					setElevatorName(key);
+				if(a.getColInCSV()==2)
+					setRudderName(key);
+				if(a.getColInCSV()==6)
+					setThrottleName(key);
+				if(a.getColInCSV()==20)
+					setYawName(key);
+				if(a.getColInCSV()==24)
+					setAirspeedName(key);
+				if(a.getColInCSV()==25)
+					setAltimeterName(key);
+				if(a.getColInCSV()==28)
+					setRollName(key);
+				if(a.getColInCSV()==29)
+					setPitchName(key);
+				if(a.getColInCSV()==36)
+					setHeadingName(key);
+			}
+		}
+	}
 	
 	public TimeSeries checkValidationCSV(String csv) {
 		TimeSeries ts=new TimeSeries(csv);

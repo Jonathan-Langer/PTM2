@@ -6,6 +6,8 @@ import java.util.ResourceBundle;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,7 @@ public class JoystickDisplayer extends AnchorPane {
 	public DoubleProperty aileronValue,elevatorsValue,rudderValue,throttleValue;
 	public DoubleProperty minAileron,maxAileron,minElevator,maxElevator,minThrottle,maxThrottle,
 	minRudder,maxRudder;
+	public StringProperty throttleName,rudderName,aileronName,elevatorName;
 	public JoystickController controller;
 
 	public JoystickDisplayer() {
@@ -45,6 +48,10 @@ public class JoystickDisplayer extends AnchorPane {
 			rudderValue=controller.rudder.valueProperty();
 			minRudder=controller.rudder.minProperty();
 			maxRudder=controller.rudder.maxProperty();
+			throttleName=controller.throttleTitle.textProperty();
+			aileronName=controller.aileronTitle.textProperty();
+			rudderName=controller.rudderTitle.textProperty();
+			elevatorName=controller.elevatorTitle.textProperty();
 			aileronValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {

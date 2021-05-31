@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +18,7 @@ public class TableClocksDisplayer extends Pane {
 	rollValue,pitchValue,yawValue;
 	public DoubleProperty minAltimeter,maxAltimeter,minAirspeed,maxAirspeed,minHeading,maxHeading,
 	minRoll,maxRoll,minPitch,maxPitch,minYaw,maxYaw;
-
+	public StringProperty altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
 	public TableClocksController controller;
 	
 	public TableClocksDisplayer() {
@@ -39,11 +41,23 @@ public class TableClocksDisplayer extends Pane {
 		maxPitch = new SimpleDoubleProperty();
 		minYaw = new SimpleDoubleProperty();
 		maxYaw = new SimpleDoubleProperty();
+		altimeterName=new SimpleStringProperty();
+		airspeedName=new SimpleStringProperty();
+		headingName=new SimpleStringProperty();
+		rollName=new SimpleStringProperty();
+		pitchName=new SimpleStringProperty();
+		yawName=new SimpleStringProperty();
 		FXMLLoader loader=new FXMLLoader();
 		try {
 			Pane toDisplay=loader.load(getClass().getResource("TableClocks.fxml").openStream());
 			controller=loader.getController();
 			this.getChildren().add(toDisplay);
+			altimeterName.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+					controller.gAltimeter.setTitle(altimeterName.getValue());
+				}
+			});
 			altimeterValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -63,6 +77,12 @@ public class TableClocksDisplayer extends Pane {
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
 					double x=maxAltimeter.getValue();
 					controller.gAltimeter.setMaxValue(x);
+				}
+			});
+			airspeedName.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+					controller.gAirspeed.setTitle(airspeedName.getValue());
 				}
 			});
 			airspeedValue.addListener(new ChangeListener<Number>() {
@@ -86,6 +106,12 @@ public class TableClocksDisplayer extends Pane {
 					controller.gAirspeed.setMaxValue(x);
 				}
 			});
+			headingName.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+					controller.gHeading.setTitle(headingName.getValue());
+				}
+			});
 			headingValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -105,6 +131,12 @@ public class TableClocksDisplayer extends Pane {
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
 					double x=maxHeading.getValue();
 					controller.gHeading.setMaxValue(x);
+				}
+			});
+			pitchName.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+					controller.gPitch.setTitle(pitchName.getValue());
 				}
 			});
 			pitchValue.addListener(new ChangeListener<Number>() {
@@ -128,6 +160,12 @@ public class TableClocksDisplayer extends Pane {
 					controller.gPitch.setMaxValue(x);
 				}
 			});
+			rollName.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+					controller.gRoll.setTitle(rollName.getValue());
+				}
+			});
 			rollValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
@@ -147,6 +185,12 @@ public class TableClocksDisplayer extends Pane {
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
 					double x=maxRoll.getValue();
 					controller.gRoll.setMaxValue(x);
+				}
+			});
+			yawName.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+					controller.gYaw.setTitle(yawName.getValue());
 				}
 			});
 			yawValue.addListener(new ChangeListener<Number>() {

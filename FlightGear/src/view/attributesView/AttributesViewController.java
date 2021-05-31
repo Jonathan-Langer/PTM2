@@ -2,6 +2,7 @@ package view.attributesView;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 import anomaly_detectors.Point;
@@ -19,8 +20,7 @@ import view.attributesView.coordinateSystem.CoordinateSystemDisplayer;
 
 public class AttributesViewController implements Initializable {
 	ObservableList<String> list = FXCollections.observableArrayList();
-	ListOfAttributes attributes;
-	
+
 	@FXML
 	ListView<String> listAttributes=new ListView<String>();
 	
@@ -36,10 +36,6 @@ public class AttributesViewController implements Initializable {
 	
 	public AttributesViewController() {
 		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
-		if(lastSetting.exists())
-			this.attributes=new ListOfAttributes(lastSetting.getAbsolutePath());
-		else
-			this.attributes=new ListOfAttributes();
 		detections=new CoordinateSystemDisplayer();
 		selectedPrameter=new CoordinateSystemDisplayer();
 		correlatedPrameter=new CoordinateSystemDisplayer();
@@ -52,23 +48,19 @@ public class AttributesViewController implements Initializable {
 		list.addAll(attributes.getAttributesNames());
 		list.sort((s1,s2)->s1.compareTo(s2));
 		listAttributes.getItems().addAll(list);*/
-		applySetting();
+		//applySetting();
 		// -----------set event handler for choosing an option---------
 		//listAttributes.addEventFilter(MouseEvent.MOUSE_CLICKED, (e)->toDelete());
 		//access to the selected item - 
 		//listAttributes.getSelectionModel().getSelectedItem()
 	}
 	
-	public void applySetting() {
+	public void applySetting(Collection<String> c) {
 		listAttributes.getItems().removeAll(listAttributes.getItems());
 		list.removeAll(list);
-		list.addAll(attributes.getAttributesNames());
+		list.addAll(c);
 		list.sort((s1,s2)->s1.compareTo(s2));
 		listAttributes.getItems().addAll(list);
 	}
-	
-	public void changeSetting(ListOfAttributes newAttrinbutes) {
-		this.attributes=newAttrinbutes;
-		applySetting();
-	}
+
 }

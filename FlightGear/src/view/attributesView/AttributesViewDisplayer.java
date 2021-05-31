@@ -8,11 +8,9 @@ import model.ListOfAttributes;
 import view.joystick.JoystickController;
 
 public class AttributesViewDisplayer extends AnchorPane {
-	ListOfAttributes attributes;
 	public AttributesViewController controller;
 	public AttributesViewDisplayer() {
 		super();
-		attributes=new ListOfAttributes();
 		FXMLLoader loader=new FXMLLoader();
 		try {
 			AnchorPane toDisplay=loader.load(getClass().getResource("AttributesView.fxml").openStream());
