@@ -463,28 +463,30 @@ public class MyModel extends Observable implements Model {
 		if(c==null)
 			return false;
 		detector=(TimeSeriesAnomalyDetector)c.newInstance();
-		detector.learnNormal(train);
 		}
 		catch (MalformedURLException e) {e.printStackTrace(); return false;}
 		catch (ClassNotFoundException e) {e.printStackTrace(); return false;}
 		catch (InstantiationException e) {e.printStackTrace(); return false;}
 		catch (IllegalAccessException e) {e.printStackTrace(); return false;}
 		System.out.println("done:)))");
+		detector.learnNormal(train);
 		return true;
 	}
 	
 	public String[] getPaths(String path,String name) {
 		Character backs = 92;
+		String pattern="\\W";
 		String backslash = (backs).toString();
 		String bin="bin"+backslash;
 		String[] ret = path.split("bin");
 		ret[0]+=bin;
-		System.out.println(ret[1]);
-		String[] packagePath = ret[1].split("\");
+		String[] packagePath = ret[1].split(pattern);
 		ret[1]="";
 		for(String s:packagePath)
-			ret[1]+=s+".";
-		ret[1]+=name;
+			if(!s.isEmpty())
+				ret[1]+=s+".";
+		ret[1]+=name;//this string ends with ".class"
+		ret[1]=ret[1].split(".class")[0];
 		return ret;
 	}
 

@@ -56,8 +56,6 @@ public class WindowController implements Initializable,Observer{
 	StringProperty csvTrainFilePath=new SimpleStringProperty();
 	ListOfAttributes attributes;
 	ViewModel vm;
-	@FXML
-	MenuItem linearRegression,zScore,hybrid,classFile;
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
 		csvTrainFilePath.set(new File("resources/last_train.csv").getAbsolutePath());
