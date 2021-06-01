@@ -17,11 +17,9 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import anomaly_detectors.CorrelatedFeatures;
-import anomaly_detectors.SimpleAnomalyDetector;
-import anomaly_detectors.TimeSeries;
-import anomaly_detectors.TimeSeriesAnomalyDetector;
+import anomaly_detectors.*;
 import javafx.scene.control.Alert;
+import javafx.scene.paint.Color;
 import viewModel.ViewModel;
 
 public class MyModel extends Observable implements Model {
@@ -207,16 +205,6 @@ public class MyModel extends Observable implements Model {
 		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
 		atrList=new ListOfAttributes(txtLast);
 		collsForView=new HashMap<>();
-		collsForView.put(0,null);
-		collsForView.put(1,null);
-		collsForView.put(2,null);
-		collsForView.put(6,null);
-		collsForView.put(20,null);
-		collsForView.put(24,null);
-		collsForView.put(25,null);
-		collsForView.put(28,null);
-		collsForView.put(29,null);
-		collsForView.put(36,null);
 		t=new Thread(()->{
 			System.out.println("start");
 			while(!stop)
@@ -237,107 +225,116 @@ public class MyModel extends Observable implements Model {
 			e.printStackTrace();
 		}
 	}
-	@Override
-	public boolean checkValidateSettingFile(String txtFile) {
+
+	private ListOfAttributes checkValidationSettingFile(String txtFile){
 		if(txtFile==null)
-			return false;
-		if(!txtFile.endsWith(".txt"))
-			return false;
+			return null;
 		File f=new File(txtFile);
 		if(!f.exists())
-			return false;
-		HashMap<Integer, Boolean> cellsAreApeared=new HashMap<>();
-		HashMap<String, Boolean> specialSettingsApeared = new HashMap<>();
+			return null;
+		HashMap<String, Integer> atrApeared=new HashMap<>();
+		ListOfAttributes atrL = new ListOfAttributes();
 
 		//for the ip, port and rate
-		specialSettingsApeared.put("ip", false);
-		specialSettingsApeared.put("port", false);
-		specialSettingsApeared.put("rate", false);
+		atrApeared.put("aileron",-1);
+		atrApeared.put("elevator",-1);
+		atrApeared.put("rudder",-1);
+		atrApeared.put("throttle",-1);
+		atrApeared.put("altimeter",-1);
+		atrApeared.put("airspeed",-1);
+		atrApeared.put("heading",-1);
+		atrApeared.put("roll",-1);
+		atrApeared.put("pitch",-1);
+		atrApeared.put("yaw",-1);
+		atrApeared.put("ip",-1);
+		atrApeared.put("port",-1);
+		atrApeared.put("rate",-1);
 
-		cellsAreApeared.put(0, false);
-		cellsAreApeared.put(1, false);
-		cellsAreApeared.put(2, false);
-		cellsAreApeared.put(6, false);
-		cellsAreApeared.put(20, false);
-		cellsAreApeared.put(24, false);
-		cellsAreApeared.put(25, false);
-		cellsAreApeared.put(28, false);
-		cellsAreApeared.put(29, false);
-		cellsAreApeared.put(36, false);
+
 		try {
 			BufferedReader read=new BufferedReader(new FileReader(new File(txtFile)));
 			String line=null;
 			while((line=read.readLine())!=null) {
 				String[] data = line.split(",");
 				if (data.length == 4) {
-					if (!cellsAreApeared.containsKey(Integer.parseInt(data[1]))) {
+					if (!atrApeared.containsKey(data[0])) { //only these attributes
 						read.close();
-						return false;
+						return null;
 					}
-					if (Double.parseDouble(data[2]) > Double.parseDouble(data[3])) {
+					if (Double.parseDouble(data[2]) >= Double.parseDouble(data[3])) { //min is smaller than max
 						read.close();
-						return false;
+						return null;
 					}
-					if (cellsAreApeared.get(Integer.parseInt(data[1]))) {
+					if (atrApeared.get(data[0])!=-1) { //attribute is already in use
 						read.close();
-						return false;
+						return null;
 					}
-					cellsAreApeared.put(Integer.parseInt(data[1]), true);
-				} else {
+					if(atrApeared.containsValue(Integer.parseInt(data[1]))){ //col is already in use
+						read.close();
+						return null;
+					}
+					atrApeared.put(data[0], Integer.parseInt(data[1]));
+					String[] arr= {data[1],data[2],data[3]};
+					atrL.addAttribute(data[0], new AttributeSettings(arr));
+				}//if 4
+				else {
 					if (data.length == 2) {
 						if (!(data[0].equals("ip") || data[0].equals("port") || data[0].equals("rate"))) {
 							read.close();
-							return false;
+							return null;
 						} else {
 							if (data[0].equals("ip")) {
-								if (specialSettingsApeared.get("ip").equals(true)) {
+								if (atrApeared.get("ip")!=-1) {
 									read.close();
-									return false;
+									return null;
 								}
 								else
-									specialSettingsApeared.put("ip", true);
+									atrL.ip=data[1];
 							}
 							if (data[0].equals("port")) {
-								if (specialSettingsApeared.get("port").equals(true)) {
+								if (atrApeared.get("port").equals(true)) {
 									read.close();
-									return false;
+									return null;
 								}
 								else
-									specialSettingsApeared.put("port", true);
+									atrL.port=Integer.parseInt(data[1]);
 							}
 							if (data[0].equals("rate")) {
-								if (specialSettingsApeared.get("rate").equals(true)) {
+								if (atrApeared.get("rate").equals(true)) {
 									read.close();
-									return false;
+									return null;
 								}
 								else
-									specialSettingsApeared.put("rate", true);
+									atrL.rate=Integer.parseInt(data[1]);
 							}
+							atrApeared.put(data[0],-2);
 						}
-					}
-				}
-			}
-			for (Integer c: cellsAreApeared.keySet()) {
-				if(!cellsAreApeared.get(c))
-					return false;
-			}
-			for(String s : specialSettingsApeared.keySet()) {
-				if(!specialSettingsApeared.get(s))
-					return false;
-			}
-			line=read.readLine();
+					}//if 2
+					else{
+						read.close();
+						return null;
+					}//else
+				}//else
+			}//while
 			read.close();
-			return line == null;
-		} catch (IOException e) {
-			return false;
-		}
- 
+			return atrL;
+		} catch (IOException e) {return null;}
+
 	}
 
 	@Override
 	public void saveLastSettingFile(String currentTxtFile) {
 		copyFile(currentTxtFile, new File("resources/last_setting.txt").getAbsolutePath());
 		atrList=new ListOfAttributes(txtLast);
+	}
+
+	@Override
+	public boolean checkValidateSettingFile(String txtFile) {
+		ListOfAttributes atrL=checkValidationSettingFile(txtFile);
+		if(atrL==null)
+			return false;
+		atrList=atrL;
+		return true;
 	}
 
 	@Override
@@ -646,6 +643,14 @@ public class MyModel extends Observable implements Model {
 	}
 	@Override
 	public String getMostCorrelated(String parameter){
+		CorrelatedFeatures mostRelevant=getCorrelatedFeatures(parameter);
+		if(mostRelevant==null)
+			return "no correlated feature";
+		if(mostRelevant.feature1.equals(parameter))
+			return mostRelevant.feature2;
+		return mostRelevant.feature1;
+	}
+	private CorrelatedFeatures getCorrelatedFeatures(String parameter){
 		if(!trainForView.getTitles().contains(parameter))
 			return null;
 		SimpleAnomalyDetector d=new SimpleAnomalyDetector(Float.parseFloat("0.5"));
@@ -657,19 +662,41 @@ public class MyModel extends Observable implements Model {
 				if(mostRelevant==null)
 					mostRelevant=c;
 				else
-					if(mostRelevant.corrlation<c.corrlation)
-						mostRelevant=c;
+				if(mostRelevant.corrlation<c.corrlation)
+					mostRelevant=c;
 			if(c.feature2.equals(parameter))
 				if(mostRelevant==null)
 					mostRelevant=c;
 				else
-					if(mostRelevant.corrlation<c.corrlation)
-						mostRelevant=c;
+				if(mostRelevant.corrlation<c.corrlation)
+					mostRelevant=c;
 		}
-		if(mostRelevant==null)
-			return "no correlated feature";
-		if(mostRelevant.feature1.equals(parameter))
-			return mostRelevant.feature2;
-		return mostRelevant.feature1;
+		return mostRelevant;
+	}
+	public HashMap<Point, Color> sendPoint(int endTime, String feature){
+		HashMap<Point, Color> result=new HashMap<>();
+		if(endTime<0)
+			return result;
+		if(!collsForView.containsValue(feature))
+			return result;
+		if(testForView==null)
+			return result;
+		CorrelatedFeatures relevant=getCorrelatedFeatures(feature);
+		if(relevant==null)
+			if(detector!=null){
+				List<AnomalyReport> detcted=detector.detect(testForView);
+				for(int i=0;i<=endTime;i++){
+					Point p=new Point(i,testForView.getLine(feature).get(i));
+					if(!detcted.contains(p))
+						result.put(new Point(i,testForView.getLine(feature).get(i)),Color.rgb(58,58,191));
+					else
+						result.put(new Point(i,testForView.getLine(feature).get(i)),Color.rgb(205,21,47));
+				}
+			}
+		for(int i=0;i<endTime;i++){
+			if(detector==null)
+				result.put(new Point(i,testForView.getLine(feature).get(i)),Color.rgb(58,58,191));
+		}
+		return result;
 	}
 }

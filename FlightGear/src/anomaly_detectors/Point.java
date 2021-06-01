@@ -26,4 +26,13 @@ public class Point {
 		return "X: " + x + ", Y: " + y; 
 	}
 
+	@Override
+	public boolean equals(Object other){
+		if(other==this)
+			return true;
+		if(!(other instanceof Point))
+			return false;
+		Point p=(Point) other;
+		return this.x==p.x&&this.y==p.y;
+	}
 }

@@ -2,7 +2,9 @@ package view.attributesView;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import anomaly_detectors.Point;
@@ -62,5 +64,6 @@ public class AttributesViewController implements Initializable {
 		list.sort((s1,s2)->s1.compareTo(s2));
 		listAttributes.getItems().addAll(list);
 	}
+
 
 }
