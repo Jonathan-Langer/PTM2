@@ -24,4 +24,5 @@ public interface Model {
 	public void applyValuesMinMax();
 	public void applyNames();
 	public void setValues(int timeStep);
+	public String getMostCorrelated(String parameter);
 }

@@ -10,6 +10,7 @@ import anomaly_detectors.Point;
 import com.sun.javafx.scene.paint.GradientUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -22,6 +23,8 @@ public class CoordinateSystemController implements Initializable {
 	Line x,y;
 	@FXML
 	AnchorPane board;
+	@FXML
+	Label title;
 	double height;
 	double width;
 	double maxValue;

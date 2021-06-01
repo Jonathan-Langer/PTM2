@@ -144,6 +144,7 @@ public class WindowController implements Initializable,Observer{
 		vm.applyValuesMinMax();
 		vm.applyNames();
 		attributesView.controller.applySetting(namesAttribute.values());
+		//vm.checkValidateSettingFile(txtFilePath.getValue());
 		vm.setTrainTimeSeries(csvTrainFilePath.get());
 	}
 	//---------------FXML Objects--------------
@@ -272,6 +273,16 @@ public class WindowController implements Initializable,Observer{
 				tableClocks.yawName.setValue(yawName.getValue());
 				namesAttribute.put(yawName,yawName.getValue());
 				//attributesView.controller.applySetting(namesAttribute.values());
+			}
+		});
+		attributesView.selectedParameter.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				if(vm!=null){
+					String str=vm.getMostCorrelated(attributesView.selectedParameter.getValue());
+					if(str!=null)
+						attributesView.correlatedPrameter.setValue(str);
+				}
 			}
 		});
 	}

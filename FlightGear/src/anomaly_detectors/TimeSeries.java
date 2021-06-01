@@ -1,7 +1,6 @@
 package anomaly_detectors;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -83,5 +82,24 @@ public class TimeSeries {
 	public void addCol(String feature,ArrayList<Float> data) {
 		titles.add(feature);
 		info.add(data);
+	}
+
+	public TimeSeries filterBySelectingColl(HashMap<Integer,String> c){
+		if(c==null)
+			return null;
+		if(c.isEmpty())
+			return null;
+		TimeSeries ret=new TimeSeries();
+		for(Integer coll:c.keySet()){
+			if(titles.get(coll)!=null){
+				if(ret.titles==null)
+					ret.titles=new ArrayList<>();
+				if(ret.info==null)
+					ret.info=new ArrayList<>();
+				ret.titles.add(c.get(coll));
+				ret.info.add(this.info.get(coll));
+			}
+		}
+		return ret;
 	}
 }

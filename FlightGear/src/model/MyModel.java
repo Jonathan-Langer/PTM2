@@ -17,6 +17,8 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import anomaly_detectors.CorrelatedFeatures;
+import anomaly_detectors.SimpleAnomalyDetector;
 import anomaly_detectors.TimeSeries;
 import anomaly_detectors.TimeSeriesAnomalyDetector;
 import javafx.scene.control.Alert;
@@ -26,8 +28,10 @@ public class MyModel extends Observable implements Model {
 
 	int currentTime=0;
 	TimeSeries train,test;
+	TimeSeries trainForView,testForView;
 	TimeSeriesAnomalyDetector detector;
 	ListOfAttributes atrList;
+	HashMap<Integer,String> collsForView;
 	String txtLast;
 	double aileronVal,elevatorVal,rudderVal,throttleVal,altimeterVal,airspeedVal,headingVal,rollVal,pitchVal,yawVal;
 	String aileronName,elevatorName,rudderName,throttleName,altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
@@ -202,6 +206,17 @@ public class MyModel extends Observable implements Model {
 	public MyModel() {
 		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
 		atrList=new ListOfAttributes(txtLast);
+		collsForView=new HashMap<>();
+		collsForView.put(0,null);
+		collsForView.put(1,null);
+		collsForView.put(2,null);
+		collsForView.put(6,null);
+		collsForView.put(20,null);
+		collsForView.put(24,null);
+		collsForView.put(25,null);
+		collsForView.put(28,null);
+		collsForView.put(29,null);
+		collsForView.put(36,null);
 		t=new Thread(()->{
 			System.out.println("start");
 			while(!stop)
@@ -266,8 +281,8 @@ public class MyModel extends Observable implements Model {
 					if (cellsAreApeared.get(Integer.parseInt(data[1]))) {
 						read.close();
 						return false;
-					} else
-						cellsAreApeared.put(Integer.parseInt(data[1]), true);
+					}
+					cellsAreApeared.put(Integer.parseInt(data[1]), true);
 				} else {
 					if (data.length == 2) {
 						if (!(data[0].equals("ip") || data[0].equals("port") || data[0].equals("rate"))) {
@@ -393,9 +408,8 @@ public class MyModel extends Observable implements Model {
 		if(atrList!=null){
 			for(String key:atrList.getAttributesNames()){
 				AttributeSettings a=atrList.getList().get(key);
-				if(a.getColInCSV()==0){
+				if(a.getColInCSV()==0)
 					setAileronName(key);
-				}
 				if(a.getColInCSV()==1)
 					setElevatorName(key);
 				if(a.getColInCSV()==2)
@@ -414,6 +428,7 @@ public class MyModel extends Observable implements Model {
 					setPitchName(key);
 				if(a.getColInCSV()==36)
 					setHeadingName(key);
+				collsForView.put(a.getColInCSV(),key);
 			}
 		}
 	}
@@ -453,6 +468,7 @@ public class MyModel extends Observable implements Model {
 		TimeSeries ts= checkValidationCSV(csvTrainFile);
 		if(ts!=null) {
 			train=ts;
+			trainForView=ts.filterBySelectingColl(collsForView);
 			if(detector!=null)
 				detector.learnNormal(train);
 			return true;
@@ -465,6 +481,7 @@ public class MyModel extends Observable implements Model {
 		TimeSeries ts= checkValidationCSV(csvTestFile);
 		if(ts!=null) {
 			test=ts;
+			testForView=ts.filterBySelectingColl(collsForView);
 			return true;
 		}
 		return false;
@@ -560,7 +577,7 @@ public class MyModel extends Observable implements Model {
 		catch (InstantiationException e) {e.printStackTrace(); return false;}
 		catch (IllegalAccessException e) {e.printStackTrace(); return false;}
 		System.out.println("done:)))");
-		detector.learnNormal(train);
+		detector.learnNormal(trainForView);
 		return true;
 	}
 	
@@ -626,5 +643,33 @@ public class MyModel extends Observable implements Model {
 
 	public int getLength(){
 		return this.test.getLength();
+	}
+	@Override
+	public String getMostCorrelated(String parameter){
+		if(!trainForView.getTitles().contains(parameter))
+			return null;
+		SimpleAnomalyDetector d=new SimpleAnomalyDetector(Float.parseFloat("0.5"));
+		d.learnNormal(trainForView);
+		List<CorrelatedFeatures> a=d.getNormalModel();
+		CorrelatedFeatures mostRelevant=null;
+		for(CorrelatedFeatures c:a){
+			if(c.feature1.equals(parameter))
+				if(mostRelevant==null)
+					mostRelevant=c;
+				else
+					if(mostRelevant.corrlation<c.corrlation)
+						mostRelevant=c;
+			if(c.feature2.equals(parameter))
+				if(mostRelevant==null)
+					mostRelevant=c;
+				else
+					if(mostRelevant.corrlation<c.corrlation)
+						mostRelevant=c;
+		}
+		if(mostRelevant==null)
+			return "no correlated feature";
+		if(mostRelevant.feature1.equals(parameter))
+			return mostRelevant.feature2;
+		return mostRelevant.feature1;
 	}
 }

@@ -300,4 +300,7 @@ public class ViewModel extends Observable implements Observer{
 	public boolean setAnomalyDetector(String path,String name){
 		return m.setAnomalyDetector(path, name);
 	}
+	public String getMostCorrelated(String parameter){
+		return m.getMostCorrelated(parameter);
+	}
 }
