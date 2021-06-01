@@ -50,6 +50,7 @@ public class AttributesViewController implements Initializable {
 				selectedPrameter.title.setValue(listAttributes.getSelectionModel().getSelectedItem());
 			}
 		});
+		detections.title.setValue("anomaly detection");
 
 		//listAttributes.getSelectionModel().getSelectedItem()
 	}
