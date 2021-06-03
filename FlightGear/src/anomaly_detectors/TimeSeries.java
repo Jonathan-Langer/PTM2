@@ -84,20 +84,20 @@ public class TimeSeries {
 		info.add(data);
 	}
 
-	public TimeSeries filterBySelectingColl(HashMap<Integer,String> c){
+	public TimeSeries filterBySelectingColl(HashMap<String,Integer> c){
 		if(c==null)
 			return null;
 		if(c.isEmpty())
 			return null;
 		TimeSeries ret=new TimeSeries();
-		for(Integer coll:c.keySet()){
-			if(titles.get(coll)!=null){
+		for(String name:c.keySet()){
+			if(titles.get(c.get(name))!=null){
 				if(ret.titles==null)
 					ret.titles=new ArrayList<>();
 				if(ret.info==null)
 					ret.info=new ArrayList<>();
-				ret.titles.add(c.get(coll));
-				ret.info.add(this.info.get(coll));
+				ret.titles.add(name);
+				ret.info.add(this.info.get(c.get(name)));
 			}
 		}
 		return ret;

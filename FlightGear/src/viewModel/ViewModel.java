@@ -4,6 +4,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import anomaly_detectors.HybridAnomalyDetector;
+import anomaly_detectors.Point;
 import anomaly_detectors.SimpleAnomalyDetector;
 import anomaly_detectors.ZScoreAnomalyDetector;
 import javafx.beans.property.DoubleProperty;
@@ -15,6 +16,7 @@ import java.util.*;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.paint.Color;
 import model.Model;
 import model.MyModel;
 
@@ -302,5 +304,12 @@ public class ViewModel extends Observable implements Observer{
 	}
 	public String getMostCorrelated(String parameter){
 		return m.getMostCorrelated(parameter);
+	}
+
+	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature){
+		return m.sendPointOf2Parameter(endTime,feature);
+	}
+	public HashMap<Point, Color> sendPointOf1Parameter(int endTime, String feature){
+		return m.sendPointOf1Parameter(endTime,feature);
 	}
 }

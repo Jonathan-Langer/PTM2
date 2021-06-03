@@ -24,22 +24,22 @@ import viewModel.ViewModel;
 
 public class MyModel extends Observable implements Model {
 
-	int currentTime=0;
-	TimeSeries train,test;
-	TimeSeries trainForView,testForView;
+	int currentTime = 0;
+	TimeSeries train, test;
+	TimeSeries trainForView, testForView;
 	TimeSeriesAnomalyDetector detector;
 	ListOfAttributes atrList;
-	HashMap<Integer,String> collsForView;
+	HashMap<String, Integer> collsForView;
 	String txtLast;
-	double aileronVal,elevatorVal,rudderVal,throttleVal,altimeterVal,airspeedVal,headingVal,rollVal,pitchVal,yawVal;
-	String aileronName,elevatorName,rudderName,throttleName,altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
-	int port=-1;
-	String ip="";
-	int rate=-1;
-	Socket fg=null;
-	PrintWriter writeToFlightGear=null;
-	ArrayBlockingQueue<Runnable> tasks=new ArrayBlockingQueue<>(6);
-	volatile boolean stop=false;
+	double aileronVal, elevatorVal, rudderVal, throttleVal, altimeterVal, airspeedVal, headingVal, rollVal, pitchVal, yawVal;
+	String aileronName, elevatorName, rudderName, throttleName, altimeterName, airspeedName, headingName, rollName, pitchName, yawName;
+	int port = -1;
+	String ip = "";
+	int rate = -1;
+	Socket fg = null;
+	PrintWriter writeToFlightGear = null;
+	ArrayBlockingQueue<Runnable> tasks = new ArrayBlockingQueue<>(6);
+	volatile boolean stop = false;
 	Thread t;
 
 	public double getAileronVal() {
@@ -49,7 +49,7 @@ public class MyModel extends Observable implements Model {
 	public void setAileronVal(double aileronVal) {
 		this.aileronVal = aileronVal;
 		setChanged();
-		notifyObservers("aileronVal: "+aileronVal);
+		notifyObservers("aileronVal: " + aileronVal);
 	}
 
 	public double getElevatorVal() {
@@ -59,7 +59,7 @@ public class MyModel extends Observable implements Model {
 	public void setElevatorVal(double elevatorVal) {
 		this.elevatorVal = elevatorVal;
 		setChanged();
-		notifyObservers("elevatorVal: "+elevatorVal);
+		notifyObservers("elevatorVal: " + elevatorVal);
 	}
 
 	public double getRudderVal() {
@@ -69,7 +69,7 @@ public class MyModel extends Observable implements Model {
 	public void setRudderVal(double rudderVal) {
 		this.rudderVal = rudderVal;
 		setChanged();
-		notifyObservers("rudderVal: "+rudderVal);
+		notifyObservers("rudderVal: " + rudderVal);
 	}
 
 	public double getThrottleVal() {
@@ -79,7 +79,7 @@ public class MyModel extends Observable implements Model {
 	public void setThrottleVal(double throttleVal) {
 		this.throttleVal = throttleVal;
 		setChanged();
-		notifyObservers("throttleVal: "+throttleVal);
+		notifyObservers("throttleVal: " + throttleVal);
 	}
 
 	public double getAltimeterVal() {
@@ -89,7 +89,7 @@ public class MyModel extends Observable implements Model {
 	public void setAltimeterVal(double altimeterVal) {
 		this.altimeterVal = altimeterVal;
 		setChanged();
-		notifyObservers("altimeterVal: "+altimeterVal);
+		notifyObservers("altimeterVal: " + altimeterVal);
 	}
 
 	public double getAirspeedVal() {
@@ -99,7 +99,7 @@ public class MyModel extends Observable implements Model {
 	public void setAirspeedVal(double airspeedVal) {
 		this.airspeedVal = airspeedVal;
 		setChanged();
-		notifyObservers("airspeedVal: "+airspeedVal);
+		notifyObservers("airspeedVal: " + airspeedVal);
 	}
 
 	public double getHeadingVal() {
@@ -109,7 +109,7 @@ public class MyModel extends Observable implements Model {
 	public void setHeadingVal(double headingVal) {
 		this.headingVal = headingVal;
 		setChanged();
-		notifyObservers("headingVal: "+headingVal);
+		notifyObservers("headingVal: " + headingVal);
 	}
 
 	public double getRollVal() {
@@ -119,7 +119,7 @@ public class MyModel extends Observable implements Model {
 	public void setRollVal(double rollVal) {
 		this.rollVal = rollVal;
 		setChanged();
-		notifyObservers("rollVal: "+rollVal);
+		notifyObservers("rollVal: " + rollVal);
 	}
 
 	public double getPitchVal() {
@@ -129,7 +129,7 @@ public class MyModel extends Observable implements Model {
 	public void setPitchVal(double pitchVal) {
 		this.pitchVal = pitchVal;
 		setChanged();
-		notifyObservers("pitchVal: "+pitchVal);
+		notifyObservers("pitchVal: " + pitchVal);
 	}
 
 	public double getYawVal() {
@@ -139,122 +139,123 @@ public class MyModel extends Observable implements Model {
 	public void setYawVal(double yawVal) {
 		this.yawVal = yawVal;
 		setChanged();
-		notifyObservers("yawVal: "+yawVal);
+		notifyObservers("yawVal: " + yawVal);
 	}
+
 	public void setAileronName(String aileronName) {
 		this.aileronName = aileronName;
 		setChanged();
-		notifyObservers("aileronName: "+aileronName);
+		notifyObservers("aileronName: " + aileronName);
 	}
 
 	public void setElevatorName(String elevatorName) {
 		this.elevatorName = elevatorName;
 		setChanged();
-		notifyObservers("elevatorsName: "+elevatorName);
+		notifyObservers("elevatorsName: " + elevatorName);
 	}
 
 	public void setRudderName(String rudderName) {
 		this.rudderName = rudderName;
 		setChanged();
-		notifyObservers("rudderName: "+rudderName);
+		notifyObservers("rudderName: " + rudderName);
 	}
 
 	public void setThrottleName(String throttleName) {
 		this.throttleName = throttleName;
 		setChanged();
-		notifyObservers("throttleName: "+throttleName);
+		notifyObservers("throttleName: " + throttleName);
 	}
 
 	public void setAltimeterName(String altimeterName) {
 		this.altimeterName = altimeterName;
 		setChanged();
-		notifyObservers("altimeterName: "+altimeterName);
+		notifyObservers("altimeterName: " + altimeterName);
 	}
 
 	public void setAirspeedName(String airspeedName) {
 		this.airspeedName = airspeedName;
 		setChanged();
-		notifyObservers("airspeedName: "+airspeedName);
+		notifyObservers("airspeedName: " + airspeedName);
 	}
 
 	public void setHeadingName(String headingName) {
 		this.headingName = headingName;
 		setChanged();
-		notifyObservers("headingName: "+headingName);
+		notifyObservers("headingName: " + headingName);
 	}
 
 	public void setRollName(String rollName) {
 		this.rollName = rollName;
 		setChanged();
-		notifyObservers("rollName: "+rollName);
+		notifyObservers("rollName: " + rollName);
 	}
 
 	public void setPitchName(String pitchName) {
 		this.pitchName = pitchName;
 		setChanged();
-		notifyObservers("pitchName: "+pitchName);
+		notifyObservers("pitchName: " + pitchName);
 	}
 
 	public void setYawName(String yawName) {
 		this.yawName = yawName;
 		setChanged();
-		notifyObservers("yawName: "+yawName);
+		notifyObservers("yawName: " + yawName);
 	}
 
 	public MyModel() {
 		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
-		atrList=new ListOfAttributes(txtLast);
-		collsForView=new HashMap<>();
-		t=new Thread(()->{
+		atrList = new ListOfAttributes(txtLast);
+		collsForView = new HashMap<>();
+		t = new Thread(() -> {
 			System.out.println("start");
-			while(!stop)
-			{
-				try{
+			while (!stop) {
+				try {
 					tasks.take().run();
-				}catch(InterruptedException e){}
+				} catch (InterruptedException e) {
+				}
 			}
-				System.out.println("end");
+			System.out.println("end");
 		});
 		//t.start();
 	}
 
-	public void endQueue(){
+	public void endQueue() {
 		try {
-			tasks.put(()->stop=true);
+			tasks.put(() -> stop = true);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private ListOfAttributes checkValidationSettingFile(String txtFile){
-		if(txtFile==null)
+	private ListOfAttributes checkValidationSettingFile(String txtFile) {
+		if (txtFile == null)
 			return null;
-		File f=new File(txtFile);
-		if(!f.exists())
+		File f = new File(txtFile);
+		if (!f.exists())
 			return null;
-		HashMap<String, Integer> atrApeared=new HashMap<>();
+		HashMap<String, Integer> atrApeared = new HashMap<>();
 		ListOfAttributes atrL = new ListOfAttributes();
 
 		//for the ip, port and rate
-		atrApeared.put("aileron",-1);
-		atrApeared.put("elevator",-1);
-		atrApeared.put("rudder",-1);
-		atrApeared.put("throttle",-1);
-		atrApeared.put("altimeter",-1);
-		atrApeared.put("airspeed",-1);
-		atrApeared.put("heading",-1);
-		atrApeared.put("roll",-1);
-		atrApeared.put("pitch",-1);
-		atrApeared.put("yaw",-1);
-		atrApeared.put("ip",-1);
-		atrApeared.put("port",-1);
-		atrApeared.put("rate",-1);
+		atrApeared.put("aileron", -1);
+		atrApeared.put("elevator", -1);
+		atrApeared.put("rudder", -1);
+		atrApeared.put("throttle", -1);
+		atrApeared.put("altimeter", -1);
+		atrApeared.put("airspeed", -1);
+		atrApeared.put("heading", -1);
+		atrApeared.put("roll", -1);
+		atrApeared.put("pitch", -1);
+		atrApeared.put("yaw", -1);
+		atrApeared.put("ip", -1);
+		atrApeared.put("port", -1);
+		atrApeared.put("rate", -1);
 
 
 		try {
-			BufferedReader read=new BufferedReader(new FileReader(new File(txtFile)));
-			String line=null;
-			while((line=read.readLine())!=null) {
+			BufferedReader read = new BufferedReader(new FileReader(new File(txtFile)));
+			String line = null;
+			while ((line = read.readLine()) != null) {
 				String[] data = line.split(",");
 				if (data.length == 4) {
 					if (!atrApeared.containsKey(data[0])) { //only these attributes
@@ -265,16 +266,16 @@ public class MyModel extends Observable implements Model {
 						read.close();
 						return null;
 					}
-					if (atrApeared.get(data[0])!=-1) { //attribute is already in use
+					if (atrApeared.get(data[0]) != -1) { //attribute is already in use
 						read.close();
 						return null;
 					}
-					if(atrApeared.containsValue(Integer.parseInt(data[1]))){ //col is already in use
+					if (atrApeared.containsValue(Integer.parseInt(data[1]))) { //col is already in use
 						read.close();
 						return null;
 					}
 					atrApeared.put(data[0], Integer.parseInt(data[1]));
-					String[] arr= {data[1],data[2],data[3]};
+					String[] arr = {data[1], data[2], data[3]};
 					atrL.addAttribute(data[0], new AttributeSettings(arr));
 				}//if 4
 				else {
@@ -284,33 +285,30 @@ public class MyModel extends Observable implements Model {
 							return null;
 						} else {
 							if (data[0].equals("ip")) {
-								if (atrApeared.get("ip")!=-1) {
+								if (atrApeared.get("ip") != -1) {
 									read.close();
 									return null;
-								}
-								else
-									atrL.ip=data[1];
+								} else
+									atrL.ip = data[1];
 							}
 							if (data[0].equals("port")) {
 								if (atrApeared.get("port").equals(true)) {
 									read.close();
 									return null;
-								}
-								else
-									atrL.port=Integer.parseInt(data[1]);
+								} else
+									atrL.port = Integer.parseInt(data[1]);
 							}
 							if (data[0].equals("rate")) {
 								if (atrApeared.get("rate").equals(true)) {
 									read.close();
 									return null;
-								}
-								else
-									atrL.rate=Integer.parseInt(data[1]);
+								} else
+									atrL.rate = Integer.parseInt(data[1]);
 							}
-							atrApeared.put(data[0],-2);
+							atrApeared.put(data[0], -2);
 						}
 					}//if 2
-					else{
+					else {
 						read.close();
 						return null;
 					}//else
@@ -318,32 +316,37 @@ public class MyModel extends Observable implements Model {
 			}//while
 			read.close();
 			return atrL;
-		} catch (IOException e) {return null;}
+		} catch (IOException e) {
+			return null;
+		}
 
 	}
 
 	@Override
 	public void saveLastSettingFile(String currentTxtFile) {
 		copyFile(currentTxtFile, new File("resources/last_setting.txt").getAbsolutePath());
-		atrList=new ListOfAttributes(txtLast);
+		atrList = new ListOfAttributes(txtLast);
 	}
 
 	@Override
 	public boolean checkValidateSettingFile(String txtFile) {
-		ListOfAttributes atrL=checkValidationSettingFile(txtFile);
-		if(atrL==null)
+		ListOfAttributes atrL = checkValidationSettingFile(txtFile);
+		if (atrL == null)
 			return false;
-		atrList=atrL;
+		atrList = atrL;
 		return true;
 	}
 
 	@Override
 	public void applyValuesMinMax() {
-		if(atrList!=null){
-			for(String key:atrList.getAttributesNames()){
-				AttributeSettings a=atrList.getList().get(key);
+		if (atrList != null) {
+			for (String key : atrList.getAttributesNames()) {
+				AttributeSettings a = atrList.getList().get(key);
 				setChanged();
-				if(a.getColInCSV()==0){
+				notifyObservers(key + "Min: " + a.getMinValue());
+				setChanged();
+				notifyObservers(key + "Max: " + a.getMaxValue());
+				/*if(a.getColInCSV()==0){
 					notifyObservers("aileronMin: "+a.getMinValue());
 					setChanged();
 					notifyObservers("aileronMax: "+a.getMaxValue());
@@ -392,113 +395,113 @@ public class MyModel extends Observable implements Model {
 					notifyObservers("headingMin: "+a.getMinValue());
 					setChanged();
 					notifyObservers("headingMax: "+a.getMaxValue());
-				}
-				ip=atrList.ip;
-				port= atrList.port;
-				rate=atrList.rate;
+				}*/
 			}
+			ip = atrList.ip;
+			port = atrList.port;
+			rate = atrList.rate;
 		}
 	}
 
 	@Override
-	public void applyNames(){
-		if(atrList!=null){
-			for(String key:atrList.getAttributesNames()){
-				AttributeSettings a=atrList.getList().get(key);
-				if(a.getColInCSV()==0)
+	public void applyNames() {
+		if (atrList != null) {
+			for (String key : atrList.getAttributesNames()) {
+				AttributeSettings a = atrList.getList().get(key);
+				if (a.getColInCSV() == 0)
 					setAileronName(key);
-				if(a.getColInCSV()==1)
+				if (a.getColInCSV() == 1)
 					setElevatorName(key);
-				if(a.getColInCSV()==2)
+				if (a.getColInCSV() == 2)
 					setRudderName(key);
-				if(a.getColInCSV()==6)
+				if (a.getColInCSV() == 6)
 					setThrottleName(key);
-				if(a.getColInCSV()==20)
+				if (a.getColInCSV() == 20)
 					setYawName(key);
-				if(a.getColInCSV()==24)
+				if (a.getColInCSV() == 24)
 					setAirspeedName(key);
-				if(a.getColInCSV()==25)
+				if (a.getColInCSV() == 25)
 					setAltimeterName(key);
-				if(a.getColInCSV()==28)
+				if (a.getColInCSV() == 28)
 					setRollName(key);
-				if(a.getColInCSV()==29)
+				if (a.getColInCSV() == 29)
 					setPitchName(key);
-				if(a.getColInCSV()==36)
+				if (a.getColInCSV() == 36)
 					setHeadingName(key);
-				collsForView.put(a.getColInCSV(),key);
+				collsForView.put(key, a.getColInCSV());
 			}
 		}
 	}
-	
+
 	public TimeSeries checkValidationCSV(String csv) {
-		TimeSeries ts=new TimeSeries(csv);
-		if(ts.isEmpty())
+		TimeSeries ts = new TimeSeries(csv);
+		if (ts.isEmpty())
 			return null;
-		int atrLen=0;
+		int atrLen = 0;
 		ArrayList<Float> thisLine;
-		
-		Map<Integer, AttributeSettings> atrCols=
+
+		Map<Integer, AttributeSettings> atrCols =
 				atrList.getList().values().stream().
-				collect(Collectors.toMap
-						(atr->atr.colInCSV,atr->atr));
-		
-		for(int i=0; i<ts.getSize(); i++) {
-			thisLine=ts.getLine(ts.getTitles().get(i));
-			if(thisLine.size()!=ts.getLength()) //if all cols are in same length
+						collect(Collectors.toMap
+								(atr -> atr.colInCSV, atr -> atr));
+
+		for (int i = 0; i < ts.getSize(); i++) {
+			thisLine = ts.getLine(ts.getTitles().get(i));
+			if (thisLine.size() != ts.getLength()) //if all cols are in same length
 				return null;
-			if(atrCols.containsKey(i)) {//this col must be in csv
+			if (atrCols.containsKey(i)) {//this col must be in csv
 				atrLen++;
-				for(float f : thisLine) { //if all values are between the min and max that was defined in the setting file
-					if(f>atrCols.get(i).getMaxValue()||f<atrCols.get(i).getMinValue())
+				for (float f : thisLine) { //if all values are between the min and max that was defined in the setting file
+					if (f > atrCols.get(i).getMaxValue() || f < atrCols.get(i).getMinValue())
 						return null;
 				}
 			}
 		}
-		if(atrLen!=atrList.getLength()) // if all the settings appear in the setting file
+		if (atrLen != atrList.getLength()) // if all the settings appear in the setting file
 			return null;
-		
+
 		return ts;
 	}
-	
+
 	@Override
 	public boolean setTrainTimeSeries(String csvTrainFile) {
-		TimeSeries ts= checkValidationCSV(csvTrainFile);
-		if(ts!=null) {
-			train=ts;
-			trainForView=ts.filterBySelectingColl(collsForView);
-			if(detector!=null)
+		TimeSeries ts = checkValidationCSV(csvTrainFile);
+		if (ts != null) {
+			train = ts;
+			trainForView = ts.filterBySelectingColl(collsForView);
+			if (detector != null)
 				detector.learnNormal(train);
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
-	public boolean setTestTimeSeries(String csvTestFile){
-		TimeSeries ts= checkValidationCSV(csvTestFile);
-		if(ts!=null) {
-			test=ts;
-			testForView=ts.filterBySelectingColl(collsForView);
+	public boolean setTestTimeSeries(String csvTestFile) {
+		TimeSeries ts = checkValidationCSV(csvTestFile);
+		if (ts != null) {
+			test = ts;
+			testForView = ts.filterBySelectingColl(collsForView);
 			return true;
 		}
 		return false;
 	}
 
-	
+
 	public void saveLastCsvTrainFile(String currentCsvTrainFile) {
 		copyFile(currentCsvTrainFile, new File("resources/last_train.txt").getAbsolutePath());
 	}
-	
+
 	public void copyFile(String originalPath, String copyPath) {
-		File lastFile=new File(copyPath);
-		File currentFile=new File(originalPath);
+		File lastFile = new File(copyPath);
+		File currentFile = new File(originalPath);
 		try {
-			if(!lastFile.exists())
+			if (!lastFile.exists())
 				lastFile.createNewFile();
-			PrintWriter write=new PrintWriter(lastFile);
-			BufferedReader read=new BufferedReader(new FileReader(currentFile));
-			String line=null;
-			while((line=read.readLine())!=null) {
+			PrintWriter write = new PrintWriter(lastFile);
+			BufferedReader read = new BufferedReader(new FileReader(currentFile));
+			String line = null;
+			while ((line = read.readLine()) != null) {
 				write.println(line);
 				write.flush();
 			}
@@ -508,15 +511,15 @@ public class MyModel extends Observable implements Model {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+
 	@Override
 	public void play(int startTime, int rate) {
 		try {
-			tasks.put(()->{
-				if(fg==null||writeToFlightGear==null)
+			tasks.put(() -> {
+				if (fg == null || writeToFlightGear == null)
 					start();
-				for(int i=startTime;i<startTime+rate&&i<test.getLength();i++) {
+				for (int i = startTime; i < startTime + rate && i < test.getLength(); i++) {
 					String line = "";
 					for (int j = 0; j < test.getTitles().size(); j++)
 						if (j != 0)
@@ -530,7 +533,7 @@ public class MyModel extends Observable implements Model {
 					} catch (InterruptedException e) {
 						System.out.println("didn't succeed to connect to the flight gear simulator");
 					}
-					if(startTime+rate>test.getLength()){
+					if (startTime + rate > test.getLength()) {
 						try {
 							fg.close();
 						} catch (IOException e) {
@@ -558,66 +561,75 @@ public class MyModel extends Observable implements Model {
 	}
 
 	@Override
-	public boolean setAnomalyDetector(String path,String name) {
-		String[] paths=getPaths(path,name);
+	public boolean setAnomalyDetector(String path, String name) {
+		String[] paths = getPaths(path, name);
 		URLClassLoader urlClassLoader;
 		try {
 			urlClassLoader = URLClassLoader.newInstance(
-					new URL[] {new URL("file://"+paths[0])});
-			Class<?> c=urlClassLoader.loadClass(paths[1]);
-			if(c==null)
+					new URL[]{new URL("file://" + paths[0])});
+			Class<?> c = urlClassLoader.loadClass(paths[1]);
+			if (c == null)
 				return false;
-			detector=(TimeSeriesAnomalyDetector)c.newInstance();
+			detector = (TimeSeriesAnomalyDetector) c.newInstance();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			return false;
 		}
-		catch (MalformedURLException e) {e.printStackTrace(); return false;}
-		catch (ClassNotFoundException e) {e.printStackTrace(); return false;}
-		catch (InstantiationException e) {e.printStackTrace(); return false;}
-		catch (IllegalAccessException e) {e.printStackTrace(); return false;}
 		System.out.println("done:)))");
 		detector.learnNormal(trainForView);
 		return true;
 	}
-	
-	public String[] getPaths(String path,String name) {
+
+	public String[] getPaths(String path, String name) {
 		Character backs = 92;
-		String pattern="\\W";
+		String pattern = "\\W";
 		String backslash = (backs).toString();
-		String bin="bin"+backslash;
+		String bin = "bin" + backslash;
 		String[] ret = path.split("bin");
-		ret[0]+=bin;
+		ret[0] += bin;
 		String[] packagePath = ret[1].split(pattern);
-		ret[1]="";
-		for(String s:packagePath)
-			if(!s.isEmpty())
-				ret[1]+=s+".";
-		ret[1]+=name;//this string ends with ".class"
-		ret[1]=ret[1].split(".class")[0];
+		ret[1] = "";
+		for (String s : packagePath)
+			if (!s.isEmpty())
+				ret[1] += s + ".";
+		ret[1] += name;//this string ends with ".class"
+		ret[1] = ret[1].split(".class")[0];
 		return ret;
 	}
 
 	@Override
 	public void start() {
 		try {
-			fg=new Socket("localhost",5400);
-			writeToFlightGear=new PrintWriter(fg.getOutputStream());
+			fg = new Socket("localhost", 5400);
+			writeToFlightGear = new PrintWriter(fg.getOutputStream());
 		} catch (IOException e) {
 			System.out.println("the connection with simulator doesn't succeed");
 		}
 	}
+
 	@Override
-	public void setValues(int timeStep){
-		if(test!=null){
-			if (timeStep < 0 || test.getLength()>= timeStep) {
-				double aileron=test.getLineAsList(0).get(timeStep);
-				double elevator=test.getLineAsList(1).get(timeStep);
-				double throttle=test.getLineAsList(6).get(timeStep);
-				double rudder=test.getLineAsList(2).get(timeStep);
-				double altimeter=test.getLineAsList(25).get(timeStep);
-				double airspeed=test.getLineAsList(24).get(timeStep);
-				double heading=test.getLineAsList(36).get(timeStep);
-				double roll=test.getLineAsList(28).get(timeStep);
-				double pitch=test.getLineAsList(29).get(timeStep);
-				double yaw=test.getLineAsList(20).get(timeStep);
+	public void setValues(int timeStep) {
+		if (test != null) {
+			if (timeStep < 0 || test.getLength() >= timeStep) {
+				double aileron = test.getLineAsList(0).get(timeStep);
+				double elevator = test.getLineAsList(1).get(timeStep);
+				double throttle = test.getLineAsList(6).get(timeStep);
+				double rudder = test.getLineAsList(2).get(timeStep);
+				double altimeter = test.getLineAsList(25).get(timeStep);
+				double airspeed = test.getLineAsList(24).get(timeStep);
+				double heading = test.getLineAsList(36).get(timeStep);
+				double roll = test.getLineAsList(28).get(timeStep);
+				double pitch = test.getLineAsList(29).get(timeStep);
+				double yaw = test.getLineAsList(20).get(timeStep);
 				setAileronVal(aileron);
 				setElevatorVal(elevator);
 				setThrottleVal(throttle);
@@ -631,71 +643,79 @@ public class MyModel extends Observable implements Model {
 			}
 		}
 	}
+
 	@Override
-	public void setCurrentTime(int currentTime){
-		this.currentTime=currentTime;
+	public void setCurrentTime(int currentTime) {
+		this.currentTime = currentTime;
 		setChanged();
-		notifyObservers("currentTime: "+currentTime);
+		notifyObservers("currentTime: " + currentTime);
 	}
 
-	public int getLength(){
+	public int getLength() {
 		return this.test.getLength();
 	}
+
 	@Override
-	public String getMostCorrelated(String parameter){
-		CorrelatedFeatures mostRelevant=getCorrelatedFeatures(parameter);
-		if(mostRelevant==null)
+	public String getMostCorrelated(String parameter) {
+		CorrelatedFeatures mostRelevant = getCorrelatedFeatures(parameter);
+		if (mostRelevant == null)
 			return "no correlated feature";
-		if(mostRelevant.feature1.equals(parameter))
+		if (mostRelevant.feature1.equals(parameter))
 			return mostRelevant.feature2;
 		return mostRelevant.feature1;
 	}
-	private CorrelatedFeatures getCorrelatedFeatures(String parameter){
-		if(!trainForView.getTitles().contains(parameter))
+
+	private CorrelatedFeatures getCorrelatedFeatures(String parameter) {
+		if (!trainForView.getTitles().contains(parameter))
 			return null;
-		SimpleAnomalyDetector d=new SimpleAnomalyDetector(Float.parseFloat("0.5"));
+		SimpleAnomalyDetector d = new SimpleAnomalyDetector(Float.parseFloat("0.5"));
 		d.learnNormal(trainForView);
-		List<CorrelatedFeatures> a=d.getNormalModel();
-		CorrelatedFeatures mostRelevant=null;
-		for(CorrelatedFeatures c:a){
-			if(c.feature1.equals(parameter))
-				if(mostRelevant==null)
-					mostRelevant=c;
-				else
-				if(mostRelevant.corrlation<c.corrlation)
-					mostRelevant=c;
-			if(c.feature2.equals(parameter))
-				if(mostRelevant==null)
-					mostRelevant=c;
-				else
-				if(mostRelevant.corrlation<c.corrlation)
-					mostRelevant=c;
+		List<CorrelatedFeatures> a = d.getNormalModel();
+		CorrelatedFeatures mostRelevant = null;
+		for (CorrelatedFeatures c : a) {
+			if (c.feature1.equals(parameter))
+				if (mostRelevant == null)
+					mostRelevant = c;
+				else if (mostRelevant.corrlation < c.corrlation)
+					mostRelevant = c;
+			if (c.feature2.equals(parameter))
+				if (mostRelevant == null)
+					mostRelevant = c;
+				else if (mostRelevant.corrlation < c.corrlation)
+					mostRelevant = c;
 		}
 		return mostRelevant;
 	}
-	public HashMap<Point, Color> sendPoint(int endTime, String feature){
-		HashMap<Point, Color> result=new HashMap<>();
-		if(endTime<0)
+	@Override
+	public HashMap<Point,Color> sendPointOf1Parameter(int endTime,String feature){
+		HashMap<Point, Color> result = new HashMap<>();
+		if (endTime < 0)
 			return result;
-		if(!collsForView.containsValue(feature))
+		if (!trainForView.getTitles().contains(feature))
 			return result;
-		if(testForView==null)
+		if (testForView == null)
 			return result;
-		CorrelatedFeatures relevant=getCorrelatedFeatures(feature);
-		if(relevant==null)
-			if(detector!=null){
-				List<AnomalyReport> detcted=detector.detect(testForView);
-				for(int i=0;i<=endTime;i++){
-					Point p=new Point(i,testForView.getLine(feature).get(i));
-					if(!detcted.contains(p))
-						result.put(new Point(i,testForView.getLine(feature).get(i)),Color.rgb(58,58,191));
-					else
-						result.put(new Point(i,testForView.getLine(feature).get(i)),Color.rgb(205,21,47));
-				}
-			}
-		for(int i=0;i<endTime;i++){
-			if(detector==null)
-				result.put(new Point(i,testForView.getLine(feature).get(i)),Color.rgb(58,58,191));
+		for (int i = 0; i <= endTime; i++) {
+			Point p = new Point(i, testForView.getLine(feature).get(i));
+			result.put(p, Color.rgb(58, 58, 191));
+		}
+		return result;
+	}
+	@Override
+	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature) {
+		HashMap<Point, Color> result = new HashMap<>();
+		if (endTime < 0)
+			return result;
+		if (trainForView.getTitles().contains(feature))
+			return result;
+		if (testForView == null)
+			return result;
+		CorrelatedFeatures relevant = getCorrelatedFeatures(feature);
+		if (relevant == null)
+			return sendPointOf1Parameter(endTime,feature);
+		for(int i=0;i<=endTime;i++){
+			Point p=new Point(testForView.getLine(relevant.feature1).get(i),testForView.getLine(relevant.feature2).get(i));
+			result.put(p,Color.rgb(58, 58, 191));
 		}
 		return result;
 	}

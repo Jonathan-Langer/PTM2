@@ -187,6 +187,16 @@ public class WindowController implements Initializable,Observer{
 				}
 			}
 		});
+		playerDisplayer.currentTime.addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+				attributesView.controller.selectedPrameter.controller.clear();
+				attributesView.controller.selectedPrameter.controller.changeSetting(playerDisplayer.currentTime.getValue(),0);
+				attributesView.controller.selectedPrameter.controller.addSetPoints(
+						vm.sendPointOf1Parameter((int)playerDisplayer.currentTime.get(),
+								attributesView.controller.selectedPrameter.title.getValue()).keySet(),Color.BLUE);
+			}
+		});
 		playerDisplayer.controller.playIcon.fillProperty().addListener(new ChangeListener<Paint>() {
 			@Override
 			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
@@ -285,6 +295,7 @@ public class WindowController implements Initializable,Observer{
 				}
 			}
 		});
+
 	}
 
 	public void loadClassFile(){
@@ -344,9 +355,9 @@ public class WindowController implements Initializable,Observer{
 				message.setContentText("well done!"
 						+ " \n your txt file was saved in the system");
 				message.show();
+				vm.applyValuesMinMax();
+				vm.applyNames();
 			}
-			vm.applyValuesMinMax();
-			vm.applyNames();
 			attributesView.controller.applySetting(namesAttribute.values());
 		}
 	}

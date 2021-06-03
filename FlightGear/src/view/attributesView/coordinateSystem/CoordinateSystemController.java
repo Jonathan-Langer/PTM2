@@ -1,10 +1,7 @@
 package view.attributesView.coordinateSystem;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.Scanner;
+import java.util.*;
 
 import anomaly_detectors.Point;
 import com.sun.javafx.scene.paint.GradientUtils;
@@ -51,16 +48,20 @@ public class CoordinateSystemController implements Initializable {
 		board=new AnchorPane();
 	}
 	public void changeSetting(double newMaxVal,double newMinVal) {
-		maxValue=newMaxVal;
-		minValue=newMinVal;
+		if(newMaxVal>newMinVal){
+			maxValue=newMaxVal;
+			minValue=Math.min(newMinVal,0);
+			y.setStartX(minValue+((0-minValue)/maxValue-minValue)*width);
+			y.setEndX(minValue+((0-minValue)/maxValue-minValue)*width);
+		}
 	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		height=board.getPrefHeight();
-		width=board.getPrefWidth();		
+		width=board.getPrefWidth();
 	}
 	public void addPoint(Point p,Paint color) {
-		double displayX=(p.x/(maxValue-minValue))*width+width/2;
+		double displayX=(p.x/(maxValue-minValue))*width+width*(0-minValue)/(maxValue-minValue);
 		double displayY=height-(p.y/(maxValue-minValue))*height-height/2;
 		Circle toDisplay=new Circle();
 		toDisplay.setRadius(5);
@@ -99,7 +100,7 @@ public class CoordinateSystemController implements Initializable {
 		board.getChildren().removeAll(circles);
 		board.getChildren().addAll(circles);
 	}
-	public void addSetPoints(List<Point> listPoints,Paint color){
+	public void addSetPoints(Collection<Point> listPoints, Paint color){
 		listPoints.forEach((p)->addPoint(p,color));
 	}
 	public void clear() {
