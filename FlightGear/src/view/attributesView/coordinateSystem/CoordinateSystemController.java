@@ -64,7 +64,7 @@ public class CoordinateSystemController implements Initializable {
 		double displayX=(p.x/(maxValue-minValue))*width+width*(0-minValue)/(maxValue-minValue);
 		double displayY=height-(p.y/(maxValue-minValue))*height-height/2;
 		Circle toDisplay=new Circle();
-		toDisplay.setRadius(5);
+		toDisplay.setRadius(1);
 		toDisplay.setCenterX(displayX);
 		toDisplay.setCenterY(displayY);
 		toDisplay.setFill(color);
