@@ -12,7 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Observable;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -38,9 +38,15 @@ public class MyModel extends Observable implements Model {
 	int rate = -1;
 	Socket fg = null;
 	PrintWriter writeToFlightGear = null;
-	ArrayBlockingQueue<Runnable> tasks = new ArrayBlockingQueue<>(6);
-	volatile boolean stop = false;
-	Thread t;
+	ActiveObject task;
+
+	public MyModel() {
+		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
+		atrList = new ListOfAttributes(txtLast);
+		collsForView = new HashMap<>();
+		task=new ActiveObject(5);
+		//t.start();
+	}
 
 	public double getAileronVal() {
 		return aileronVal;
@@ -200,31 +206,6 @@ public class MyModel extends Observable implements Model {
 		this.yawName = yawName;
 		setChanged();
 		notifyObservers("yawName: " + yawName);
-	}
-
-	public MyModel() {
-		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
-		atrList = new ListOfAttributes(txtLast);
-		collsForView = new HashMap<>();
-		t = new Thread(() -> {
-			System.out.println("start");
-			while (!stop) {
-				try {
-					tasks.take().run();
-				} catch (InterruptedException e) {
-				}
-			}
-			System.out.println("end");
-		});
-		//t.start();
-	}
-
-	public void endQueue() {
-		try {
-			tasks.put(() -> stop = true);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private ListOfAttributes checkValidationSettingFile(String txtFile) {
@@ -514,38 +495,31 @@ public class MyModel extends Observable implements Model {
 
 
 	@Override
-	public void play(int startTime, int rate) {
-		try {
-			tasks.put(() -> {
+	public void play(int startTime,double speed) {
+			task.execute(() -> {
 				if (fg == null || writeToFlightGear == null)
 					start();
-				for (int i = startTime; i < startTime + rate && i < test.getLength(); i++) {
-					String line = "";
-					for (int j = 0; j < test.getTitles().size(); j++)
-						if (j != 0)
-							line = line + "," + test.getLineAsList(j).get(i);
-						else
-							line = line + test.getLineAsList(j).get(i);
-					writeToFlightGear.println(line);
-					writeToFlightGear.flush();
+				int i=startTime;
+				while(true){
+					if(writeToFlightGear!=null){
+						String line = "";
+						for (int j = 0; j < test.getTitles().size(); j++)
+							if (j != 0)
+								line = line + "," + test.getLineAsList(j).get(i);
+							else
+								line = line + test.getLineAsList(j).get(i);
+						writeToFlightGear.println(line);
+						writeToFlightGear.flush();
+					}
+					setValues(i);
+					i++;
 					try {
-						Thread.sleep(100);//replace the number 100 with (long)(1000.0/(float)rate)
+						Thread.sleep((long)(1000.0/(speed*rate)));
 					} catch (InterruptedException e) {
 						System.out.println("didn't succeed to connect to the flight gear simulator");
 					}
-					if (startTime + rate > test.getLength()) {
-						try {
-							fg.close();
-						} catch (IOException e) {
-							System.out.println("didn't succeed to connect to the flight gear simulator");
-							writeToFlightGear.close();
-						}
-					}
 				}
 			});
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -556,7 +530,6 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -609,7 +582,7 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void start() {
 		try {
-			fg = new Socket("localhost", 5400);
+			fg = new Socket("localhost", port);
 			writeToFlightGear = new PrintWriter(fg.getOutputStream());
 		} catch (IOException e) {
 			System.out.println("the connection with simulator doesn't succeed");
@@ -620,16 +593,16 @@ public class MyModel extends Observable implements Model {
 	public void setValues(int timeStep) {
 		if (test != null) {
 			if (timeStep < 0 || test.getLength() >= timeStep) {
-				double aileron = test.getLineAsList(0).get(timeStep);
-				double elevator = test.getLineAsList(1).get(timeStep);
-				double throttle = test.getLineAsList(6).get(timeStep);
-				double rudder = test.getLineAsList(2).get(timeStep);
-				double altimeter = test.getLineAsList(25).get(timeStep);
-				double airspeed = test.getLineAsList(24).get(timeStep);
-				double heading = test.getLineAsList(36).get(timeStep);
-				double roll = test.getLineAsList(28).get(timeStep);
-				double pitch = test.getLineAsList(29).get(timeStep);
-				double yaw = test.getLineAsList(20).get(timeStep);
+				double aileron = testForView.getLine("aileron").get(timeStep);
+				double elevator = testForView.getLine("elevator").get(timeStep);
+				double throttle = testForView.getLine("throttle").get(timeStep);
+				double rudder = testForView.getLine("rudder").get(timeStep);
+				double altimeter = testForView.getLine("altimeter").get(timeStep);
+				double airspeed = testForView.getLine("airspeed").get(timeStep);
+				double heading = testForView.getLine("heading").get(timeStep);
+				double roll = testForView.getLine("roll").get(timeStep);
+				double pitch = testForView.getLine("pitch").get(timeStep);
+				double yaw = testForView.getLine("yaw").get(timeStep);
 				setAileronVal(aileron);
 				setElevatorVal(elevator);
 				setThrottleVal(throttle);

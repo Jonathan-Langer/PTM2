@@ -201,7 +201,7 @@ public class WindowController implements Initializable,Observer{
 			@Override
 			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
 				if(playerDisplayer.controller.playIcon.getFill()!= Color.BLACK){
-					vm.play();
+					vm.play((int)playerDisplayer.currentTime.get(),Double.parseDouble(playerDisplayer.speedPlayer.getValue()));
 				}
 			}
 		});

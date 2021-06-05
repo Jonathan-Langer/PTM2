@@ -296,8 +296,8 @@ public class ViewModel extends Observable implements Observer{
 
 	public int getLength() {return m.getLength();}
 
-	public void play(){
-
+	public void play(int start,double speed){
+		m.play(start,speed);
 	}
 	public boolean setAnomalyDetector(String path,String name){
 		return m.setAnomalyDetector(path, name);

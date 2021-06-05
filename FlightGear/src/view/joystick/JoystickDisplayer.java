@@ -2,8 +2,10 @@ package view.joystick;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -52,11 +54,15 @@ public class JoystickDisplayer extends AnchorPane {
 			aileronName=controller.aileronTitle.textProperty();
 			rudderName=controller.rudderTitle.textProperty();
 			elevatorName=controller.elevatorTitle.textProperty();
+
 			aileronValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					double x=aileronValue.getValue();
-					controller.aileronVal.setText(Double.toString(x));
+					Platform.runLater(()->{
+						double x=aileronValue.getValue();
+						controller.aileronVal.setText(""
+								+Double.parseDouble(new DecimalFormat("##.######").format(x)));
+					});
 				}
 			});
 			minAileron=controller.minAileron;
@@ -64,14 +70,15 @@ public class JoystickDisplayer extends AnchorPane {
 			elevatorsValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					double x=elevatorsValue.getValue();
-					controller.elevatorVal.setText(Double.toString(x));
+					Platform.runLater(()->{
+						double x=elevatorsValue.getValue();
+						controller.elevatorVal.setText(""+x);
+					});
 				}
 			});
 			minElevator=controller.minElevator;
 			maxElevator=controller.maxElevator;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

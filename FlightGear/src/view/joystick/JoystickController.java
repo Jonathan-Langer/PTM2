@@ -52,7 +52,7 @@ public class JoystickController implements Initializable {
 		elevatorVal.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-				insideCircle.setCenterY(centerY+Double.parseDouble(elevatorVal.getText())*heightToMove);
+				insideCircle.setCenterY(centerY-Double.parseDouble(elevatorVal.getText())*heightToMove);
 			}
 		});
 	}

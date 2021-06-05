@@ -15,7 +15,7 @@ public interface Model {
 	public void setCurrentTime(int currentTime);
 	public void saveLastCsvTrainFile(String csvTrainFile);
 	public int getLength();
-	public void play(int startTime, int rate);
+	public void play(int startTime, double speed);
 	public void pause();
 	public void stop();
 	
