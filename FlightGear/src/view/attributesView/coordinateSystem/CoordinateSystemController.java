@@ -78,8 +78,8 @@ public class CoordinateSystemController implements Initializable {
 		Line toDisplay=new Line();
 		toDisplay.setStroke(color);
 		toDisplay.setStrokeWidth(1.0);
-		toDisplay.setStartX((minValue/(maxValue-minValue))*width+width/2);
-		toDisplay.setEndX((maxValue/(maxValue-minValue))*width+width/2);
+		toDisplay.setStartX((minValue/(maxValue-minValue))*width+width*(0-minValue)/(maxValue-minValue));
+		toDisplay.setEndX((maxValue/(maxValue-minValue))*width+width*(0-minValue)/(maxValue-minValue));
 		toDisplay.setStartY((height-(valueForMinX/(maxValue-minValue))*height-height/2));
 		toDisplay.setEndY((height-(valueForMaxX/(maxValue-minValue))*height-height/2));
 		lines.add(toDisplay);
@@ -88,10 +88,10 @@ public class CoordinateSystemController implements Initializable {
 	}
 	public void addCircle(Point center,double radius,Paint color) {
 		Circle toDisplay=new Circle();
-		toDisplay.setCenterX((center.x/(maxValue-minValue))*width+width/2);
+		toDisplay.setCenterX((center.x/(maxValue-minValue))*width+width*(0-minValue)/(maxValue-minValue));
 		toDisplay.setCenterY(height-(center.y/(maxValue-minValue))*height-height/2);
 		toDisplay.setStroke(Color.GREENYELLOW);
-		double radiusDisplay=((center.x+radius)/(maxValue-minValue))*width+width/2-(((center.x)/(maxValue-minValue))*width+width/2);
+		double radiusDisplay=((center.x+radius)/(maxValue-minValue))*width+width*(0-minValue)/(maxValue-minValue)-(((center.x)/(maxValue-minValue))*width+width*(0-minValue)/(maxValue-minValue));
 		toDisplay.setRadius(radiusDisplay);
 		toDisplay.setFill(Color.rgb(255, 255, 255, 0));
 		toDisplay.setStroke(color);
