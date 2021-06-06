@@ -2,6 +2,7 @@ package view.tableClocks;
 
 import java.io.IOException;
 
+import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -61,8 +62,10 @@ public class TableClocksDisplayer extends Pane {
 			altimeterValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					double x=altimeterValue.getValue();
-					controller.gAltimeter.setValue(x);
+					Platform.runLater(()->{
+						double x=altimeterValue.getValue();
+						controller.gAltimeter.setValue(x);
+					});
 				}
 			});
 			minAltimeter.addListener(new ChangeListener<Number>() {
@@ -88,8 +91,10 @@ public class TableClocksDisplayer extends Pane {
 			airspeedValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					double x=airspeedValue.getValue();
-					controller.gAirspeed.setValue(x);
+					Platform.runLater(()->{
+						double x=airspeedValue.getValue();
+						controller.gAirspeed.setValue(x);
+					});
 				}
 			});
 			minAirspeed.addListener(new ChangeListener<Number>() {
@@ -115,8 +120,10 @@ public class TableClocksDisplayer extends Pane {
 			headingValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					double x=headingValue.getValue();
-					controller.gHeading.setValue(x);
+					Platform.runLater(()->{
+						double x=headingValue.getValue();
+						controller.gHeading.setValue(x);
+					});
 				}
 			});
 			minHeading.addListener(new ChangeListener<Number>() {
@@ -142,8 +149,10 @@ public class TableClocksDisplayer extends Pane {
 			pitchValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					double x=pitchValue.getValue();
-					controller.gPitch.setValue(x);
+					Platform.runLater(()->{
+						double x=pitchValue.getValue();
+						controller.gPitch.setValue(x);
+					});
 				}
 			});
 			minPitch.addListener(new ChangeListener<Number>() {
@@ -169,8 +178,10 @@ public class TableClocksDisplayer extends Pane {
 			rollValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					double x=rollValue.getValue();
-					controller.gRoll.setValue(x);
+					Platform.runLater(()->{
+						double x=rollValue.getValue();
+						controller.gRoll.setValue(x);
+					});
 				}
 			});
 			minRoll.addListener(new ChangeListener<Number>() {
@@ -196,8 +207,10 @@ public class TableClocksDisplayer extends Pane {
 			yawValue.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					double x=yawValue.getValue();
-					controller.gYaw.setValue(x);
+					Platform.runLater(()->{
+						double x=yawValue.getValue();
+						controller.gYaw.setValue(x);
+					});
 				}
 			});
 			minYaw.addListener(new ChangeListener<Number>() {
