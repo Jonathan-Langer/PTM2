@@ -7,11 +7,8 @@ import anomaly_detectors.HybridAnomalyDetector;
 import anomaly_detectors.Point;
 import anomaly_detectors.SimpleAnomalyDetector;
 import anomaly_detectors.ZScoreAnomalyDetector;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+
 import java.util.*;
 
 import javafx.beans.value.ChangeListener;
@@ -22,7 +19,6 @@ import model.MyModel;
 
 public class ViewModel extends Observable implements Observer{
 	public DoubleProperty currentTime;
-
 	StringProperty txtFilePath;
 	StringProperty csvTrainFilePath;
 	StringProperty csvTestFilePath;
@@ -95,7 +91,7 @@ public class ViewModel extends Observable implements Observer{
 		maxPitch = new SimpleDoubleProperty();
 		minYaw = new SimpleDoubleProperty();
 		maxYaw = new SimpleDoubleProperty();
-		
+
 		properties.put("settingsFile", this.txtFilePath);
 		properties.put("csvTrain", this.csvTrainFilePath);
 		properties.put("csvTest", this.csvTestFilePath);
@@ -164,7 +160,9 @@ public class ViewModel extends Observable implements Observer{
 		}
 		else{	//the ViewModel change the View
 			p.bind(prop);
-			prop.setValue(prop.getValue());
+			Object obj=prop.getValue();
+			prop.setValue(null);
+			prop.setValue(obj);
 		}
 
 		properties.put(name, prop);
@@ -312,4 +310,5 @@ public class ViewModel extends Observable implements Observer{
 	public HashMap<Point, Color> sendPointOf1Parameter(int endTime, String feature){
 		return m.sendPointOf1Parameter(endTime,feature);
 	}
+	public int getRate(){return m.getRate();}
 }

@@ -2,6 +2,7 @@ package view.player;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -33,7 +34,8 @@ public class PlayerDisplayerController  implements Initializable {
 	public ComboBox<String> options = new ComboBox<>();
 	@FXML
 	public FontAwesomeIcon playIcon,pauseIcon,stopIcon,forwardIcon,rewindIcon;
-
+	@FXML
+	Label timeLabel;
 	public PlayerDisplayerController() {
 		options = new ComboBox<>();
 		csvTestFilePath = new SimpleStringProperty();

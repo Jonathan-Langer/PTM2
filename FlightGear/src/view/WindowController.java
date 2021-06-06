@@ -143,6 +143,7 @@ public class WindowController implements Initializable,Observer{
 		vm.currentTime.bindBidirectional(playerDisplayer.currentTime);
 		vm.applyValuesMinMax();
 		vm.applyNames();
+		playerDisplayer.setRate(vm.getRate());
 		attributesView.controller.applySetting(namesAttribute.values());
 		//vm.checkValidateSettingFile(txtFilePath.getValue());
 		vm.setTrainTimeSeries(csvTrainFilePath.get());
@@ -295,7 +296,6 @@ public class WindowController implements Initializable,Observer{
 				}
 			}
 		});
-
 	}
 
 	public void loadClassFile(){
@@ -356,6 +356,7 @@ public class WindowController implements Initializable,Observer{
 						+ " \n your txt file was saved in the system");
 				message.show();
 				vm.applyValuesMinMax();
+				playerDisplayer.setRate(vm.getRate());
 				vm.applyNames();
 			}
 			attributesView.controller.applySetting(namesAttribute.values());

@@ -41,8 +41,8 @@ public class JoystickController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		heightToMove=outsideCircle.getRadius()-insideCircle.getRadius();
 		widthToMove=outsideCircle.getRadius()-insideCircle.getRadius();
-		centerX=insideCircle.getCenterX();
-		centerY=insideCircle.getCenterY();
+		centerX=outsideCircle.getCenterX();
+		centerY=outsideCircle.getCenterY();
 		aileronVal.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {

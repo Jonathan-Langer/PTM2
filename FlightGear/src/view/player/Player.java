@@ -2,6 +2,7 @@ package view.player;
 
 import java.io.IOException;
 
+import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -16,8 +17,10 @@ public class Player extends AnchorPane {
 	public DoubleProperty currentTime;
 	public PlayerDisplayerController controller;
 	int length;
+	int rate=1;
 	boolean sliderMoved=true;
 
+	public void setRate(int r){rate=r;}
 	public void setLength(int l){length=l;}
 
 	public Player() {
@@ -41,10 +44,29 @@ public class Player extends AnchorPane {
 			currentTime.addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					double minValue=controller.timeLine.getMin();
-					double maxValue=controller.timeLine.getMax();
-					sliderMoved=false;
-					controller.timeLine.valueProperty().setValue(minValue+((maxValue-minValue)*currentTime.getValue()/length));
+					Platform.runLater(()->{
+						double minValue=controller.timeLine.getMin();
+						double maxValue=controller.timeLine.getMax();
+						sliderMoved=false;
+						controller.timeLine.valueProperty().setValue(minValue+((maxValue-minValue)*currentTime.getValue()/length));
+						int hour=(int)(currentTime.get())/(rate)/60/60;
+						int minute=(int)((currentTime.get())/(rate)/60)%60;
+						int second=(int)(currentTime.get())/(rate)%60;
+						String newTimeLabel="";
+						if(hour<10)
+							newTimeLabel+="0"+hour+":";
+						else
+							newTimeLabel+=hour+":";
+						if(minute<10)
+							newTimeLabel+="0"+minute+":";
+						else
+							newTimeLabel+=minute+":";
+						if(second<10)
+							newTimeLabel+="0"+second;
+						else
+							newTimeLabel+=second;
+						controller.timeLabel.setText(newTimeLabel);
+					});
 				}
 			});
 			controller.timeLine.valueProperty().addListener(new ChangeListener<Number>() {

@@ -60,8 +60,7 @@ public class JoystickDisplayer extends AnchorPane {
 				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
 					Platform.runLater(()->{
 						double x=aileronValue.getValue();
-						controller.aileronVal.setText(""
-								+Double.parseDouble(new DecimalFormat("##.######").format(x)));
+						controller.aileronVal.setText(""+x);
 					});
 				}
 			});

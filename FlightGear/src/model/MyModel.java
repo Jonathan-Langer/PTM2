@@ -42,14 +42,22 @@ public class MyModel extends Observable implements Model {
 
 	public MyModel() {
 		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
+		checkValidateSettingFile(new File("resources/last_setting.txt").getAbsolutePath());
 		atrList = new ListOfAttributes(txtLast);
 		collsForView = new HashMap<>();
 		task=new ActiveObject(5);
 		//t.start();
 	}
-
+	@Override
+	public int getRate(){return rate;}
 	public double getAileronVal() {
 		return aileronVal;
+	}
+
+	public void setRate(int rate){
+		this.rate=rate;
+		setChanged();
+		notifyObservers("rate: "+rate);
 	}
 
 	public void setAileronVal(double aileronVal) {
@@ -380,7 +388,7 @@ public class MyModel extends Observable implements Model {
 			}
 			ip = atrList.ip;
 			port = atrList.port;
-			rate = atrList.rate;
+			rate=atrList.rate;
 		}
 	}
 
@@ -501,25 +509,31 @@ public class MyModel extends Observable implements Model {
 					start();
 				int i=startTime;
 				while(true){
-					if(writeToFlightGear!=null){
-						String line = "";
-						for (int j = 0; j < test.getTitles().size(); j++)
-							if (j != 0)
-								line = line + "," + test.getLineAsList(j).get(i);
-							else
-								line = line + test.getLineAsList(j).get(i);
-						writeToFlightGear.println(line);
-						writeToFlightGear.flush();
+					if(i<test.getLineAsList(0).size()){
+						if(writeToFlightGear!=null){
+							String line = "";
+							for (int j = 0; j < test.getTitles().size(); j++)
+								if (j != 0)
+									line = line + "," + test.getLineAsList(j).get(i);
+								else
+									line = line + test.getLineAsList(j).get(i);
+							writeToFlightGear.println(line);
+							writeToFlightGear.flush();
+						}
+						setValues(i);
+						i++;
+						setCurrentTime(currentTime+1);
+						try {
+							Thread.sleep((long)(1000.0/(speed*rate)));
+						} catch (InterruptedException e) {
+							System.out.println("didn't succeed to connect to the flight gear simulator");
+						}
 					}
-					setValues(i);
-					i++;
-					try {
-						Thread.sleep((long)(1000.0/(speed*rate)));
-					} catch (InterruptedException e) {
-						System.out.println("didn't succeed to connect to the flight gear simulator");
-					}
+					else
+						break;
 				}
 			});
+			task.shutDown();
 	}
 
 	@Override
