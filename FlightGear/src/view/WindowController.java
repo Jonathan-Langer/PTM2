@@ -8,6 +8,7 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.*;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
@@ -191,11 +192,13 @@ public class WindowController implements Initializable,Observer{
 		playerDisplayer.currentTime.addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-				attributesView.controller.selectedPrameter.controller.clear();
-				attributesView.controller.selectedPrameter.controller.changeSetting(playerDisplayer.currentTime.getValue(),0);
-				attributesView.controller.selectedPrameter.controller.addSetPoints(
-						vm.sendPointOf1Parameter((int)playerDisplayer.currentTime.get(),
-								attributesView.controller.selectedPrameter.title.getValue()).keySet(),Color.BLUE);
+				Platform.runLater(()->{
+					attributesView.controller.selectedPrameter.controller.clear();
+					attributesView.controller.selectedPrameter.controller.changeSetting(playerDisplayer.currentTime.getValue(),0);
+					attributesView.controller.selectedPrameter.controller.addSetPoints(
+							vm.sendPointOf1Parameter((int)playerDisplayer.currentTime.get(),
+									attributesView.controller.selectedPrameter.title.getValue()).keySet(),Color.BLUE);
+				});
 			}
 		});
 		playerDisplayer.controller.playIcon.fillProperty().addListener(new ChangeListener<Paint>() {
