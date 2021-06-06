@@ -27,8 +27,8 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="library" name="lib" level="project" />
     <orderEntry type="library" name="Medusa" level="project" />
     <orderEntry type="library" name="javafx-font_awesome" level="project" />
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
