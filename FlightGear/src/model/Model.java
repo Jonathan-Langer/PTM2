@@ -16,7 +16,8 @@ public interface Model {
 	public void saveLastCsvTrainFile(String csvTrainFile);
 	public int getLength();
 	public int getRate();
-	public void play(int startTime, double speed);
+	public void setSpeedOfFlight(double speed);
+	public void play(int startTime);
 	public void pause();
 	public void stop();
 	

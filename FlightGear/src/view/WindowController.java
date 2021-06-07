@@ -189,6 +189,12 @@ public class WindowController implements Initializable,Observer{
 				}
 			}
 		});
+		playerDisplayer.speedPlayer.addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+				vm.setSpeedOfFlight(Double.parseDouble(playerDisplayer.speedPlayer.getValue()));
+			}
+		});
 		playerDisplayer.currentTime.addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {

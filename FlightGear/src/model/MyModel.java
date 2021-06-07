@@ -37,6 +37,7 @@ public class MyModel extends Observable implements Model {
 	String ip = "";
 	int rate = -1;
 	Socket fg = null;
+	double speed;
 	PrintWriter writeToFlightGear = null;
 	ActiveObject task;
 
@@ -335,61 +336,16 @@ public class MyModel extends Observable implements Model {
 				notifyObservers(key + "Min: " + a.getMinValue());
 				setChanged();
 				notifyObservers(key + "Max: " + a.getMaxValue());
-				/*if(a.getColInCSV()==0){
-					notifyObservers("aileronMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("aileronMax: "+a.getMaxValue());
-				}
-				if(a.getColInCSV()==1){
-					notifyObservers("elevatorMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("elevatorMax: "+a.getMaxValue());
-				}
-				if(a.getColInCSV()==2){
-					notifyObservers("rudderMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("rudderMax: "+a.getMaxValue());
-				}
-				if(a.getColInCSV()==6){
-					notifyObservers("throttleMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("throttleMax: "+a.getMaxValue());
-				}
-				if(a.getColInCSV()==20) {
-					notifyObservers("yawMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("yawMax: "+a.getMaxValue());
-				}
-				if(a.getColInCSV()==24){
-					notifyObservers("airspeedMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("airspeedMax: "+a.getMaxValue());
-				}
-				if(a.getColInCSV()==25){
-					notifyObservers("altimeterMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("altimeterMax: "+a.getMaxValue());
-				}
-				if(a.getColInCSV()==28){
-					notifyObservers("rollMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("rollMax: "+a.getMaxValue());
-				}
-				if(a.getColInCSV()==29){
-					notifyObservers("pitchMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("pitchMax: "+a.getMaxValue());
-				}
-				if(a.getColInCSV()==36){
-					notifyObservers("headingMin: "+a.getMinValue());
-					setChanged();
-					notifyObservers("headingMax: "+a.getMaxValue());
-				}*/
 			}
 			ip = atrList.ip;
 			port = atrList.port;
 			rate=atrList.rate;
 		}
+	}
+
+	@Override
+	public void setSpeedOfFlight(double speed){
+		this.speed=speed;
 	}
 
 	@Override
@@ -503,7 +459,7 @@ public class MyModel extends Observable implements Model {
 
 
 	@Override
-	public void play(int startTime,double speed) {
+	public void play(int startTime) {
 			task.execute(() -> {
 				if (fg == null || writeToFlightGear == null)
 					start();
