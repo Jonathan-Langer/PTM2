@@ -70,7 +70,6 @@ public class PlayerDisplayerController  implements Initializable {
 				stopIcon.setFill(Color.rgb(114,12,12));
 				forwardIcon.setFill(Color.BLACK);
 				rewindIcon.setFill(Color.BLACK);
-				timeLine.setValue(0);
 			});
 			forwardIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
 				int x=-1;

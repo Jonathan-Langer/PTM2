@@ -9,7 +9,8 @@ import anomaly_detectors.TimeSeriesAnomalyDetector;
 import javafx.scene.paint.Color;
 
 public interface Model {
-	
+
+	public void shutDown();
 	public boolean setTrainTimeSeries(String csvTrainFile);
 	public boolean setTestTimeSeries(String csvTestFile);
 	public void setCurrentTime(int currentTime);
@@ -17,9 +18,10 @@ public interface Model {
 	public int getLength();
 	public int getRate();
 	public void setSpeedOfFlight(double speed);
-	public void play(int startTime);
+	public void play();
 	public void pause();
 	public void stop();
+	public void setCurrentTimeWithoutNotify(int currentTime);
 	
 	public boolean setAnomalyDetector(String path,String name);
 	public void start(); //run in the background

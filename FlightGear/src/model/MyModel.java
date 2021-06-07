@@ -55,6 +55,9 @@ public class MyModel extends Observable implements Model {
 		return aileronVal;
 	}
 
+	@Override
+	public void setCurrentTimeWithoutNotify(int currentTime){this.currentTime=currentTime;}
+
 	public void setRate(int rate){
 		this.rate=rate;
 		setChanged();
@@ -459,25 +462,13 @@ public class MyModel extends Observable implements Model {
 
 
 	@Override
-	public void play(int startTime) {
-			task.execute(() -> {
-				if (fg == null || writeToFlightGear == null)
-					start();
-				int i=startTime;
+	public void play() {
+		if(task==null)
+			task=new ActiveObject(5);
+		task.execute(() -> {
 				while(true){
-					if(i<test.getLineAsList(0).size()){
-						if(writeToFlightGear!=null){
-							String line = "";
-							for (int j = 0; j < test.getTitles().size(); j++)
-								if (j != 0)
-									line = line + "," + test.getLineAsList(j).get(i);
-								else
-									line = line + test.getLineAsList(j).get(i);
-							writeToFlightGear.println(line);
-							writeToFlightGear.flush();
-						}
-						setValues(i);
-						i++;
+					if(currentTime<test.getLineAsList(0).size()){
+						//setValues(currentTime);
 						setCurrentTime(currentTime+1);
 						try {
 							Thread.sleep((long)(1000.0/(speed*rate)));
@@ -489,7 +480,7 @@ public class MyModel extends Observable implements Model {
 						break;
 				}
 			});
-			task.shutDown();
+			task.shutDownNow();
 	}
 
 	@Override
@@ -500,7 +491,6 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public void stop() {
-
 	}
 
 	@Override
@@ -583,6 +573,18 @@ public class MyModel extends Observable implements Model {
 				setRollVal(roll);
 				setPitchVal(pitch);
 				setYawVal(yaw);
+				if (fg == null || writeToFlightGear == null)
+					start();
+				if(writeToFlightGear!=null){
+					String line = "";
+					for (int j = 0; j < test.getTitles().size(); j++)
+						if (j != 0)
+							line = line + "," + test.getLineAsList(j).get(timeStep);
+						else
+							line = line + test.getLineAsList(j).get(timeStep);
+					writeToFlightGear.println(line);
+					writeToFlightGear.flush();
+				}
 			}
 		}
 	}
@@ -661,5 +663,9 @@ public class MyModel extends Observable implements Model {
 			result.put(p,Color.rgb(58, 58, 191));
 		}
 		return result;
+	}
+	@Override
+	public void shutDown(){
+		task.shutDown();
 	}
 }

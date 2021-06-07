@@ -291,15 +291,18 @@ public class ViewModel extends Observable implements Observer{
 	public void initValues(){
 		m.setValues(0);
 	}
-
+	public void setValues(int timestep){m.setValues(timestep);}
 	public int getLength() {return m.getLength();}
 
-	public void play(int start,double speed){
+	public void play(double speed){
 		m.setSpeedOfFlight(speed);
-		m.play(start);
+		m.play();
+	}
+	public void stop(){
+		m.stop();
 	}
 	public void setSpeedOfFlight(double speed){m.setSpeedOfFlight(speed);}
-
+	public void setCurrentTime(int currentTime){m.setCurrentTimeWithoutNotify(currentTime);}
 	public boolean setAnomalyDetector(String path,String name){
 		return m.setAnomalyDetector(path, name);
 	}

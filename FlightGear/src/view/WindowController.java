@@ -8,6 +8,7 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.*;
 
+import javafx.animation.Animation;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -178,6 +179,7 @@ public class WindowController implements Initializable,Observer{
 					message.setContentText("oops!"
 							+ " \n this file format is not valid");
 					message.show();
+					playerDisplayer.csvTestFilePath.set(null);
 				}
 				else{
 					vm.initValues();
@@ -211,8 +213,29 @@ public class WindowController implements Initializable,Observer{
 			@Override
 			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
 				if(playerDisplayer.controller.playIcon.getFill()!= Color.BLACK){
-					vm.play((int)playerDisplayer.currentTime.get(),Double.parseDouble(playerDisplayer.speedPlayer.getValue()));
+					if(playerDisplayer.csvTestFilePath.get()!=null)
+						vm.play(Double.parseDouble(playerDisplayer.speedPlayer.getValue()));
+					else{
+						/*Alert message=new Alert(Alert.AlertType.ERROR);
+						message.setContentText("oops!"
+								+ " \n you didnt choose any csv test file, please choose one and try again");
+						message.show();
+						playerDisplayer.controller.playIcon.setFill(Color.BLACK);*/
+					}
 				}
+			}
+		});
+		playerDisplayer.controller.stopIcon.fillProperty().addListener(new ChangeListener<Paint>() {
+			@Override
+			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
+				vm.stop();
+			}
+		});
+		playerDisplayer.currentTime.addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+				vm.setCurrentTime((int)playerDisplayer.currentTime.get());
+				vm.setValues((int)playerDisplayer.currentTime.get());
 			}
 		});
 		aileronName.addListener(new ChangeListener<String>() {
