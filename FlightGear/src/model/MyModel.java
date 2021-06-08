@@ -467,7 +467,7 @@ public class MyModel extends Observable implements Model {
 			task=new ActiveObject(5);
 		task.execute(() -> {
 				while(true){
-					if(currentTime<test.getLineAsList(0).size()){
+					if(currentTime+1<test.getLineAsList(0).size()){
 						//setValues(currentTime);
 						setCurrentTime(currentTime+1);
 						try {
