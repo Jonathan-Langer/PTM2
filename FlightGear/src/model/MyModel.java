@@ -46,7 +46,7 @@ public class MyModel extends Observable implements Model {
 		checkValidateSettingFile(new File("resources/last_setting.txt").getAbsolutePath());
 		atrList = new ListOfAttributes(txtLast);
 		collsForView = new HashMap<>();
-		task=new ActiveObject(5);
+		task=new ActiveObject(1);
 		//t.start();
 	}
 	@Override
@@ -464,7 +464,7 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void play() {
 		if(task==null)
-			task=new ActiveObject(5);
+			task=new ActiveObject(1);
 		task.execute(() -> {
 				while(true){
 					if(currentTime+1<test.getLineAsList(0).size()){
@@ -480,7 +480,7 @@ public class MyModel extends Observable implements Model {
 						break;
 				}
 			});
-			task.shutDownNow();
+			//task.shutDownNow();
 	}
 
 	@Override
