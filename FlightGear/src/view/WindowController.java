@@ -231,6 +231,14 @@ public class WindowController implements Initializable,Observer{
 				vm.stop();
 			}
 		});
+		playerDisplayer.controller.pauseIcon.fillProperty().addListener(new ChangeListener<Paint>() {
+			@Override
+			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
+				vm.pause();
+			}
+		});
+		playerDisplayer.controller.setEventHandlerForForward(()->vm.forward());
+		playerDisplayer.controller.setEventHandlerForRewind(()->vm.rewind());
 		playerDisplayer.currentTime.addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {

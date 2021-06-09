@@ -21,6 +21,8 @@ public interface Model {
 	public void play();
 	public void pause();
 	public void stop();
+	public void forward();
+	public void rewind();
 	public void setCurrentTimeWithoutNotify(int currentTime);
 	
 	public boolean setAnomalyDetector(String path,String name);

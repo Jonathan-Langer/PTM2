@@ -301,6 +301,9 @@ public class ViewModel extends Observable implements Observer{
 	public void stop(){
 		m.stop();
 	}
+	public void pause(){m.pause();}
+	public void forward(){m.forward();}
+	public void rewind(){m.rewind();}
 	public void setSpeedOfFlight(double speed){m.setSpeedOfFlight(speed);}
 	public void setCurrentTime(int currentTime){m.setCurrentTimeWithoutNotify(currentTime);}
 	public boolean setAnomalyDetector(String path,String name){

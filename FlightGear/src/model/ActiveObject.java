@@ -1,6 +1,5 @@
 package model;
 
-import javafx.application.Platform;
 
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -32,7 +31,11 @@ public class ActiveObject {
     public void execute(Runnable r)
     {
         if(!stop)
-            try{q.put(r);}catch(InterruptedException e){}
+            try{
+                q.put(r);
+            } catch(InterruptedException e){
+                e.printStackTrace();
+            }
     }
 
     public void shutDown(){

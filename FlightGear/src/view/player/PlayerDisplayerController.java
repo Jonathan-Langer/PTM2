@@ -142,4 +142,12 @@ public class PlayerDisplayerController  implements Initializable {
 			timeLine.valueProperty().set(0);
 		}
 	}
+
+	public void setEventHandlerForForward(Runnable r){
+		forwardIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->r.run());
+	}
+
+	public void setEventHandlerForRewind(Runnable r){
+		rewindIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->r.run());
+	}
 }

@@ -460,36 +460,47 @@ public class MyModel extends Observable implements Model {
 		}
 	}
 
-
+	boolean wantToSuspend=false;
 	@Override
 	public void play() {
-		if(task==null)
-			task=new ActiveObject(1);
 		task.execute(() -> {
-				while(true){
-					if(currentTime+1<test.getLineAsList(0).size()){
-						//setValues(currentTime);
-						setCurrentTime(currentTime+1);
-						try {
-							Thread.sleep((long)(1000.0/(speed*rate)));
-						} catch (InterruptedException e) {
-							System.out.println("didn't succeed to connect to the flight gear simulator");
-						}
+			wantToSuspend=false;
+			while(!wantToSuspend) {
+				if (currentTime + 1 < test.getLineAsList(0).size()) {
+					setCurrentTime(currentTime + 1);
+					try {
+						Thread.sleep((long) (1000.0 / (speed * rate)));
+					} catch (InterruptedException e) {
+						System.out.println("didn't succeed to connect to the flight gear simulator");
 					}
-					else
-						break;
-				}
+				} else
+					break;
+			}
 			});
 			//task.shutDownNow();
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+		wantToSuspend=true;
 	}
 
 	@Override
 	public void stop() {
+		pause();
+		task.execute(()->{
+			setCurrentTime(0);
+		});
+	}
+
+	@Override
+	public void forward(){
+		setCurrentTime(Math.min(test.getLength()-1,currentTime+5*rate));
+	}
+
+	@Override
+	public void rewind(){
+		setCurrentTime(Math.max(0,currentTime-5*rate));
 	}
 
 	@Override
