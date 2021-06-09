@@ -463,6 +463,7 @@ public class MyModel extends Observable implements Model {
 	boolean wantToSuspend=false;
 	@Override
 	public void play() {
+		wantToSuspend=false;
 		task.execute(() -> {
 			wantToSuspend=false;
 			while(!wantToSuspend) {
@@ -488,9 +489,10 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void stop() {
 		pause();
-		task.execute(()->{
+		setCurrentTime(0);
+		/*task.execute(()->{
 			setCurrentTime(0);
-		});
+		});*/
 	}
 
 	@Override

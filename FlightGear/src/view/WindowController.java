@@ -228,13 +228,15 @@ public class WindowController implements Initializable,Observer{
 		playerDisplayer.controller.stopIcon.fillProperty().addListener(new ChangeListener<Paint>() {
 			@Override
 			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
-				vm.stop();
+				if(playerDisplayer.controller.stopIcon.getFill()!=Color.BLACK)
+					vm.stop();
 			}
 		});
 		playerDisplayer.controller.pauseIcon.fillProperty().addListener(new ChangeListener<Paint>() {
 			@Override
 			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
-				vm.pause();
+				if(playerDisplayer.controller.pauseIcon.getFill()!=Color.BLACK)
+					vm.pause();
 			}
 		});
 		playerDisplayer.controller.setEventHandlerForForward(()->vm.forward());
