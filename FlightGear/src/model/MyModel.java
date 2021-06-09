@@ -486,7 +486,6 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
