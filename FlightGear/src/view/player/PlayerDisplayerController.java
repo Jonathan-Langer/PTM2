@@ -71,61 +71,6 @@ public class PlayerDisplayerController  implements Initializable {
 				forwardIcon.setFill(Color.BLACK);
 				rewindIcon.setFill(Color.BLACK);
 			});
-			forwardIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
-				int x=-1;
-				if(playIcon.getFill()!=Color.BLACK)
-					x=0;
-				else
-					if(stopIcon.getFill()!=Color.BLACK)
-						x=1;
-					else
-						if(pauseIcon.getFill()!=Color.BLACK)
-							x=2;
-				playIcon.setFill(Color.BLACK);
-				pauseIcon.setFill(Color.BLACK);
-				stopIcon.setFill(Color.BLACK);
-				forwardIcon.setFill(Color.rgb(50,74,224));
-				rewindIcon.setFill(Color.BLACK);
-					if(x==0)
-						playIcon.setFill(Color.rgb(3,187,116));
-					else
-					if(x==1)
-						stopIcon.setFill(Color.rgb(114,12,12));
-					else
-					if(x==2)
-						pauseIcon.setFill(Color.rgb(210,65,65));
-					forwardIcon.setFill(Color.BLACK);
-			});
-			rewindIcon.addEventHandler(MouseEvent.MOUSE_PRESSED,(e)->{
-				int x=-1;
-				if(playIcon.getFill()!=Color.BLACK)
-					x=0;
-				else
-				if(stopIcon.getFill()!=Color.BLACK)
-					x=1;
-				else
-				if(pauseIcon.getFill()!=Color.BLACK)
-					x=2;
-				playIcon.setFill(Color.BLACK);
-				pauseIcon.setFill(Color.BLACK);
-				stopIcon.setFill(Color.BLACK);
-				forwardIcon.setFill(Color.BLACK);
-				rewindIcon.setFill(Color.rgb(50,74,224));
-				try {
-					Thread.sleep(500);
-					if(x==0)
-						playIcon.setFill(Color.rgb(3,187,116));
-					else
-					if(x==1)
-						stopIcon.setFill(Color.rgb(114,12,12));
-					else
-					if(x==2)
-						pauseIcon.setFill(Color.rgb(210,65,65));
-					rewindIcon.setFill(Color.BLACK);
-				} catch (InterruptedException interruptedException) {
-					interruptedException.printStackTrace();
-				}
-			});
 	}
 
 	public void openCSVFile() {

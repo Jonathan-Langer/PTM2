@@ -32,7 +32,7 @@ public class MyModel extends Observable implements Model {
 	HashMap<String, Integer> collsForView;
 	String txtLast;
 	double aileronVal, elevatorVal, rudderVal, throttleVal, altimeterVal, airspeedVal, headingVal, rollVal, pitchVal, yawVal;
-	String aileronName, elevatorName, rudderName, throttleName, altimeterName, airspeedName, headingName, rollName, pitchName, yawName;
+	final String aileronName="aileron", elevatorName="elevator", rudderName="rudder", throttleName="throttle", altimeterName="altimeter", airspeedName="airspeed", headingName="heading", rollName="roll", pitchName="pitch", yawName="yaw";
 	int port = -1;
 	String ip = "";
 	int rate = -1;
@@ -160,66 +160,6 @@ public class MyModel extends Observable implements Model {
 		notifyObservers("yawVal: " + yawVal);
 	}
 
-	public void setAileronName(String aileronName) {
-		this.aileronName = aileronName;
-		setChanged();
-		notifyObservers("aileronName: " + aileronName);
-	}
-
-	public void setElevatorName(String elevatorName) {
-		this.elevatorName = elevatorName;
-		setChanged();
-		notifyObservers("elevatorsName: " + elevatorName);
-	}
-
-	public void setRudderName(String rudderName) {
-		this.rudderName = rudderName;
-		setChanged();
-		notifyObservers("rudderName: " + rudderName);
-	}
-
-	public void setThrottleName(String throttleName) {
-		this.throttleName = throttleName;
-		setChanged();
-		notifyObservers("throttleName: " + throttleName);
-	}
-
-	public void setAltimeterName(String altimeterName) {
-		this.altimeterName = altimeterName;
-		setChanged();
-		notifyObservers("altimeterName: " + altimeterName);
-	}
-
-	public void setAirspeedName(String airspeedName) {
-		this.airspeedName = airspeedName;
-		setChanged();
-		notifyObservers("airspeedName: " + airspeedName);
-	}
-
-	public void setHeadingName(String headingName) {
-		this.headingName = headingName;
-		setChanged();
-		notifyObservers("headingName: " + headingName);
-	}
-
-	public void setRollName(String rollName) {
-		this.rollName = rollName;
-		setChanged();
-		notifyObservers("rollName: " + rollName);
-	}
-
-	public void setPitchName(String pitchName) {
-		this.pitchName = pitchName;
-		setChanged();
-		notifyObservers("pitchName: " + pitchName);
-	}
-
-	public void setYawName(String yawName) {
-		this.yawName = yawName;
-		setChanged();
-		notifyObservers("yawName: " + yawName);
-	}
-
 	private ListOfAttributes checkValidationSettingFile(String txtFile) {
 		if (txtFile == null)
 			return null;
@@ -230,20 +170,19 @@ public class MyModel extends Observable implements Model {
 		ListOfAttributes atrL = new ListOfAttributes();
 
 		//for the ip, port and rate
-		atrApeared.put("aileron", -1);
-		atrApeared.put("elevator", -1);
-		atrApeared.put("rudder", -1);
-		atrApeared.put("throttle", -1);
-		atrApeared.put("altimeter", -1);
-		atrApeared.put("airspeed", -1);
-		atrApeared.put("heading", -1);
-		atrApeared.put("roll", -1);
-		atrApeared.put("pitch", -1);
-		atrApeared.put("yaw", -1);
+		atrApeared.put(aileronName, -1);
+		atrApeared.put(elevatorName, -1);
+		atrApeared.put(rudderName, -1);
+		atrApeared.put(throttleName, -1);
+		atrApeared.put(altimeterName, -1);
+		atrApeared.put(airspeedName, -1);
+		atrApeared.put(headingName, -1);
+		atrApeared.put(rollName, -1);
+		atrApeared.put(pitchName, -1);
+		atrApeared.put(yawName, -1);
 		atrApeared.put("ip", -1);
 		atrApeared.put("port", -1);
 		atrApeared.put("rate", -1);
-
 
 		try {
 			BufferedReader read = new BufferedReader(new FileReader(new File(txtFile)));
@@ -285,14 +224,14 @@ public class MyModel extends Observable implements Model {
 									atrL.ip = data[1];
 							}
 							if (data[0].equals("port")) {
-								if (atrApeared.get("port").equals(true)) {
+								if (atrApeared.get("port")!=-1) {
 									read.close();
 									return null;
 								} else
 									atrL.port = Integer.parseInt(data[1]);
 							}
 							if (data[0].equals("rate")) {
-								if (atrApeared.get("rate").equals(true)) {
+								if (atrApeared.get("rate")!=-1) {
 									read.close();
 									return null;
 								} else
@@ -312,7 +251,6 @@ public class MyModel extends Observable implements Model {
 		} catch (IOException e) {
 			return null;
 		}
-
 	}
 
 	@Override
@@ -324,8 +262,10 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public boolean checkValidateSettingFile(String txtFile) {
 		ListOfAttributes atrL = checkValidationSettingFile(txtFile);
-		if (atrL == null)
+		if (atrL == null){
+			atrList=new ListOfAttributes();
 			return false;
+		}
 		atrList = atrL;
 		return true;
 	}
@@ -354,29 +294,41 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void applyNames() {
 		if (atrList != null) {
-			for (String key : atrList.getAttributesNames()) {
-				AttributeSettings a = atrList.getList().get(key);
-				if (a.getColInCSV() == 0)
-					setAileronName(key);
-				if (a.getColInCSV() == 1)
-					setElevatorName(key);
-				if (a.getColInCSV() == 2)
-					setRudderName(key);
-				if (a.getColInCSV() == 6)
-					setThrottleName(key);
-				if (a.getColInCSV() == 20)
-					setYawName(key);
-				if (a.getColInCSV() == 24)
-					setAirspeedName(key);
-				if (a.getColInCSV() == 25)
-					setAltimeterName(key);
-				if (a.getColInCSV() == 28)
-					setRollName(key);
-				if (a.getColInCSV() == 29)
-					setPitchName(key);
-				if (a.getColInCSV() == 36)
-					setHeadingName(key);
-				collsForView.put(key, a.getColInCSV());
+			if(!atrList.isEmpty()){
+				try {
+					collsForView.put(aileronName,atrList.getList().get(aileronName).colInCSV);
+					collsForView.put(elevatorName,atrList.getList().get(elevatorName).colInCSV);
+					collsForView.put(rudderName, atrList.getList().get(rudderName).colInCSV);
+					collsForView.put(throttleName, atrList.getList().get(throttleName).colInCSV);
+					collsForView.put(altimeterName,atrList.getList().get(altimeterName).colInCSV);
+					collsForView.put(airspeedName,atrList.getList().get(airspeedName).colInCSV);
+					collsForView.put(headingName,atrList.getList().get(headingName).colInCSV);
+					collsForView.put(rollName,atrList.getList().get(rollName).colInCSV);
+					collsForView.put(pitchName,atrList.getList().get(pitchName).colInCSV);
+					collsForView.put(yawName,atrList.getList().get(yawName).colInCSV);
+					setChanged();
+					notifyObservers("aileronName: "+aileronName);
+					setChanged();
+					notifyObservers("elevatorsName: "+elevatorName);
+					setChanged();
+					notifyObservers("rudderName: "+rudderName);
+					setChanged();
+					notifyObservers("throttleName: "+throttleName);
+					setChanged();
+					notifyObservers("altimeterName: "+altimeterName);
+					setChanged();
+					notifyObservers("airspeedName: "+airspeedName);
+					setChanged();
+					notifyObservers("headingName: "+headingName);
+					setChanged();
+					notifyObservers("rollName: "+rollName);
+					setChanged();
+					notifyObservers("pitchName: "+pitchName);
+					setChanged();
+					notifyObservers("yawName: "+yawName);
+					if(train!=null)
+						trainForView=train.filterBySelectingColl(collsForView);
+				}catch(Exception e){collsForView.clear();}
 			}
 		}
 	}
@@ -385,6 +337,8 @@ public class MyModel extends Observable implements Model {
 		TimeSeries ts = new TimeSeries(csv);
 		if (ts.isEmpty())
 			return null;
+		if(atrList.isEmpty())
+			return ts;
 		int atrLen = 0;
 		ArrayList<Float> thisLine;
 
@@ -478,7 +432,6 @@ public class MyModel extends Observable implements Model {
 					break;
 			}
 			});
-			//task.shutDownNow();
 	}
 
 	@Override
@@ -490,15 +443,10 @@ public class MyModel extends Observable implements Model {
 	public void stop() {
 		pause();
 		setCurrentTime(0);
-		/*task.execute(()->{
-			setCurrentTime(0);
-		});*/
 	}
 
 	@Override
-	public void forward(){
-		setCurrentTime(Math.min(test.getLength()-1,currentTime+5*rate));
-	}
+	public void forward() { setCurrentTime(Math.min(test.getLength()-1,currentTime+5*rate)); }
 
 	@Override
 	public void rewind(){
@@ -565,16 +513,16 @@ public class MyModel extends Observable implements Model {
 	public void setValues(int timeStep) {
 		if (test != null) {
 			if (timeStep < 0 || test.getLength() >= timeStep) {
-				double aileron = testForView.getLine("aileron").get(timeStep);
-				double elevator = testForView.getLine("elevator").get(timeStep);
-				double throttle = testForView.getLine("throttle").get(timeStep);
-				double rudder = testForView.getLine("rudder").get(timeStep);
-				double altimeter = testForView.getLine("altimeter").get(timeStep);
-				double airspeed = testForView.getLine("airspeed").get(timeStep);
-				double heading = testForView.getLine("heading").get(timeStep);
-				double roll = testForView.getLine("roll").get(timeStep);
-				double pitch = testForView.getLine("pitch").get(timeStep);
-				double yaw = testForView.getLine("yaw").get(timeStep);
+				double aileron = testForView.getLine(aileronName).get(timeStep);
+				double elevator = testForView.getLine(elevatorName).get(timeStep);
+				double throttle = testForView.getLine(throttleName).get(timeStep);
+				double rudder = testForView.getLine(rudderName).get(timeStep);
+				double altimeter = testForView.getLine(altimeterName).get(timeStep);
+				double airspeed = testForView.getLine(airspeedName).get(timeStep);
+				double heading = testForView.getLine(headingName).get(timeStep);
+				double roll = testForView.getLine(rollName).get(timeStep);
+				double pitch = testForView.getLine(pitchName).get(timeStep);
+				double yaw = testForView.getLine(yawName).get(timeStep);
 				setAileronVal(aileron);
 				setElevatorVal(elevator);
 				setThrottleVal(throttle);

@@ -26,7 +26,7 @@ public class ListOfAttributes extends Observable{
 	public ListOfAttributes() {
 		attributesConnection=new HashMap<String, AttributeSettings>();
 	}
-	
+	public boolean isEmpty(){return attributesConnection.keySet().size()==0;}
 	public ListOfAttributes(String txtFile) {
 		attributesConnection=new HashMap<>();
 		try {
