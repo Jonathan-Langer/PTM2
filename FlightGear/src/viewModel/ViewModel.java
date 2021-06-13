@@ -316,7 +316,7 @@ public class ViewModel extends Observable implements Observer{
 	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature){
 		return m.sendPointOf2Parameter(endTime,feature);
 	}
-	public HashMap<Point, Color> sendPointOf1Parameter(int endTime, String feature){
+	public List<Point> sendPointOf1Parameter(int endTime, String feature){
 		return m.sendPointOf1Parameter(endTime,feature);
 	}
 	public int getRate(){return m.getRate();}

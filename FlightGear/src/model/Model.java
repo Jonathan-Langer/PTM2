@@ -2,6 +2,7 @@ package model;
 
 import java.net.URLClassLoader;
 import java.util.HashMap;
+import java.util.List;
 
 import anomaly_detectors.Point;
 import anomaly_detectors.TimeSeries;
@@ -34,6 +35,6 @@ public interface Model {
 	public void applyNames();
 	public void setValues(int timeStep);
 	public String getMostCorrelated(String parameter);
-	public HashMap<Point, Color> sendPointOf1Parameter(int endTime, String feature);
+	public List<Point> sendPointOf1Parameter(int endTime, String feature);
 	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature);
 }

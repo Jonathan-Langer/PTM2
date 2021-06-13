@@ -40,6 +40,8 @@ public class MyModel extends Observable implements Model {
 	double speed;
 	PrintWriter writeToFlightGear = null;
 	ActiveObject task;
+	HashMap<String,List<Point>> pointsToDisplay;
+	String selectedFeature,correlatedFeature;
 
 	public MyModel() {
 		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
@@ -47,7 +49,6 @@ public class MyModel extends Observable implements Model {
 		atrList = new ListOfAttributes(txtLast);
 		collsForView = new HashMap<>();
 		task=new ActiveObject(1);
-		//t.start();
 	}
 	@Override
 	public int getRate(){return rate;}
@@ -384,11 +385,30 @@ public class MyModel extends Observable implements Model {
 		if (ts != null) {
 			test = ts;
 			testForView = ts.filterBySelectingColl(collsForView);
+			pointsToDisplay=new HashMap<>();
+			pointsToDisplay.put(aileronName,new ArrayList<>());
+			pointsToDisplay.put(elevatorName,new ArrayList<>());
+			pointsToDisplay.put(rudderName,new ArrayList<>());
+			pointsToDisplay.put(throttleName,new ArrayList<>());
+			pointsToDisplay.put(altimeterName,new ArrayList<>());
+			pointsToDisplay.put(airspeedName,new ArrayList<>());
+			pointsToDisplay.put(headingName,new ArrayList<>());
+			pointsToDisplay.put(rollName,new ArrayList<>());
+			pointsToDisplay.put(pitchName,new ArrayList<>());
+			pointsToDisplay.put(yawName,new ArrayList<>());
+			setupPoints();
 			return true;
 		}
 		return false;
 	}
 
+	void setupPoints(){
+		if(testForView!=null){
+			for(int i=0;i<testForView.getLength();i++)
+				for(String key:pointsToDisplay.keySet())
+					pointsToDisplay.get(key).add(new Point((float)i,testForView.getLine(key).get(i)));
+		}
+	}
 
 	public void saveLastCsvTrainFile(String currentCsvTrainFile) {
 		copyFile(currentCsvTrainFile, new File("resources/last_train.txt").getAbsolutePath());
@@ -464,20 +484,10 @@ public class MyModel extends Observable implements Model {
 			if (c == null)
 				return false;
 			detector = (TimeSeriesAnomalyDetector) c.newInstance();
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return false;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			return false;
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-			return false;
-		} catch (IllegalAccessException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
-		System.out.println("done:)))");
 		detector.learnNormal(trainForView);
 		return true;
 	}
@@ -562,12 +572,13 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public String getMostCorrelated(String parameter) {
+		selectedFeature=parameter;
 		CorrelatedFeatures mostRelevant = getCorrelatedFeatures(parameter);
 		if (mostRelevant == null)
-			return "no correlated feature";
+			return (correlatedFeature="no correlated feature");
 		if (mostRelevant.feature1.equals(parameter))
-			return mostRelevant.feature2;
-		return mostRelevant.feature1;
+			return (correlatedFeature=mostRelevant.feature2);
+		return (correlatedFeature=mostRelevant.feature1);
 	}
 
 	private CorrelatedFeatures getCorrelatedFeatures(String parameter) {
@@ -592,18 +603,15 @@ public class MyModel extends Observable implements Model {
 		return mostRelevant;
 	}
 	@Override
-	public HashMap<Point,Color> sendPointOf1Parameter(int endTime,String feature){
-		HashMap<Point, Color> result = new HashMap<>();
+	public List<Point> sendPointOf1Parameter(int endTime,String feature){
+		List<Point> result = new ArrayList<>();
 		if (endTime < 0)
 			return result;
-		if (!trainForView.getTitles().contains(feature))
+		if (!pointsToDisplay.containsKey(feature))
 			return result;
 		if (testForView == null)
 			return result;
-		for (int i = 0; i <= endTime; i++) {
-			Point p = new Point(i, testForView.getLine(feature).get(i));
-			result.put(p, Color.rgb(58, 58, 191));
-		}
+		result=pointsToDisplay.get(feature).subList(0,endTime);
 		return result;
 	}
 	@Override
@@ -617,7 +625,7 @@ public class MyModel extends Observable implements Model {
 			return result;
 		CorrelatedFeatures relevant = getCorrelatedFeatures(feature);
 		if (relevant == null)
-			return sendPointOf1Parameter(endTime,feature);
+			return null;
 		for(int i=0;i<=endTime;i++){
 			Point p=new Point(testForView.getLine(relevant.feature1).get(i),testForView.getLine(relevant.feature2).get(i));
 			result.put(p,Color.rgb(58, 58, 191));
