@@ -25,7 +25,7 @@ public class ViewModel extends Observable implements Observer{
 
 	StringProperty aileronName,elevatorName,throttleName,rudderName,altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
 
-	Map<String, Property> properties = new HashMap<>();
+	public final Map<String, Property> properties = new HashMap<>();
 
 	//--------values for gauge table----------
 	DoubleProperty altimeterValue, airspeedValue, headingValue,

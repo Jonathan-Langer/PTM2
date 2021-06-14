@@ -201,11 +201,17 @@ public class WindowController implements Initializable,Observer{
 			@Override
 			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
 				Platform.runLater(()->{
-					//attributesView.controller.selectedPrameter.controller.clear();
-					//attributesView.controller.selectedPrameter.controller.changeSetting(1000,-1000);
-					attributesView.controller.selectedPrameter.controller.addSetPoints(
-							vm.sendPointOf1Parameter((int)playerDisplayer.currentTime.get()
-									,attributesView.selectedParameter.getValue()),Color.BLUE);
+					String s=attributesView.selectedParameter.getValue();
+					if(!s.isEmpty()){
+						s=s.substring(0,1).toUpperCase()+s.substring(1,s.length());
+						//attributesView.controller.selectedPrameter.controller.clear();
+						attributesView.controller.selectedPrameter.controller.changeSetting(0,vm.getLength(),
+								Double.parseDouble(vm.properties.get("min"+s).getValue().toString()),
+								Double.parseDouble(vm.properties.get("max"+s).getValue().toString()));
+						attributesView.controller.selectedPrameter.controller.addSetPoints(
+								vm.sendPointOf1Parameter((int)playerDisplayer.currentTime.get()
+										,attributesView.selectedParameter.getValue()),Color.BLUE);
+					}
 				});
 			}
 		});
