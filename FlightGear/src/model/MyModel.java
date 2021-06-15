@@ -653,6 +653,12 @@ public class MyModel extends Observable implements Model {
 		return result;
 	}
 	@Override
+	public Shape sendShapeDetector(String feature){
+		if(detector!=null)
+			return detector.sendShape(feature);
+		return null;
+	}
+	@Override
 	public void shutDown(){
 		task.shutDown();
 	}

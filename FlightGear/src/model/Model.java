@@ -4,10 +4,7 @@ import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.List;
 
-import anomaly_detectors.CorrelatedFeatures;
-import anomaly_detectors.Point;
-import anomaly_detectors.TimeSeries;
-import anomaly_detectors.TimeSeriesAnomalyDetector;
+import anomaly_detectors.*;
 import javafx.scene.paint.Color;
 
 public interface Model {
@@ -39,4 +36,5 @@ public interface Model {
 	public List<Point> sendPointOf1Parameter(int endTime, String feature);
 	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature);
 	public CorrelatedFeatures getCorrelatedFeatures(String parameter);
+	public Shape sendShapeDetector(String feature);
 }

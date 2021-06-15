@@ -72,8 +72,25 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 		}
 		return detected;
 	}
-	
 	public List<CorrelatedFeatures> getNormalModel(){
 		return normalModel;
+	}
+
+	@Override
+	public Shape sendShape(String feature){
+		CorrelatedFeatures mostRelevant=null;
+		for(CorrelatedFeatures cf:normalModel){
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature)){
+				if(mostRelevant==null)
+					mostRelevant=cf;
+				else{
+					if(mostRelevant.corrlation<cf.corrlation)
+						mostRelevant=cf;
+				}
+			}
+		}
+		if(mostRelevant!=null)
+			return mostRelevant.lin_reg;
+		return null;
 	}
 }

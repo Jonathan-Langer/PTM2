@@ -338,4 +338,5 @@ public class ViewModel extends Observable implements Observer{
 		return m.getCorrelatedFeatures(feature);
 	}
 	public int getRate(){return m.getRate();}
+	public Shape sendShapeDetector(String feature){return m.sendShapeDetector(feature);}
 }

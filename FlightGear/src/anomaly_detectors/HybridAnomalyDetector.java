@@ -16,7 +16,7 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 	
 	TimeSeriesAnomalyDetector algorithm;
 	HashMap<String,HashSet<CorrelatedFeatures>> featuresToAlgorithm;
-	HashMap<CorrelatedFeatures,Circle> welzlCircleModel;//storing circles for each 
+	HashMap<CorrelatedFeatures,Circle> welzlCircleModel=new HashMap<>();//storing circles for each
 	//pair of correlated features
 	SimpleAnomalyDetector regressionDetector;
 	ZScoreAnomalyDetector zScoreDetector;
@@ -77,5 +77,34 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 			}
 		}
 		return detected;
+	}
+
+	@Override
+	public Shape sendShape(String feature) {
+		CorrelatedFeatures mostRelevant=null;
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("ZScore")){
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature)){
+				return null;
+			}
+		}
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("Regression")){
+			if(mostRelevant==null)
+				mostRelevant=cf;
+			else{
+				if(mostRelevant.corrlation<cf.corrlation)
+					mostRelevant=cf;
+			}
+		}
+		if(mostRelevant!=null)
+			return mostRelevant.lin_reg;
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("Welzl")){
+			if(mostRelevant==null)
+				mostRelevant=cf;
+			else{
+				if(mostRelevant.corrlation<cf.corrlation)
+					mostRelevant=cf;
+			}
+		}
+		return welzlCircleModel.get(mostRelevant);
 	}
 }

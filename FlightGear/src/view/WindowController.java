@@ -8,7 +8,7 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.*;
 
-import anomaly_detectors.CorrelatedFeatures;
+import anomaly_detectors.*;
 import javafx.animation.Animation;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -20,7 +20,6 @@ import view.joystick.JoystickDisplayer;
 import view.player.*;
 import view.tableClocks.TableClocksController;
 import view.tableClocks.TableClocksDisplayer;
-import anomaly_detectors.TimeSeries;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -51,7 +50,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import model.MyModel;
 //import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Circle;
+
 
 public class WindowController implements Initializable,Observer{
 	HashMap<StringProperty,String> namesAttribute=new HashMap<>();
@@ -378,7 +377,6 @@ public class WindowController implements Initializable,Observer{
 									Double.parseDouble(vm.properties.get("min" + s2).getValue().toString()),
 									Double.parseDouble(vm.properties.get("max" + s2).getValue().toString()));
 						}
-						attributesView.controller.detections.controller.clear();
 						CorrelatedFeatures cf=vm.getCorrelatedFeatureObject(t1);
 						if(cf!=null){
 							if(cf.feature1.equals(t1))
@@ -402,7 +400,17 @@ public class WindowController implements Initializable,Observer{
 									Double.parseDouble(vm.properties.get("min" + s1).getValue().toString()),
 									Double.parseDouble(vm.properties.get("max" + s1).getValue().toString())
 							);
+						attributesView.controller.detections.controller.clear();
+						Shape shape=vm.sendShapeDetector(t1);
+						if(shape!=null){
+							if(shape instanceof Line)
+								attributesView.controller.detections.controller.addLine((Line)shape,Color.GRAY);
+							if(shape instanceof Circle)
+								attributesView.controller.detections
+										.controller.addCircle((Circle)(shape),Color.GRAY);
+						}
 					}
+
 				}
 			}
 		});

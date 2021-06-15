@@ -80,7 +80,7 @@ public class CoordinateSystemController implements Initializable {
 		double valueForMinX=l.a*minValueX+l.b;
 		double valueForMaxX=l.a*maxValueX+l.b;
 		Line toDisplay=new Line();
-		toDisplay.setStroke(Color.GREENYELLOW);
+		toDisplay.setStroke(color);
 		toDisplay.setStrokeWidth(1.0);
 		double x0=this.y.getEndX();
 		double y0=this.x.getEndY();
@@ -96,7 +96,7 @@ public class CoordinateSystemController implements Initializable {
 		Circle toDisplay=new Circle();
 		toDisplay.setCenterX(x0+c.center.x/(maxValueX-minValueX)*width);
 		toDisplay.setCenterY(y0-c.center.y/(maxValueY-minValueY)*height);
-		toDisplay.setStroke(Color.GREENYELLOW);
+		toDisplay.setStroke(color);
 		double radiusDisplay=(x0+(c.center.x+c.radius)/(maxValueX-minValueX)*width-(x0+c.center.x/(maxValueX-minValueX)*width));
 		toDisplay.setRadius(radiusDisplay);
 		toDisplay.setFill(Color.rgb(255, 255, 255, 0));
