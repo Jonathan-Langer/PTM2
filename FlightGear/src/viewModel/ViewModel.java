@@ -3,10 +3,7 @@ package viewModel;
 import java.util.Observable;
 import java.util.Observer;
 
-import anomaly_detectors.HybridAnomalyDetector;
-import anomaly_detectors.Point;
-import anomaly_detectors.SimpleAnomalyDetector;
-import anomaly_detectors.ZScoreAnomalyDetector;
+import anomaly_detectors.*;
 import javafx.beans.property.*;
 
 import java.util.*;
@@ -318,6 +315,27 @@ public class ViewModel extends Observable implements Observer{
 	}
 	public List<Point> sendPointOf1Parameter(int endTime, String feature){
 		return m.sendPointOf1Parameter(endTime,feature);
+	}
+	private HashMap<Point,Color> pointsForDetector=new HashMap<>();
+	public void initPointsForDetector(String feature,int endTime){
+		pointsForDetector=m.sendPointOf2Parameter(endTime,feature);
+	}
+	public List<Point> sendAnomaliesPointWith2Parameter(String feature,int endTime){
+		List<Point> res=new ArrayList<>();
+		for(Point key:pointsForDetector.keySet())
+			if(pointsForDetector.get(key)==Color.RED)
+				res.add(key);
+		return res;
+	}
+	public List<Point> sendNotAnomaliesPointWith2Parameter(String feature,int endTime){
+		List<Point> res=new ArrayList<>();
+		for(Point key:pointsForDetector.keySet())
+			if(pointsForDetector.get(key)==Color.BLUE)
+				res.add(key);
+		return res;
+	}
+	public CorrelatedFeatures getCorrelatedFeatureObject(String feature){
+		return m.getCorrelatedFeatures(feature);
 	}
 	public int getRate(){return m.getRate();}
 }

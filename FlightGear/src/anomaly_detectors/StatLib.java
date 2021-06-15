@@ -1,11 +1,13 @@
 package anomaly_detectors;
 
+import java.util.List;
+
 public class StatLib {
 	
-	public static float[] toFloat(Float[] arr) {
-		float[] retArr = new float[arr.length];
+	public static float[] toFloat(List<Float> arr) {
+		float[] retArr = new float[arr.size()];
 		for (int j=0; j<retArr.length;j++)
-			retArr[j]=arr[j].floatValue();
+			retArr[j]=arr.get(j);
 		return retArr;
 	}
 

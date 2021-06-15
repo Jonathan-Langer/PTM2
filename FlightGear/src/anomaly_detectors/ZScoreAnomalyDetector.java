@@ -1,12 +1,13 @@
 package anomaly_detectors;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 	
 	ArrayList<Float> thArr;
-	
+
 	@Override
 	public void learnNormal(TimeSeries ts) {
 		thArr= new ArrayList<>();
@@ -22,7 +23,6 @@ public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 					/Math.sqrt(StatLib.var(col)));
 			if(th<z)
 				th=z;
-			
 		}
 		return th;
 	}
@@ -39,16 +39,14 @@ public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 			
 			for (int j=0; j<info.size(); j++)
 			{
-				float z = zScore(StatLib.toFloat((Float[])curr.toArray()));
+				float z = zScore(StatLib.toFloat(curr));
 				if (z>thArr.get(i))
 				{
-					detected.add(new AnomalyReport(i+"-"+ts.getTitles().get(i),j+1));
+					detected.add(new AnomalyReport(ts.getTitles().get(i),j+1));
 				}//if
 				curr.add(info.get(j));
 			}//for
 		}//for
-		
 		return detected;
 	}
-
 }

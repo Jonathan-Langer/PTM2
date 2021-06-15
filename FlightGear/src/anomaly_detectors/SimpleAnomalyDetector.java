@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 		
-	public static float th = (float) 0.9;
+	public static float th = (float) 0.5;
 	
 	public SimpleAnomalyDetector() {
 		super();

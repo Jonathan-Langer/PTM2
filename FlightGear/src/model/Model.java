@@ -4,6 +4,7 @@ import java.net.URLClassLoader;
 import java.util.HashMap;
 import java.util.List;
 
+import anomaly_detectors.CorrelatedFeatures;
 import anomaly_detectors.Point;
 import anomaly_detectors.TimeSeries;
 import anomaly_detectors.TimeSeriesAnomalyDetector;
@@ -37,4 +38,5 @@ public interface Model {
 	public String getMostCorrelated(String parameter);
 	public List<Point> sendPointOf1Parameter(int endTime, String feature);
 	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature);
+	public CorrelatedFeatures getCorrelatedFeatures(String parameter);
 }

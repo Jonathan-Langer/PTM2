@@ -35,7 +35,7 @@ public class PlayerDisplayerController  implements Initializable {
 	@FXML
 	public FontAwesomeIcon playIcon,pauseIcon,stopIcon,forwardIcon,rewindIcon;
 	@FXML
-	Label timeLabel;
+	public Label timeLabel;
 	public PlayerDisplayerController() {
 		options = new ComboBox<>();
 		csvTestFilePath = new SimpleStringProperty();

@@ -484,6 +484,7 @@ public class MyModel extends Observable implements Model {
 			if (c == null)
 				return false;
 			detector = (TimeSeriesAnomalyDetector) c.newInstance();
+			detector.learnNormal(trainForView);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -522,7 +523,7 @@ public class MyModel extends Observable implements Model {
 	@Override
 	public void setValues(int timeStep) {
 		if (test != null) {
-			if (timeStep < 0 || test.getLength() >= timeStep) {
+			if (timeStep >= 0 && test.getLength() > timeStep) {
 				double aileron = testForView.getLine(aileronName).get(timeStep);
 				double elevator = testForView.getLine(elevatorName).get(timeStep);
 				double throttle = testForView.getLine(throttleName).get(timeStep);
@@ -581,7 +582,7 @@ public class MyModel extends Observable implements Model {
 		return (correlatedFeature=mostRelevant.feature1);
 	}
 
-	private CorrelatedFeatures getCorrelatedFeatures(String parameter) {
+	public CorrelatedFeatures getCorrelatedFeatures(String parameter) {
 		if (!trainForView.getTitles().contains(parameter))
 			return null;
 		SimpleAnomalyDetector d = new SimpleAnomalyDetector(Float.parseFloat("0.5"));
@@ -589,16 +590,16 @@ public class MyModel extends Observable implements Model {
 		List<CorrelatedFeatures> a = d.getNormalModel();
 		CorrelatedFeatures mostRelevant = null;
 		for (CorrelatedFeatures c : a) {
-			if (c.feature1.equals(parameter))
+			if (c.feature1.equals(parameter)||c.feature2.equals(parameter))
 				if (mostRelevant == null)
 					mostRelevant = c;
 				else if (mostRelevant.corrlation < c.corrlation)
 					mostRelevant = c;
-			if (c.feature2.equals(parameter))
+			/*if (c.feature2.equals(parameter))
 				if (mostRelevant == null)
 					mostRelevant = c;
 				else if (mostRelevant.corrlation < c.corrlation)
-					mostRelevant = c;
+					mostRelevant = c;*/
 		}
 		return mostRelevant;
 	}
@@ -616,19 +617,38 @@ public class MyModel extends Observable implements Model {
 	}
 	@Override
 	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature) {
-		HashMap<Point, Color> result = new HashMap<>();
-		if (endTime < 0)
-			return result;
-		if (trainForView.getTitles().contains(feature))
-			return result;
-		if (testForView == null)
-			return result;
-		CorrelatedFeatures relevant = getCorrelatedFeatures(feature);
-		if (relevant == null)
-			return null;
-		for(int i=0;i<=endTime;i++){
-			Point p=new Point(testForView.getLine(relevant.feature1).get(i),testForView.getLine(relevant.feature2).get(i));
-			result.put(p,Color.rgb(58, 58, 191));
+		HashMap<Point,Color> result=new HashMap<>();
+		if(testForView!=null){
+			CorrelatedFeatures cf=getCorrelatedFeatures(feature);
+			if(detector==null){
+				for(int i=0;i<endTime;i++){
+					if(cf==null)
+						result.put(new Point(i,testForView.getLine(feature).get(i)),Color.BLUE);
+					else
+						result.put(new Point(testForView.getLine(cf.feature1).get(i),testForView.getLine(cf.feature2).get(i)),Color.BLUE);
+				}
+			}
+			else{
+				List<AnomalyReport> l=detector.detect(testForView);
+				for(int i=0;i<endTime;i++){
+					if(cf==null){
+						String description=feature;
+						if(l.contains(new AnomalyReport(description,i)))
+							result.put(new Point(i,testForView.getLine(feature).get(i)),Color.RED);
+						else
+							result.put(new Point(i,testForView.getLine(feature).get(i)),Color.BLUE);
+					}
+					else{
+						String description=cf.feature1+"-"+cf.feature2;
+						if(l.contains(new AnomalyReport(description,i)))
+							result.put(new Point(testForView.getLine(cf.feature1).get(i),testForView.getLine(cf.feature2).get(i))
+									,Color.RED);
+						else
+							result.put(new Point(testForView.getLine(cf.feature1).get(i),testForView.getLine(cf.feature2).get(i))
+									,Color.BLUE);
+					}
+				}
+			}
 		}
 		return result;
 	}

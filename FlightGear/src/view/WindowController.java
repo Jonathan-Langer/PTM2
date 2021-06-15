@@ -8,6 +8,7 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.*;
 
+import anomaly_detectors.CorrelatedFeatures;
 import javafx.animation.Animation;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -199,20 +200,41 @@ public class WindowController implements Initializable,Observer{
 		});
 		playerDisplayer.currentTime.addListener(new ChangeListener<Number>() {
 			@Override
-			public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-				Platform.runLater(()->{
-					String s=attributesView.selectedParameter.getValue();
-					if(!s.isEmpty()){
-						s=s.substring(0,1).toUpperCase()+s.substring(1,s.length());
-						//attributesView.controller.selectedPrameter.controller.clear();
-						attributesView.controller.selectedPrameter.controller.changeSetting(0,vm.getLength(),
-								Double.parseDouble(vm.properties.get("min"+s).getValue().toString()),
-								Double.parseDouble(vm.properties.get("max"+s).getValue().toString()));
-						attributesView.controller.selectedPrameter.controller.addSetPoints(
-								vm.sendPointOf1Parameter((int)playerDisplayer.currentTime.get()
-										,attributesView.selectedParameter.getValue()),Color.BLUE);
-					}
-				});
+			public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
+				double oldV=(double)oldVal;
+				double newV=(double)newVal;
+				if(oldV<newV){
+					Platform.runLater(()->{
+						String s1=attributesView.selectedParameter.getValue();
+						String s2=attributesView.correlatedPrameter.getValue();
+						if(!s1.isEmpty()&&!s2.isEmpty()){
+							int time=(int)newV;
+							attributesView.controller.selectedPrameter.controller.addSetPoints(
+									vm.sendPointOf1Parameter(time
+											,attributesView.selectedParameter.getValue()),Color.BLUE);
+							playerDisplayer.currentTime.setValue(time);
+							if(!s2.equals("no correlated feature")){
+								attributesView.controller.correlatedPrameter.controller.addSetPoints(
+										vm.sendPointOf1Parameter(time
+												,attributesView.correlatedPrameter.getValue()),Color.BLUE);
+							}
+							playerDisplayer.currentTime.setValue(time);
+							vm.initPointsForDetector(s1,time);
+							attributesView.controller.detections.controller.addSetPoints(vm.sendNotAnomaliesPointWith2Parameter(s1,time),Color.BLUE);
+							attributesView.controller.detections.controller.addSetPoints(vm.sendAnomaliesPointWith2Parameter(s1,time),Color.RED);
+							playerDisplayer.currentTime.setValue(time);
+						}
+					});
+				}
+				else {
+					int time=(int)newV;
+					playerDisplayer.currentTime.setValue(time);
+					attributesView.controller.selectedPrameter.controller.removePoint((int)(oldV-newV));
+					playerDisplayer.currentTime.setValue(time);
+					attributesView.controller.correlatedPrameter.controller.removePoint((int)(oldV-newV));
+					playerDisplayer.currentTime.setValue(time);
+					attributesView.controller.detections.controller.removePoint((int)(oldV-newV));
+				}
 			}
 		});
 		playerDisplayer.controller.playIcon.fillProperty().addListener(new ChangeListener<Paint>() {
@@ -337,10 +359,50 @@ public class WindowController implements Initializable,Observer{
 		attributesView.selectedParameter.addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-				if(vm!=null){
-					String str=vm.getMostCorrelated(attributesView.selectedParameter.getValue());
-					if(str!=null)
+				if (vm != null) {
+					String str = vm.getMostCorrelated(attributesView.selectedParameter.getValue());
+					if (str != null) {
 						attributesView.correlatedPrameter.setValue(str);
+						String s1 = t1;
+						s1 = s1.substring(0, 1).toUpperCase() + s1.substring(1, s1.length());
+						String s2 = str;
+						if(!s2.equals("no correlated feature"))
+							s2 = s2.substring(0, 1).toUpperCase() + s2.substring(1, s2.length());
+						attributesView.controller.selectedPrameter.controller.clear();
+						attributesView.controller.selectedPrameter.controller.changeSetting(0, vm.getLength(),
+								Double.parseDouble(vm.properties.get("min" + s1).getValue().toString()),
+								Double.parseDouble(vm.properties.get("max" + s1).getValue().toString()));
+						attributesView.controller.correlatedPrameter.controller.clear();
+						if (!s2.equals("no correlated feature")) {
+							attributesView.controller.correlatedPrameter.controller.changeSetting(0, vm.getLength(),
+									Double.parseDouble(vm.properties.get("min" + s2).getValue().toString()),
+									Double.parseDouble(vm.properties.get("max" + s2).getValue().toString()));
+						}
+						attributesView.controller.detections.controller.clear();
+						CorrelatedFeatures cf=vm.getCorrelatedFeatureObject(t1);
+						if(cf!=null){
+							if(cf.feature1.equals(t1))
+								attributesView.controller.detections.controller.changeSetting(
+										Double.parseDouble(vm.properties.get("min" + s1).getValue().toString()),
+										Double.parseDouble(vm.properties.get("max" + s1).getValue().toString()),
+										Double.parseDouble(vm.properties.get("min" + s2).getValue().toString()),
+										Double.parseDouble(vm.properties.get("max" + s2).getValue().toString())
+								);
+							else
+								attributesView.controller.detections.controller.changeSetting(
+										Double.parseDouble(vm.properties.get("min" + s2).getValue().toString()),
+										Double.parseDouble(vm.properties.get("max" + s2).getValue().toString()),
+										Double.parseDouble(vm.properties.get("min" + s1).getValue().toString()),
+										Double.parseDouble(vm.properties.get("max" + s1).getValue().toString())
+								);
+						}
+						else
+							attributesView.controller.detections.controller.changeSetting(
+									0, vm.getLength(),
+									Double.parseDouble(vm.properties.get("min" + s1).getValue().toString()),
+									Double.parseDouble(vm.properties.get("max" + s1).getValue().toString())
+							);
+					}
 				}
 			}
 		});
@@ -362,6 +424,7 @@ public class WindowController implements Initializable,Observer{
 				message.setContentText("well done!"
 						+ " \n the anomaly detector class file has been saved in the system");
 				message.show();
+				attributesView.controller.detections.controller.clear();
 			}
 			else {
 				Alert message=new Alert(Alert.AlertType.ERROR);

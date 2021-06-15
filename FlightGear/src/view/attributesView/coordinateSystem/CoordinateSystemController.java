@@ -60,19 +60,21 @@ public class CoordinateSystemController implements Initializable {
 		x.setEndY(height-height*(0-minValueY)/(maxValueY-minValueY));
 	}
 	public void addPoint(Point p,Paint color) {
-		double x0=this.y.getEndX();
-		double y0=this.x.getEndY();
-		double displayX=x0+p.x/(maxValueX-minValueX)*width;
-		double displayY=y0-p.y/(maxValueY-minValueY)*height;
-		Circle toDisplay=new Circle();
-		toDisplay.setRadius(1);
-		toDisplay.setCenterX(displayX);
-		toDisplay.setCenterY(displayY);
-		toDisplay.setFill(Color.rgb(51, 89, 210));
-		points.add(toDisplay);
-		pointList.add(p);
-		board.getChildren().removeAll(points);
-		board.getChildren().addAll(points);
+		if(!pointList.contains(p)){
+			double x0=this.y.getEndX();
+			double y0=this.x.getEndY();
+			double displayX=x0+p.x/(maxValueX-minValueX)*width;
+			double displayY=y0-p.y/(maxValueY-minValueY)*height;
+			Circle toDisplay=new Circle();
+			toDisplay.setRadius(1);
+			toDisplay.setCenterX(displayX);
+			toDisplay.setCenterY(displayY);
+			toDisplay.setFill(color);
+			points.add(toDisplay);
+			pointList.add(p);
+			//board.getChildren().removeAll(points);
+			board.getChildren().add(toDisplay);
+		}
 	}
 	public void addLine(anomaly_detectors.Line l,Paint color) {
 		double valueForMinX=l.a*minValueX+l.b;
@@ -102,10 +104,40 @@ public class CoordinateSystemController implements Initializable {
 		board.getChildren().add(toDisplay);
 	}
 	public void addSetPoints(Collection<Point> listPoints, Paint color){
-		listPoints.removeAll(pointList);
-		listPoints.forEach((p)->addPoint(p,color));
+		List<Point> tmp = new ArrayList<>(List.copyOf(listPoints));
+		tmp.removeAll(pointList);
+		tmp.forEach((p)->addPoint(p,color));
 	}
-
+	public void removePoint(int numOfPointToRemove){ // remove the last "numOfPointsToRemove" points
+		if(numOfPointToRemove>pointList.size()){
+			int x=pointList.size();
+			pointList.removeAll(pointList);
+			for(int i=0;i<x;i++)
+				if(board.getChildren().get(board.getChildren().size()-1) instanceof Circle){
+					Circle c=(Circle)board.getChildren().get(board.getChildren().size()-1);
+					if(!c.getFill().equals(Color.rgb(255, 255, 255, 0)))
+						board.getChildren().remove(board.getChildren().size()-1);
+					else
+						i--;
+				}
+				else
+					i--;
+		}
+		else{
+			for(int i=0;i<numOfPointToRemove;i++)
+				pointList.remove(pointList.size()-1);
+			for(int i=0;i<numOfPointToRemove;i++)
+				if(board.getChildren().get(board.getChildren().size()-1) instanceof Circle){
+					Circle c=(Circle)board.getChildren().get(board.getChildren().size()-1);
+					if(!c.getFill().equals(Color.rgb(255, 255, 255, 0)))
+						board.getChildren().remove(board.getChildren().size()-1);
+					else
+						i--;
+				}
+				else
+					i--;
+		}
+	}
 	public void clear() {
 		board.getChildren().removeAll(points);
 		board.getChildren().removeAll(lines);
