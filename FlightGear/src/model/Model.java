@@ -1,13 +1,11 @@
 package model;
 
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import anomaly_detectors.CorrelatedFeatures;
-import anomaly_detectors.Point;
-import anomaly_detectors.TimeSeries;
-import anomaly_detectors.TimeSeriesAnomalyDetector;
+import anomaly_detectors.*;
 import javafx.scene.paint.Color;
 
 public interface Model {
@@ -19,6 +17,7 @@ public interface Model {
 	public void saveLastCsvTrainFile(String csvTrainFile);
 	public int getLength();
 	public int getRate();
+	public ArrayList<String> getNames();
 	public void setSpeedOfFlight(double speed);
 	public void play();
 	public void pause();
@@ -26,6 +25,10 @@ public interface Model {
 	public void forward();
 	public void rewind();
 	public void setCurrentTimeWithoutNotify(int currentTime);
+	public double getMinValueOfColl(String f);
+	public double getMaxValueOfColl(String f);
+	public Shape sendShapeDetector(String f);
+
 	
 	public boolean setAnomalyDetector(String path,String name);
 	public void start(); //run in the background

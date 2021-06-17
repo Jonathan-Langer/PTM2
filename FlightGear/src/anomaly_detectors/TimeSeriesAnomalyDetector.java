@@ -6,5 +6,5 @@ import java.util.List;
 public interface TimeSeriesAnomalyDetector {
 	void learnNormal(TimeSeries ts);
 	List<AnomalyReport> detect(TimeSeries ts);
-	//HashMap<Integer,Point> getDetectedPoints();
+	Shape sendShape(String f);
 }

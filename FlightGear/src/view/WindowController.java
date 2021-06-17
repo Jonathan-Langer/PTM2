@@ -8,7 +8,7 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.util.*;
 
-import anomaly_detectors.CorrelatedFeatures;
+import anomaly_detectors.*;
 import javafx.animation.Animation;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -20,7 +20,6 @@ import view.joystick.JoystickDisplayer;
 import view.player.*;
 import view.tableClocks.TableClocksController;
 import view.tableClocks.TableClocksDisplayer;
-import anomaly_detectors.TimeSeries;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -51,10 +50,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import model.MyModel;
 //import javafx.scene.layout.AnchorPane;
-import javafx.scene.shape.Circle;
+
 
 public class WindowController implements Initializable,Observer{
 	HashMap<StringProperty,String> namesAttribute=new HashMap<>();
+
 	StringProperty txtFilePath=new SimpleStringProperty();
 	StringProperty csvTrainFilePath=new SimpleStringProperty();
 	ViewModel vm;
@@ -147,9 +147,10 @@ public class WindowController implements Initializable,Observer{
 		vm.applyValuesMinMax();
 		vm.applyNames();
 		playerDisplayer.setRate(vm.getRate());
-		attributesView.controller.applySetting(namesAttribute.values());
+		//attributesView.controller.applySetting(vm.getNames());
 		//vm.checkValidateSettingFile(txtFilePath.getValue());
 		vm.setTrainTimeSeries(csvTrainFilePath.get());
+		attributesView.controller.applySetting(vm.getNames());
 	}
 	//---------------FXML Objects--------------
 	@FXML
@@ -167,9 +168,7 @@ public class WindowController implements Initializable,Observer{
 	@FXML
 	Player playerDisplayer;
 	
-	
-		
-		
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		playerDisplayer.csvTestFilePath.addListener(new ChangeListener<String>() {
@@ -218,22 +217,27 @@ public class WindowController implements Initializable,Observer{
 										vm.sendPointOf1Parameter(time
 												,attributesView.correlatedPrameter.getValue()),Color.BLUE);
 							}
-							playerDisplayer.currentTime.setValue(time);
+							//playerDisplayer.currentTime.setValue(time);
 							vm.initPointsForDetector(s1,time);
+							//playerDisplayer.currentTime.setValue(time);
 							attributesView.controller.detections.controller.addSetPoints(vm.sendNotAnomaliesPointWith2Parameter(s1,time),Color.BLUE);
+							//playerDisplayer.currentTime.setValue(time);
 							attributesView.controller.detections.controller.addSetPoints(vm.sendAnomaliesPointWith2Parameter(s1,time),Color.RED);
-							playerDisplayer.currentTime.setValue(time);
+							//playerDisplayer.currentTime.setValue(time);
 						}
 					});
 				}
 				else {
-					int time=(int)newV;
-					playerDisplayer.currentTime.setValue(time);
-					attributesView.controller.selectedPrameter.controller.removePoint((int)(oldV-newV));
-					playerDisplayer.currentTime.setValue(time);
-					attributesView.controller.correlatedPrameter.controller.removePoint((int)(oldV-newV));
-					playerDisplayer.currentTime.setValue(time);
-					attributesView.controller.detections.controller.removePoint((int)(oldV-newV));
+					Platform.runLater(()->{
+						int time=(int)newV;
+						//playerDisplayer.currentTime.setValue(time);
+						attributesView.controller.selectedPrameter.controller.removePoint((int)(oldV-newV));
+						//playerDisplayer.currentTime.setValue(time);
+						attributesView.controller.correlatedPrameter.controller.removePoint((int)(oldV-newV));
+						//playerDisplayer.currentTime.setValue(time);
+						attributesView.controller.detections.controller.removePoint((int)(oldV-newV));
+						//playerDisplayer.currentTime.setValue(time);
+					});
 				}
 			}
 		});
@@ -256,8 +260,12 @@ public class WindowController implements Initializable,Observer{
 		playerDisplayer.controller.stopIcon.fillProperty().addListener(new ChangeListener<Paint>() {
 			@Override
 			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
-				if(playerDisplayer.controller.stopIcon.getFill()!=Color.BLACK)
+				if(playerDisplayer.controller.stopIcon.getFill()!=Color.BLACK){
 					vm.stop();
+					attributesView.controller.selectedPrameter.controller.clear();
+					attributesView.controller.correlatedPrameter.controller.clear();
+					attributesView.controller.detections.controller.clear();
+				}
 			}
 		});
 		playerDisplayer.controller.pauseIcon.fillProperty().addListener(new ChangeListener<Paint>() {
@@ -356,6 +364,7 @@ public class WindowController implements Initializable,Observer{
 				//attributesView.controller.applySetting(namesAttribute.values());
 			}
 		});
+
 		attributesView.selectedParameter.addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -370,44 +379,71 @@ public class WindowController implements Initializable,Observer{
 							s2 = s2.substring(0, 1).toUpperCase() + s2.substring(1, s2.length());
 						attributesView.controller.selectedPrameter.controller.clear();
 						attributesView.controller.selectedPrameter.controller.changeSetting(0, vm.getLength(),
-								Double.parseDouble(vm.properties.get("min" + s1).getValue().toString()),
-								Double.parseDouble(vm.properties.get("max" + s1).getValue().toString()));
+								vm.getMinValColl(attributesView.selectedParameter.get()),
+								vm.getMaxValColl(attributesView.selectedParameter.get()));
 						attributesView.controller.correlatedPrameter.controller.clear();
 						if (!s2.equals("no correlated feature")) {
 							attributesView.controller.correlatedPrameter.controller.changeSetting(0, vm.getLength(),
-									Double.parseDouble(vm.properties.get("min" + s2).getValue().toString()),
-									Double.parseDouble(vm.properties.get("max" + s2).getValue().toString()));
+									vm.getMinValColl(str),
+									vm.getMaxValColl(str));
 						}
 						attributesView.controller.detections.controller.clear();
 						CorrelatedFeatures cf=vm.getCorrelatedFeatureObject(t1);
 						if(cf!=null){
 							if(cf.feature1.equals(t1))
 								attributesView.controller.detections.controller.changeSetting(
-										Double.parseDouble(vm.properties.get("min" + s1).getValue().toString()),
-										Double.parseDouble(vm.properties.get("max" + s1).getValue().toString()),
-										Double.parseDouble(vm.properties.get("min" + s2).getValue().toString()),
-										Double.parseDouble(vm.properties.get("max" + s2).getValue().toString())
-								);
+										vm.getMinValColl(t1),
+										vm.getMaxValColl(t1),
+										vm.getMinValColl(str),
+										vm.getMaxValColl(str));
 							else
 								attributesView.controller.detections.controller.changeSetting(
-										Double.parseDouble(vm.properties.get("min" + s2).getValue().toString()),
-										Double.parseDouble(vm.properties.get("max" + s2).getValue().toString()),
-										Double.parseDouble(vm.properties.get("min" + s1).getValue().toString()),
-										Double.parseDouble(vm.properties.get("max" + s1).getValue().toString())
-								);
+										vm.getMinValColl(str),
+										vm.getMaxValColl(str),
+										vm.getMinValColl(t1),
+										vm.getMaxValColl(t1));
 						}
 						else
 							attributesView.controller.detections.controller.changeSetting(
 									0, vm.getLength(),
-									Double.parseDouble(vm.properties.get("min" + s1).getValue().toString()),
-									Double.parseDouble(vm.properties.get("max" + s1).getValue().toString())
+									vm.getMinValColl(t1),
+									vm.getMinValColl(str)
 							);
+						attributesView.controller.detections.controller.clear();
+						Shape shape=vm.sendShapeDetector(t1);
+						if(shape!=null){
+							if(shape instanceof Line)
+								attributesView.controller.detections.controller.addLine((Line)shape,Color.GREEN);
+							if(shape instanceof anomaly_detectors.Circle)
+								attributesView.controller.detections
+										.controller.addCircle((Circle) (shape),Color.GREEN);
+						/*Platform.runLater(()->{
+							String str1=attributesView.selectedParameter.getValue();
+							String str2=attributesView.correlatedPrameter.getValue();
+							if(!str1.isEmpty()&&!str2.isEmpty()){
+								int time=(int)playerDisplayer.currentTime.get();
+								attributesView.controller.selectedPrameter.controller.addSetPoints(
+										vm.sendPointOf1Parameter(time
+												,attributesView.selectedParameter.getValue()),Color.BLUE);
+								playerDisplayer.currentTime.setValue(time);
+								if(!str2.equals("no correlated feature")){
+									attributesView.controller.correlatedPrameter.controller.addSetPoints(
+											vm.sendPointOf1Parameter(time
+													,attributesView.correlatedPrameter.getValue()),Color.BLUE);
+								}
+								playerDisplayer.currentTime.setValue(time);
+								vm.initPointsForDetector(str1,time);
+								attributesView.controller.detections.controller.addSetPoints(vm.sendNotAnomaliesPointWith2Parameter(str1,time),Color.BLUE);
+								attributesView.controller.detections.controller.addSetPoints(vm.sendAnomaliesPointWith2Parameter(str1,time),Color.RED);
+								playerDisplayer.currentTime.setValue(time);
+							}
+						});*/
+						}
 					}
 				}
 			}
 		});
 	}
-
 	public void loadClassFile(){
 		FileChooser fc=new FileChooser();
 		fc.setTitle("open anomaly detector class file");
@@ -470,7 +506,7 @@ public class WindowController implements Initializable,Observer{
 				playerDisplayer.setRate(vm.getRate());
 				vm.applyNames();
 			}
-			attributesView.controller.applySetting(namesAttribute.values());
+			//attributesView.controller.applySetting(v);
 		}
 	}
 
@@ -505,6 +541,7 @@ public class WindowController implements Initializable,Observer{
 			}
 		}
 		joystickDisplayer=new JoystickDisplayer();
+		attributesView.controller.applySetting(vm.getNames());
 	}
 	
 	@Override

@@ -5,14 +5,14 @@ import java.util.ArrayList;
 
 public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 		
-	public static float th = (float) 0.5;
-	
+	public static float thForCorrelation = (float) 0.5;
+	public static float thForAnomaly=2;
 	public SimpleAnomalyDetector() {
 		super();
 		this.normalModel = null;
 	}
-	public SimpleAnomalyDetector(float th) {
-		this.th=th;
+	public SimpleAnomalyDetector(float thForCorrelation) {
+		this.thForCorrelation=thForCorrelation;
 	}
 	List<CorrelatedFeatures> normalModel;
 
@@ -31,7 +31,7 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 			for (int j=i+1; j<ts.getSize();j++) {
 				valY= ts.getLineAsArray(j);
 				pear =StatLib.pearson(valX,valY);	
-				if (Math.abs(pear)>=th && Math.abs(pear)>maxAbsPear)		
+				if (Math.abs(pear)>=thForCorrelation && Math.abs(pear)>maxAbsPear)
 				{
 					maxAbsPear=Math.abs(pear);
 					maxPlace=j;
@@ -64,7 +64,7 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 			{
 				p=new Point(ts.getLine(f.feature1).get(i),
 						ts.getLine(f.feature2).get(i));
-				if (StatLib.dev(p,f.lin_reg)>(f.threshold+0.4))
+				if (StatLib.dev(p,f.lin_reg)>thForAnomaly)
 				{
 					detected.add(new AnomalyReport(f.feature1+"-"+f.feature2,i+1));
 				}
@@ -75,5 +75,22 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 	
 	public List<CorrelatedFeatures> getNormalModel(){
 		return normalModel;
+	}
+	@Override
+	public Shape sendShape(String feature){
+		CorrelatedFeatures mostRelevant=null;
+		for(CorrelatedFeatures cf:normalModel){
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature)){
+				if(mostRelevant==null)
+					mostRelevant=cf;
+				else{
+					if(mostRelevant.corrlation<cf.corrlation)
+						mostRelevant=cf;
+				}
+			}
+		}
+		if(mostRelevant!=null)
+			return mostRelevant.lin_reg;
+		return null;
 	}
 }

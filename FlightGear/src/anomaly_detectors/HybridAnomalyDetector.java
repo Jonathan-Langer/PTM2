@@ -16,10 +16,10 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 	
 	TimeSeriesAnomalyDetector algorithm;
 	HashMap<String,HashSet<CorrelatedFeatures>> featuresToAlgorithm;
-	HashMap<CorrelatedFeatures,Circle> welzlCircleModel;//storing circles for each 
+	HashMap<CorrelatedFeatures,Circle> welzlCircleModel=new HashMap<>();//storing circles for each
 	//pair of correlated features
-	SimpleAnomalyDetector regressionDetector;
-	ZScoreAnomalyDetector zScoreDetector;
+	SimpleAnomalyDetector regressionDetector=new SimpleAnomalyDetector();
+	ZScoreAnomalyDetector zScoreDetector=new ZScoreAnomalyDetector();
 	
 	@Override
 	public void learnNormal(TimeSeries ts) {
@@ -33,7 +33,7 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 		featuresToAlgorithm.put("Regression", new HashSet<>());
 		featuresToAlgorithm.put("Welzl", new HashSet<>());
 		for(CorrelatedFeatures c:mostCorrelated) {
-			if(Math.abs(c.corrlation)>=0.95)
+			if(Math.abs(c.corrlation)>=1)
 				featuresToAlgorithm.get("Regression").add(c);
 			else {
 				if(Math.abs(c.corrlation)<0.5)
@@ -77,5 +77,38 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 			}
 		}
 		return detected;
+	}
+	@Override
+	public Shape sendShape(String feature) {
+		CorrelatedFeatures mostRelevant=null;
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("ZScore")){
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature)){
+				return null;
+			}
+		}
+		mostRelevant=null;
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("Regression")){
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature)){
+				if(mostRelevant==null)
+					mostRelevant=cf;
+				else{
+					if(mostRelevant.corrlation<cf.corrlation)
+						mostRelevant=cf;
+				}
+			}
+		}
+		if(mostRelevant!=null)
+			return mostRelevant.lin_reg;
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("Welzl")){
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature)){
+				if(mostRelevant==null)
+					mostRelevant=cf;
+				else{
+					if(mostRelevant.corrlation<cf.corrlation)
+						mostRelevant=cf;
+				}
+			}
+		}
+		return welzlCircleModel.get(mostRelevant);
 	}
 }

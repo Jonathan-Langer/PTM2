@@ -24,7 +24,7 @@ public class Main extends Application {
 			WindowController view=fxl.getController();
 			vm.addObserver(view);
 			view.setViewModel(vm);
-			Scene scene = new Scene(root,1500,800);
+			Scene scene = new Scene(root,1500,900);
 			primaryStage.setTitle("Flight Gear Simulator");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);

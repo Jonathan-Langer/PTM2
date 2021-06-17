@@ -20,10 +20,10 @@
       </Label>
       <CoordinateSystemDisplayer fx:id="selectedPrameter" layoutX="245.0" layoutY="10.0" prefHeight="236.0" prefWidth="218.0">
       </CoordinateSystemDisplayer>
-      <CoordinateSystemDisplayer fx:id="correlatedPrameter" layoutX="560.0" layoutY="10.0" prefHeight="236.0" prefWidth="218.0">
+      <CoordinateSystemDisplayer fx:id="correlatedPrameter" layoutX="600.0" layoutY="10.0" prefHeight="236.0" prefWidth="218.0">
          
       </CoordinateSystemDisplayer>
-      <CoordinateSystemDisplayer fx:id="detections" layoutX="402.5" layoutY="300.0"  prefHeight="236.0" prefWidth="500.0">
+      <CoordinateSystemDisplayer fx:id="detections" layoutX="402.5" layoutY="350.0"  prefHeight="236.0" prefWidth="500.0">
         
       </CoordinateSystemDisplayer>
       

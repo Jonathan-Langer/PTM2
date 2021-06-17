@@ -1,6 +1,6 @@
 package anomaly_detectors;
 
-public class Line {
+public class Line extends Shape {
 	//ax+b
 	public final float a,b;
 	public Line(float a, float b){

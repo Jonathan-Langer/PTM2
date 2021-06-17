@@ -49,4 +49,8 @@ public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 		}//for
 		return detected;
 	}
+	@Override
+	public Shape sendShape(String feature) {
+		return null;
+	}
 }

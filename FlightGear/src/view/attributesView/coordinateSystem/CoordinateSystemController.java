@@ -40,10 +40,10 @@ public class CoordinateSystemController implements Initializable {
 	}
 	public void changeSetting(double minX,double maxX,double minY,double maxY) {
 		if(maxX>minX&&maxY>minY){
-			maxValueX=maxX;
-			minValueX=minX;
-			maxValueY=maxY;
-			minValueY=minY;
+			maxValueX=Math.max(maxX,1);
+			minValueX=Math.min(minX,-1);
+			maxValueY=Math.max(maxY,1);
+			minValueY=Math.min(minY,-1);
 			applyCoordinate();
 		}
 	}
@@ -70,17 +70,19 @@ public class CoordinateSystemController implements Initializable {
 			toDisplay.setCenterX(displayX);
 			toDisplay.setCenterY(displayY);
 			toDisplay.setFill(color);
-			points.add(toDisplay);
-			pointList.add(p);
-			//board.getChildren().removeAll(points);
-			board.getChildren().add(toDisplay);
+			if(!points.contains(toDisplay)){
+				points.add(toDisplay);
+				pointList.add(p);
+				//board.getChildren().removeAll(points);
+				board.getChildren().add(toDisplay);
+			}
 		}
 	}
 	public void addLine(anomaly_detectors.Line l,Paint color) {
 		double valueForMinX=l.a*minValueX+l.b;
 		double valueForMaxX=l.a*maxValueX+l.b;
 		Line toDisplay=new Line();
-		toDisplay.setStroke(Color.GREENYELLOW);
+		toDisplay.setStroke(color);
 		toDisplay.setStrokeWidth(1.0);
 		double x0=this.y.getEndX();
 		double y0=this.x.getEndY();
@@ -89,6 +91,7 @@ public class CoordinateSystemController implements Initializable {
 		toDisplay.setEndX(x0+maxValueX/(maxValueX-minValueX)*width);
 		toDisplay.setEndY(y0-valueForMaxX/(maxValueY-minValueY)*height);
 		board.getChildren().add(toDisplay);
+		lines.add(toDisplay);
 	}
 	public void addCircle(anomaly_detectors.Circle c, Paint color) {
 		double x0=this.y.getEndX();
@@ -96,12 +99,13 @@ public class CoordinateSystemController implements Initializable {
 		Circle toDisplay=new Circle();
 		toDisplay.setCenterX(x0+c.center.x/(maxValueX-minValueX)*width);
 		toDisplay.setCenterY(y0-c.center.y/(maxValueY-minValueY)*height);
-		toDisplay.setStroke(Color.GREENYELLOW);
-		double radiusDisplay=(x0+(c.center.x+c.radius)/(maxValueX-minValueX)*width-(x0+c.center.x/(maxValueX-minValueX)*width));
+		toDisplay.setStroke(color);
+		double radiusDisplay=(x0+(c.center.x+c.radius)/(maxValueX-minValueX)*width-toDisplay.getCenterX());
 		toDisplay.setRadius(radiusDisplay);
 		toDisplay.setFill(Color.rgb(255, 255, 255, 0));
 		toDisplay.setStrokeWidth(2.0);
 		board.getChildren().add(toDisplay);
+		circles.add(toDisplay);
 	}
 	public void addSetPoints(Collection<Point> listPoints, Paint color){
 		List<Point> tmp = new ArrayList<>(List.copyOf(listPoints));

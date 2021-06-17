@@ -26,7 +26,7 @@ public class MyModel extends Observable implements Model {
 
 	int currentTime = 0;
 	TimeSeries train, test;
-	TimeSeries trainForView, testForView;
+	//TimeSeries trainForView, testForView;
 	TimeSeriesAnomalyDetector detector;
 	ListOfAttributes atrList;
 	HashMap<String, Integer> collsForView;
@@ -54,6 +54,9 @@ public class MyModel extends Observable implements Model {
 	public int getRate(){return rate;}
 	public double getAileronVal() {
 		return aileronVal;
+	}
+	public ArrayList<String> getNames() {
+		return train.getTitles();
 	}
 
 	@Override
@@ -327,8 +330,7 @@ public class MyModel extends Observable implements Model {
 					notifyObservers("pitchName: "+pitchName);
 					setChanged();
 					notifyObservers("yawName: "+yawName);
-					if(train!=null)
-						trainForView=train.filterBySelectingColl(collsForView);
+
 				}catch(Exception e){collsForView.clear();}
 			}
 		}
@@ -371,20 +373,18 @@ public class MyModel extends Observable implements Model {
 		TimeSeries ts = checkValidationCSV(csvTrainFile);
 		if (ts != null) {
 			train = ts;
-			trainForView = ts.filterBySelectingColl(collsForView);
 			if (detector != null)
 				detector.learnNormal(train);
 			return true;
 		}
 		return false;
 	}
-
+	List<AnomalyReport> detection;
 	@Override
 	public boolean setTestTimeSeries(String csvTestFile) {
 		TimeSeries ts = checkValidationCSV(csvTestFile);
 		if (ts != null) {
 			test = ts;
-			testForView = ts.filterBySelectingColl(collsForView);
 			pointsToDisplay=new HashMap<>();
 			pointsToDisplay.put(aileronName,new ArrayList<>());
 			pointsToDisplay.put(elevatorName,new ArrayList<>());
@@ -396,19 +396,13 @@ public class MyModel extends Observable implements Model {
 			pointsToDisplay.put(rollName,new ArrayList<>());
 			pointsToDisplay.put(pitchName,new ArrayList<>());
 			pointsToDisplay.put(yawName,new ArrayList<>());
-			setupPoints();
+			if(detector!=null)
+				detection=detector.detect(test);
 			return true;
 		}
 		return false;
 	}
 
-	void setupPoints(){
-		if(testForView!=null){
-			for(int i=0;i<testForView.getLength();i++)
-				for(String key:pointsToDisplay.keySet())
-					pointsToDisplay.get(key).add(new Point((float)i,testForView.getLine(key).get(i)));
-		}
-	}
 
 	public void saveLastCsvTrainFile(String currentCsvTrainFile) {
 		copyFile(currentCsvTrainFile, new File("resources/last_train.txt").getAbsolutePath());
@@ -432,6 +426,30 @@ public class MyModel extends Observable implements Model {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	public double getMaxValueOfColl(String f) {
+		if(test!=null){
+			if(atrList.contains(f))
+				return test.maxValueOfColl(test.getTitles().get(test.getTitles().indexOf(f)));
+			return test.maxValueOfColl(f);
+		}
+		return Double.MAX_VALUE;
+	}
+
+	@Override
+	public Shape sendShapeDetector(String f) {
+		if(detector!=null)
+			return detector.sendShape(f);
+		return null;
+	}
+
+	public double getMinValueOfColl(String f) {
+		if(test!=null){
+			if(atrList.contains(f))
+				return test.minValueOfColl(test.getTitles().get(test.getTitles().indexOf(f)));
+			return test.minValueOfColl(f);
+		}
+		return Double.MIN_VALUE;
 	}
 
 	boolean wantToSuspend=false;
@@ -484,12 +502,13 @@ public class MyModel extends Observable implements Model {
 			if (c == null)
 				return false;
 			detector = (TimeSeriesAnomalyDetector) c.newInstance();
-			detector.learnNormal(trainForView);
+			detector.learnNormal(train);
+			if(test!=null)
+				detection=detector.detect(test);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
-		detector.learnNormal(trainForView);
 		return true;
 	}
 
@@ -524,16 +543,16 @@ public class MyModel extends Observable implements Model {
 	public void setValues(int timeStep) {
 		if (test != null) {
 			if (timeStep >= 0 && test.getLength() > timeStep) {
-				double aileron = testForView.getLine(aileronName).get(timeStep);
-				double elevator = testForView.getLine(elevatorName).get(timeStep);
-				double throttle = testForView.getLine(throttleName).get(timeStep);
-				double rudder = testForView.getLine(rudderName).get(timeStep);
-				double altimeter = testForView.getLine(altimeterName).get(timeStep);
-				double airspeed = testForView.getLine(airspeedName).get(timeStep);
-				double heading = testForView.getLine(headingName).get(timeStep);
-				double roll = testForView.getLine(rollName).get(timeStep);
-				double pitch = testForView.getLine(pitchName).get(timeStep);
-				double yaw = testForView.getLine(yawName).get(timeStep);
+				double aileron = test.getLineAsList(atrList.getList().get(aileronName).colInCSV).get(timeStep);
+				double elevator = test.getLineAsList(atrList.getList().get(elevatorName).colInCSV).get(timeStep);
+				double throttle = test.getLineAsList(atrList.getList().get(throttleName).colInCSV).get(timeStep);
+				double rudder = test.getLineAsList(atrList.getList().get(rudderName).colInCSV).get(timeStep);
+				double altimeter = test.getLineAsList(atrList.getList().get(altimeterName).colInCSV).get(timeStep);
+				double airspeed = test.getLineAsList(atrList.getList().get(airspeedName).colInCSV).get(timeStep);
+				double heading = test.getLineAsList(atrList.getList().get(headingName).colInCSV).get(timeStep);
+				double roll = test.getLineAsList(atrList.getList().get(rollName).colInCSV).get(timeStep);
+				double pitch = test.getLineAsList(atrList.getList().get(pitchName).colInCSV).get(timeStep);
+				double yaw = test.getLineAsList(atrList.getList().get(yawName).colInCSV).get(timeStep);
 				setAileronVal(aileron);
 				setElevatorVal(elevator);
 				setThrottleVal(throttle);
@@ -568,7 +587,9 @@ public class MyModel extends Observable implements Model {
 	}
 
 	public int getLength() {
-		return this.test.getLength();
+		try{
+		return this.test.getLength();}
+		catch (Exception e){return Integer.MAX_VALUE;}
 	}
 
 	@Override
@@ -583,10 +604,10 @@ public class MyModel extends Observable implements Model {
 	}
 
 	public CorrelatedFeatures getCorrelatedFeatures(String parameter) {
-		if (!trainForView.getTitles().contains(parameter))
+		if (!train.getTitles().contains(parameter))
 			return null;
 		SimpleAnomalyDetector d = new SimpleAnomalyDetector(Float.parseFloat("0.5"));
-		d.learnNormal(trainForView);
+		d.learnNormal(train);
 		List<CorrelatedFeatures> a = d.getNormalModel();
 		CorrelatedFeatures mostRelevant = null;
 		for (CorrelatedFeatures c : a) {
@@ -608,43 +629,49 @@ public class MyModel extends Observable implements Model {
 		List<Point> result = new ArrayList<>();
 		if (endTime < 0)
 			return result;
-		if (!pointsToDisplay.containsKey(feature))
+		if (test == null)
 			return result;
-		if (testForView == null)
-			return result;
-		result=pointsToDisplay.get(feature).subList(0,endTime);
+		if(atrList.getList().containsKey(feature)){
+			for(int i=0;i<endTime;i++)
+				result.add(new Point(i,test.getLineAsList(atrList.getList().get(feature).colInCSV).get(i)));
+		}
+		else{
+			for(int i=0;i<endTime;i++)
+				result.add(new Point(i,test.getLine(feature).get(i)));
+		}
 		return result;
 	}
 	@Override
 	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature) {
 		HashMap<Point,Color> result=new HashMap<>();
-		if(testForView!=null){
+		if(test!=null){
 			CorrelatedFeatures cf=getCorrelatedFeatures(feature);
 			if(detector==null){
 				for(int i=0;i<endTime;i++){
 					if(cf==null)
-						result.put(new Point(i,testForView.getLine(feature).get(i)),Color.BLUE);
+						result.put(new Point(i,test.getLine(feature).get(i)),Color.BLUE);
 					else
-						result.put(new Point(testForView.getLine(cf.feature1).get(i),testForView.getLine(cf.feature2).get(i)),Color.BLUE);
+						result.put(new Point(test.getLine(cf.feature1).get(i),test.getLine(cf.feature2).get(i)),Color.BLUE);
 				}
 			}
 			else{
-				List<AnomalyReport> l=detector.detect(testForView);
+				if(detection==null)
+					detection=detector.detect(test);
 				for(int i=0;i<endTime;i++){
 					if(cf==null){
 						String description=feature;
-						if(l.contains(new AnomalyReport(description,i)))
-							result.put(new Point(i,testForView.getLine(feature).get(i)),Color.RED);
+						if(detection.contains(new AnomalyReport(description,i)))
+							result.put(new Point(i,test.getLine(feature).get(i)),Color.RED);
 						else
-							result.put(new Point(i,testForView.getLine(feature).get(i)),Color.BLUE);
+							result.put(new Point(i,test.getLine(feature).get(i)),Color.BLUE);
 					}
 					else{
 						String description=cf.feature1+"-"+cf.feature2;
-						if(l.contains(new AnomalyReport(description,i)))
-							result.put(new Point(testForView.getLine(cf.feature1).get(i),testForView.getLine(cf.feature2).get(i))
+						if(detection.contains(new AnomalyReport(description,i)))
+							result.put(new Point(test.getLine(cf.feature1).get(i),test.getLine(cf.feature2).get(i))
 									,Color.RED);
 						else
-							result.put(new Point(testForView.getLine(cf.feature1).get(i),testForView.getLine(cf.feature2).get(i))
+							result.put(new Point(test.getLine(cf.feature1).get(i),test.getLine(cf.feature2).get(i))
 									,Color.BLUE);
 					}
 				}
@@ -656,4 +683,5 @@ public class MyModel extends Observable implements Model {
 	public void shutDown(){
 		task.shutDown();
 	}
+
 }

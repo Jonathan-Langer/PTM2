@@ -2,7 +2,7 @@ package anomaly_detectors;
 
 import java.util.List;
 
-public class Circle {
+public class Circle extends Shape {
 	public Point center;
 	public float radius;
 	

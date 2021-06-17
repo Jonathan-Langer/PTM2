@@ -35,4 +35,5 @@ public class Point {
 		Point p=(Point) other;
 		return this.x==p.x&&this.y==p.y;
 	}
+
 }

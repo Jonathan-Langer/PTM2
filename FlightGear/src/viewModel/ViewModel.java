@@ -274,6 +274,9 @@ public class ViewModel extends Observable implements Observer{
 			return false;
 		return true;
 	}
+	public ArrayList<String> getNames() {
+		return m.getNames();
+	}
 	
 	public void saveLastCsvTrainFile(){
 		m.saveLastCsvTrainFile(csvTrainFilePath.getValue());
@@ -338,4 +341,7 @@ public class ViewModel extends Observable implements Observer{
 		return m.getCorrelatedFeatures(feature);
 	}
 	public int getRate(){return m.getRate();}
+	public double getMaxValColl(String f){return m.getMaxValueOfColl(f);}
+	public double getMinValColl(String f){return m.getMinValueOfColl(f);}
+	public Shape sendShapeDetector(String feature) {return m.sendShapeDetector(feature);}
 }

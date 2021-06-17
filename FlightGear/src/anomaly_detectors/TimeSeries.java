@@ -10,7 +10,7 @@ public class TimeSeries {
 	private ArrayList<String> titles;
 	private ArrayList<ArrayList<Float>> info;
 	
-	public TimeSeries() {titles =null; info =null;}
+	public TimeSeries() {titles =new ArrayList<>(); info =new ArrayList<>();}
 	
 	public TimeSeries(String csvFileName) {
 		titles = null; info = null;
@@ -83,23 +83,20 @@ public class TimeSeries {
 		titles.add(feature);
 		info.add(data);
 	}
-
-	public TimeSeries filterBySelectingColl(HashMap<String,Integer> c){
-		if(c==null)
-			return null;
-		if(c.isEmpty())
-			return null;
-		TimeSeries ret=new TimeSeries();
-		for(String name:c.keySet()){
-			if(titles.get(c.get(name))!=null){
-				if(ret.titles==null)
-					ret.titles=new ArrayList<>();
-				if(ret.info==null)
-					ret.info=new ArrayList<>();
-				ret.titles.add(name);
-				ret.info.add(this.info.get(c.get(name)));
-			}
-		}
-		return ret;
+	public double maxValueOfColl(String feature){
+		if(!titles.contains(feature))
+			return Double.MAX_VALUE;
+		double max=Double.MIN_VALUE;
+		for(float f:info.get(titles.indexOf(feature)))
+			max=Math.max(max,f);
+		return max;
+	}
+	public double minValueOfColl(String feature){
+		if(!titles.contains(feature))
+			return Double.MIN_VALUE;
+		double min=Double.MAX_VALUE;
+		for(float f:info.get(titles.indexOf(feature)))
+			min=Math.min(min,f);
+		return min;
 	}
 }

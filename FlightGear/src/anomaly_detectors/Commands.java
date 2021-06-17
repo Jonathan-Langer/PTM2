@@ -98,14 +98,14 @@ public class Commands {
 
 		@Override
 		public void execute() {
-			dio.write("The current correlation threshold is "+SimpleAnomalyDetector.th+"\n");
+			dio.write("The current correlation threshold is "+SimpleAnomalyDetector.thForCorrelation+"\n");
 			dio.write("Type a new threshold\n");
 			float temp = dio.readVal();
 			while (!(temp>0 && temp<1)) {
 			dio.write("please choose a value between 0 and 1.\n");	
 			temp = dio.readVal();
 			}
-			SimpleAnomalyDetector.th=temp;
+			SimpleAnomalyDetector.thForCorrelation=temp;
 		}	
 	}
 	
