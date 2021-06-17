@@ -173,13 +173,15 @@ public class WindowController implements Initializable,Observer{
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		playerDisplayer.csvTestFilePath.addListener(new ChangeListener<String>() {
 			@Override
-			public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+			public void changed(ObservableValue<? extends String> observableValue, String oldVal, String newVal) {
 				if(!vm.setTestTimeSeries(playerDisplayer.csvTestFilePath.getValue())) {
-					Alert message=new Alert(Alert.AlertType.ERROR);
-					message.setContentText("oops!"
-							+ " \n this file format is not valid");
-					message.show();
-					playerDisplayer.csvTestFilePath.set(null);
+					if(!newVal.isEmpty()){
+						Alert message=new Alert(Alert.AlertType.ERROR);
+						message.setContentText("oops!"
+								+ " \n this file format is not valid");
+						message.show();
+						playerDisplayer.csvTestFilePath.set("");
+					}
 				}
 				else{
 					vm.initValues();
@@ -202,6 +204,10 @@ public class WindowController implements Initializable,Observer{
 			public void changed(ObservableValue<? extends Number> observableValue, Number oldVal, Number newVal) {
 				double oldV=(double)oldVal;
 				double newV=(double)newVal;
+				if(newV==vm.getLength()-1)
+					playerDisplayer.controller.playIcon.setFill(Color.BLACK);
+				if(newV!=0)
+					playerDisplayer.controller.stopIcon.setFill(Color.BLACK);
 				if(oldV<newV){
 					Platform.runLater(()->{
 						String s1=attributesView.selectedParameter.getValue();
@@ -248,11 +254,11 @@ public class WindowController implements Initializable,Observer{
 					if(playerDisplayer.csvTestFilePath.get()!=null)
 						vm.play(Double.parseDouble(playerDisplayer.speedPlayer.getValue()));
 					else{
-						/*Alert message=new Alert(Alert.AlertType.ERROR);
+						Alert message=new Alert(Alert.AlertType.ERROR);
 						message.setContentText("oops!"
 								+ " \n you didnt choose any csv test file, please choose one and try again");
 						message.show();
-						playerDisplayer.controller.playIcon.setFill(Color.BLACK);*/
+						playerDisplayer.controller.playIcon.setFill(Color.BLACK);
 					}
 				}
 			}
@@ -261,10 +267,15 @@ public class WindowController implements Initializable,Observer{
 			@Override
 			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
 				if(playerDisplayer.controller.stopIcon.getFill()!=Color.BLACK){
-					vm.stop();
-					attributesView.controller.selectedPrameter.controller.clear();
-					attributesView.controller.correlatedPrameter.controller.clear();
-					attributesView.controller.detections.controller.clear();
+					if(playerDisplayer.csvTestFilePath!=null)
+						vm.stop();
+					else{
+						Alert message=new Alert(Alert.AlertType.ERROR);
+						message.setContentText("oops!"
+								+ " \n you didnt choose any csv test file, please choose one and try again");
+						message.show();
+						playerDisplayer.controller.stopIcon.setFill(Color.BLACK);
+					}
 				}
 			}
 		});
@@ -372,24 +383,19 @@ public class WindowController implements Initializable,Observer{
 					String str = vm.getMostCorrelated(attributesView.selectedParameter.getValue());
 					if (str != null) {
 						attributesView.correlatedPrameter.setValue(str);
-						String s1 = t1;
-						s1 = s1.substring(0, 1).toUpperCase() + s1.substring(1, s1.length());
-						String s2 = str;
-						if(!s2.equals("no correlated feature"))
-							s2 = s2.substring(0, 1).toUpperCase() + s2.substring(1, s2.length());
 						attributesView.controller.selectedPrameter.controller.clear();
 						attributesView.controller.selectedPrameter.controller.changeSetting(0, vm.getLength(),
 								vm.getMinValColl(attributesView.selectedParameter.get()),
 								vm.getMaxValColl(attributesView.selectedParameter.get()));
 						attributesView.controller.correlatedPrameter.controller.clear();
-						if (!s2.equals("no correlated feature")) {
+						if (!str.equals("no correlated feature")) {
 							attributesView.controller.correlatedPrameter.controller.changeSetting(0, vm.getLength(),
 									vm.getMinValColl(str),
 									vm.getMaxValColl(str));
 						}
 						attributesView.controller.detections.controller.clear();
 						CorrelatedFeatures cf=vm.getCorrelatedFeatureObject(t1);
-						if(cf!=null){
+						if(cf!=null&&vm.howManyParameterTheDetectorUse(t1)==2){
 							if(cf.feature1.equals(t1))
 								attributesView.controller.detections.controller.changeSetting(
 										vm.getMinValColl(t1),
@@ -547,6 +553,5 @@ public class WindowController implements Initializable,Observer{
 	@Override
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
-		
 	}
 }

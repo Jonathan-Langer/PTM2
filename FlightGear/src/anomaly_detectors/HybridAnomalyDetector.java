@@ -79,6 +79,38 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 		return detected;
 	}
 	@Override
+	public List<AnomalyReport> detectOnlyByFeature(TimeSeries ts,String feature){
+		if(!ts.getTitles().contains(feature))
+			new ArrayList<AnomalyReport>();
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("Regression"))
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature))
+				return regressionDetector.detectOnlyByFeature(ts,feature);
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("ZScore"))
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature))
+				return regressionDetector.detectOnlyByFeature(ts,feature);
+		CorrelatedFeatures relevant=null;
+		List<AnomalyReport> res=new ArrayList<>();
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("Welzl")){
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature)){
+				if(relevant==null)
+					relevant=cf;
+				else
+					if(cf.corrlation>relevant.corrlation)
+						relevant=cf;
+			}
+		}
+		if(relevant==null)
+			return res;
+		int count=1;
+		List<Point> dataFeature=getListPoint(ts.getLine(relevant.feature1), ts.getLine(relevant.feature2));
+		for(Point p:dataFeature) {
+			if(!welzlCircleModel.get(relevant).containsPoint(p))
+				res.add(new AnomalyReport(relevant.feature1+"-"+relevant.feature2, count));
+			++count;
+		}
+		return res;
+	}
+	@Override
 	public Shape sendShape(String feature) {
 		CorrelatedFeatures mostRelevant=null;
 		for(CorrelatedFeatures cf:featuresToAlgorithm.get("ZScore")){
@@ -110,5 +142,13 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 			}
 		}
 		return welzlCircleModel.get(mostRelevant);
+	}
+	@Override
+	public int detectBy2Or1Parameter(String feature){
+		for(CorrelatedFeatures cf:featuresToAlgorithm.get("ZScore")){
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature))
+				return 1;
+		}
+		return 2;
 	}
 }

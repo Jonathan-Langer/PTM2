@@ -51,7 +51,30 @@ public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 		return detected;
 	}
 	@Override
+	public List<AnomalyReport> detectOnlyByFeature(TimeSeries ts,String feature){
+		List<AnomalyReport> res=new ArrayList<>();
+		if(!ts.getTitles().contains(feature))
+			return res;
+		ArrayList<Float> curr;
+		ArrayList<Float> info;
+		int i=ts.getTitles().indexOf(feature);
+		curr = new ArrayList<>();
+		info = ts.getInfo().get(i);
+		for (int j=0; j<info.size(); j++)
+		{
+			float z = zScore(StatLib.toFloat(curr));
+			if (z>thArr.get(i))
+			{
+				res.add(new AnomalyReport(ts.getTitles().get(i),j));
+			}//if
+			curr.add(info.get(j));
+		}//for
+		return res;
+	}
+	@Override
 	public Shape sendShape(String feature) {
 		return null;
 	}
+	@Override
+	public int detectBy2Or1Parameter(String feature){return 1;}
 }

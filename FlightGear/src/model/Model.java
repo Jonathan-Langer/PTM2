@@ -17,7 +17,7 @@ public interface Model {
 	public void saveLastCsvTrainFile(String csvTrainFile);
 	public int getLength();
 	public int getRate();
-	public ArrayList<String> getNames();
+	public List<String> getNames();
 	public void setSpeedOfFlight(double speed);
 	public void play();
 	public void pause();
@@ -27,8 +27,7 @@ public interface Model {
 	public void setCurrentTimeWithoutNotify(int currentTime);
 	public double getMinValueOfColl(String f);
 	public double getMaxValueOfColl(String f);
-	public Shape sendShapeDetector(String f);
-
+	public int howManyParameterTheDetectorUse(String f);
 	
 	public boolean setAnomalyDetector(String path,String name);
 	public void start(); //run in the background

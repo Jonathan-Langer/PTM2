@@ -274,7 +274,7 @@ public class ViewModel extends Observable implements Observer{
 			return false;
 		return true;
 	}
-	public ArrayList<String> getNames() {
+	public List<String> getNames() {
 		return m.getNames();
 	}
 	
@@ -288,6 +288,7 @@ public class ViewModel extends Observable implements Observer{
 		csvTestFilePath.setValue(csvTestFile);
 		return true;
 	}
+	public int howManyParameterTheDetectorUse(String f){return m.howManyParameterTheDetectorUse(f);}
 	public void initValues(){
 		m.setValues(0);
 	}

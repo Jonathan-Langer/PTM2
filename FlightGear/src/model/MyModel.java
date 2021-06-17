@@ -335,7 +335,12 @@ public class MyModel extends Observable implements Model {
 			}
 		}
 	}
-
+	@Override
+	public int howManyParameterTheDetectorUse(String f){
+		try {
+			return detector.detectBy2Or1Parameter(f);
+		}catch(Exception e){return 2;}
+	}
 	public TimeSeries checkValidationCSV(String csv) {
 		TimeSeries ts = new TimeSeries(csv);
 		if (ts.isEmpty())
@@ -396,8 +401,8 @@ public class MyModel extends Observable implements Model {
 			pointsToDisplay.put(rollName,new ArrayList<>());
 			pointsToDisplay.put(pitchName,new ArrayList<>());
 			pointsToDisplay.put(yawName,new ArrayList<>());
-			if(detector!=null)
-				detection=detector.detect(test);
+			/*if(detector!=null)
+				detection=detector.detect(test);*/
 			return true;
 		}
 		return false;
@@ -474,21 +479,28 @@ public class MyModel extends Observable implements Model {
 
 	@Override
 	public void pause() {
-		wantToSuspend=true;
+		if(test!=null)
+			wantToSuspend=true;
 	}
 
 	@Override
 	public void stop() {
-		pause();
-		setCurrentTime(0);
+		if(test!=null){
+			pause();
+			setCurrentTime(0);
+		}
 	}
 
 	@Override
-	public void forward() { setCurrentTime(Math.min(test.getLength()-1,currentTime+5*rate)); }
+	public void forward() {
+		if(test!=null)
+			setCurrentTime(Math.min(test.getLength()-1,currentTime+5*rate));
+	}
 
 	@Override
 	public void rewind(){
-		setCurrentTime(Math.max(0,currentTime-5*rate));
+		if(test!=null)
+			setCurrentTime(Math.max(0,currentTime-5*rate));
 	}
 
 	@Override
@@ -503,8 +515,8 @@ public class MyModel extends Observable implements Model {
 				return false;
 			detector = (TimeSeriesAnomalyDetector) c.newInstance();
 			detector.learnNormal(train);
-			if(test!=null)
-				detection=detector.detect(test);
+			/*if(test!=null)
+				detection=detector.detect(test);*/
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -596,6 +608,8 @@ public class MyModel extends Observable implements Model {
 	public String getMostCorrelated(String parameter) {
 		selectedFeature=parameter;
 		CorrelatedFeatures mostRelevant = getCorrelatedFeatures(parameter);
+		if(detector!=null&&test!=null)
+			this.detection=detector.detectOnlyByFeature(test,selectedFeature);
 		if (mostRelevant == null)
 			return (correlatedFeature="no correlated feature");
 		if (mostRelevant.feature1.equals(parameter))
@@ -656,9 +670,9 @@ public class MyModel extends Observable implements Model {
 			}
 			else{
 				if(detection==null)
-					detection=detector.detect(test);
+					detection=detector.detectOnlyByFeature(test,selectedFeature);
 				for(int i=0;i<endTime;i++){
-					if(cf==null){
+					if(detector.detectBy2Or1Parameter(selectedFeature)==1||cf==null){
 						String description=feature;
 						if(detection.contains(new AnomalyReport(description,i)))
 							result.put(new Point(i,test.getLine(feature).get(i)),Color.RED);
@@ -679,15 +693,18 @@ public class MyModel extends Observable implements Model {
 		}
 		return result;
 	}
-	@Override
-	public Shape sendShapeDetector(String feature){
-		if(detector!=null)
-			return detector.sendShape(feature);
-		return null;
-	}
+
 	@Override
 	public void shutDown(){
+		wantToSuspend=true;
 		task.shutDown();
+		if(writeToFlightGear!=null)
+			writeToFlightGear.close();
+		if(fg!=null) {
+			try {
+				fg.close();
+			} catch (IOException e) { }
+		}
 	}
 
 }

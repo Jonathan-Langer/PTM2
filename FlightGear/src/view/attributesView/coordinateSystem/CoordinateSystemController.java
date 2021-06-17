@@ -40,10 +40,10 @@ public class CoordinateSystemController implements Initializable {
 	}
 	public void changeSetting(double minX,double maxX,double minY,double maxY) {
 		if(maxX>minX&&maxY>minY){
-			maxValueX=Math.max(maxX,1);
-			minValueX=Math.min(minX,-1);
-			maxValueY=Math.max(maxY,1);
-			minValueY=Math.min(minY,-1);
+			maxValueX=Math.max(maxX,1)*1.2;//take 20% more space for convenience
+			minValueX=Math.min(minX,-1)*1.2;
+			maxValueY=Math.max(maxY,1)*1.2;
+			minValueY=Math.min(minY,-1)*1.2;
 			applyCoordinate();
 		}
 	}
@@ -58,6 +58,7 @@ public class CoordinateSystemController implements Initializable {
 		y.setEndX(width*(0-minValueX)/(maxValueX-minValueX));
 		x.setStartY(height-height*(0-minValueY)/(maxValueY-minValueY));
 		x.setEndY(height-height*(0-minValueY)/(maxValueY-minValueY));
+		board.getChildren().removeAll(points);
 	}
 	public void addPoint(Point p,Paint color) {
 		if(!pointList.contains(p)){
@@ -94,6 +95,8 @@ public class CoordinateSystemController implements Initializable {
 		lines.add(toDisplay);
 	}
 	public void addCircle(anomaly_detectors.Circle c, Paint color) {
+		double newMaxX=c.center.x+c.radius,newMinX=c.center.x-c.radius,newMaxY=c.center.y+c.radius,newMinY=c.center.y-c.radius;
+		changeSetting(Math.min(minValueX,newMinX),Math.max(newMaxX,maxValueX),Math.min(minValueY,newMinY),Math.max(maxValueY,newMaxY));
 		double x0=this.y.getEndX();
 		double y0=this.x.getEndY();
 		Circle toDisplay=new Circle();

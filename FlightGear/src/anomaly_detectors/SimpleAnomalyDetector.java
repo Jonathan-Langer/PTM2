@@ -77,6 +77,32 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 		return normalModel;
 	}
 	@Override
+	public List<AnomalyReport> detectOnlyByFeature(TimeSeries ts,String feature){
+		List<AnomalyReport> res=new ArrayList<>();
+		if(!ts.getTitles().contains(feature))
+			return res;
+		Point p;
+		CorrelatedFeatures relevant=null;
+		for(CorrelatedFeatures cf:normalModel){
+			if(cf.feature1.equals(feature)||cf.feature2.equals(feature)){
+				if(relevant==null)
+					relevant=cf;
+				else
+					if(cf.corrlation>relevant.corrlation)
+						relevant=cf;
+			}
+		}
+		if(relevant==null)
+			return res;
+		for ( int i=0; i<ts.getLength();i++) {
+			p=new Point(ts.getLine(relevant.feature1).get(i),
+					ts.getLine(relevant.feature2).get(i));
+			if (StatLib.dev(p,relevant.lin_reg)>thForAnomaly)
+				res.add(new AnomalyReport(relevant.feature1+"-"+relevant.feature2,i));
+		}
+		return res;
+	}
+	@Override
 	public Shape sendShape(String feature){
 		CorrelatedFeatures mostRelevant=null;
 		for(CorrelatedFeatures cf:normalModel){
@@ -93,4 +119,6 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 			return mostRelevant.lin_reg;
 		return null;
 	}
+	@Override
+	public int detectBy2Or1Parameter(String feature){return 2;}
 }

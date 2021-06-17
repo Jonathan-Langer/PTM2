@@ -1,5 +1,6 @@
 package anomaly_detectors;
 
+import java.io.File;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -18,31 +19,33 @@ public class TimeSeries {
 		
 		Scanner scan = null, lineScan = null;
 		try {
-			scan = new Scanner(new BufferedReader(new FileReader(csvFileName)));
-			titles = new ArrayList<String>();
-			info = new ArrayList<ArrayList<Float>>();
-			lines = scan.nextLine();
-			lineScan = new Scanner(lines);
-			lineScan.useDelimiter(",");
-			while (lineScan.hasNext()) {
-				titles.add(lineScan.next());
-				info.add(new ArrayList<Float>());
-			}
-			
-			int index;
-
-			while (scan.hasNextLine()) {
+			File f=new File(csvFileName);
+			if(f.exists()){
+				scan = new Scanner(new BufferedReader(new FileReader(csvFileName)));
+				titles = new ArrayList<String>();
+				info = new ArrayList<ArrayList<Float>>();
 				lines = scan.nextLine();
 				lineScan = new Scanner(lines);
 				lineScan.useDelimiter(",");
-				index =0;
-				while (lineScan.hasNextFloat()) {
-					info.get(index).add(lineScan.nextFloat());
-					index++;
+				while (lineScan.hasNext()) {
+					titles.add(lineScan.next());
+					info.add(new ArrayList<Float>());
 				}
-			}
-			scan.close();
 
+				int index;
+
+				while (scan.hasNextLine()) {
+					lines = scan.nextLine();
+					lineScan = new Scanner(lines);
+					lineScan.useDelimiter(",");
+					index =0;
+					while (lineScan.hasNextFloat()) {
+						info.get(index).add(lineScan.nextFloat());
+						index++;
+					}
+				}
+				scan.close();
+			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
