@@ -42,4 +42,5 @@ public interface Model {
 	public List<Point> sendPointOf1Parameter(int endTime, String feature);
 	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature);
 	public CorrelatedFeatures getCorrelatedFeatures(String parameter);
+	public Shape sendShapeDetector(String feature);
 }
