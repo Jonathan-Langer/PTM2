@@ -34,6 +34,7 @@ public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 		ArrayList<Float> info;
 		
 		for ( int i=0; i<ts.getLength();i++) {
+
 			curr = new ArrayList<>();
 			info = ts.getInfo().get(i);
 			
