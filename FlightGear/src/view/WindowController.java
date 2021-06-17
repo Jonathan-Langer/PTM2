@@ -425,6 +425,17 @@ public class WindowController implements Initializable,Observer{
 										.controller.addCircle((Circle) (shape),Color.GREEN);
 						}
 					}
+				if(playerDisplayer.controller.playIcon.getFill()==Color.BLACK){//checking if the player is already in play mode
+					//if it is, the points will be sent automatically
+					double time=playerDisplayer.currentTime.get();
+					try{
+						playerDisplayer.currentTime.set(time+1);
+						playerDisplayer.currentTime.set(time);
+					}catch(Exception e){
+						playerDisplayer.currentTime.set(time-1);
+						playerDisplayer.currentTime.set(time);
+					}
+				}
 				}
 			}
 		});
