@@ -413,7 +413,7 @@ public class WindowController implements Initializable,Observer{
 							attributesView.controller.detections.controller.changeSetting(
 									0, vm.getLength(),
 									vm.getMinValColl(t1),
-									vm.getMinValColl(str)
+									vm.getMaxValColl(t1)
 							);
 						attributesView.controller.detections.controller.clear();
 						Shape shape=vm.sendShapeDetector(t1);
@@ -423,27 +423,6 @@ public class WindowController implements Initializable,Observer{
 							if(shape instanceof anomaly_detectors.Circle)
 								attributesView.controller.detections
 										.controller.addCircle((Circle) (shape),Color.GREEN);
-						/*Platform.runLater(()->{
-							String str1=attributesView.selectedParameter.getValue();
-							String str2=attributesView.correlatedPrameter.getValue();
-							if(!str1.isEmpty()&&!str2.isEmpty()){
-								int time=(int)playerDisplayer.currentTime.get();
-								attributesView.controller.selectedPrameter.controller.addSetPoints(
-										vm.sendPointOf1Parameter(time
-												,attributesView.selectedParameter.getValue()),Color.BLUE);
-								playerDisplayer.currentTime.setValue(time);
-								if(!str2.equals("no correlated feature")){
-									attributesView.controller.correlatedPrameter.controller.addSetPoints(
-											vm.sendPointOf1Parameter(time
-													,attributesView.correlatedPrameter.getValue()),Color.BLUE);
-								}
-								playerDisplayer.currentTime.setValue(time);
-								vm.initPointsForDetector(str1,time);
-								attributesView.controller.detections.controller.addSetPoints(vm.sendNotAnomaliesPointWith2Parameter(str1,time),Color.BLUE);
-								attributesView.controller.detections.controller.addSetPoints(vm.sendAnomaliesPointWith2Parameter(str1,time),Color.RED);
-								playerDisplayer.currentTime.setValue(time);
-							}
-						});*/
 						}
 					}
 				}
