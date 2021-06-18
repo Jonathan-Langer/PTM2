@@ -32,8 +32,9 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 		featuresToAlgorithm.put("ZScore", new HashSet<>());
 		featuresToAlgorithm.put("Regression", new HashSet<>());
 		featuresToAlgorithm.put("Welzl", new HashSet<>());
+		featuresToAlgorithm.get("ZScore").addAll(regressionDetector.getCorrelatedOnlyForThemselve());
 		for(CorrelatedFeatures c:mostCorrelated) {
-			if(Math.abs(c.corrlation)>=1)
+			if(Math.abs(c.corrlation)>=0.95)
 				featuresToAlgorithm.get("Regression").add(c);
 			else {
 				if(Math.abs(c.corrlation)<0.5)
@@ -81,13 +82,13 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 	@Override
 	public List<AnomalyReport> detectOnlyByFeature(TimeSeries ts,String feature){
 		if(!ts.getTitles().contains(feature))
-			new ArrayList<AnomalyReport>();
+			return new ArrayList<>();
 		for(CorrelatedFeatures cf:featuresToAlgorithm.get("Regression"))
 			if(cf.feature1.equals(feature)||cf.feature2.equals(feature))
 				return regressionDetector.detectOnlyByFeature(ts,feature);
 		for(CorrelatedFeatures cf:featuresToAlgorithm.get("ZScore"))
 			if(cf.feature1.equals(feature)||cf.feature2.equals(feature))
-				return regressionDetector.detectOnlyByFeature(ts,feature);
+				return zScoreDetector.detectOnlyByFeature(ts,feature);
 		CorrelatedFeatures relevant=null;
 		List<AnomalyReport> res=new ArrayList<>();
 		for(CorrelatedFeatures cf:featuresToAlgorithm.get("Welzl")){

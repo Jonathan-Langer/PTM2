@@ -14,11 +14,11 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 	public SimpleAnomalyDetector(float thForCorrelation) {
 		this.thForCorrelation=thForCorrelation;
 	}
-	List<CorrelatedFeatures> normalModel;
-
+	List<CorrelatedFeatures> normalModel,correlatedOnlyForThemselve;
 	@Override
 	public void learnNormal(TimeSeries ts) {
 		normalModel = new ArrayList<>();
+		correlatedOnlyForThemselve=new ArrayList<>();
 		float pear, max, maxAbsPear;
 		int maxPlace;
 		Line l;
@@ -50,6 +50,9 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 			normalModel.add(new CorrelatedFeatures(ts.getTitles().get(i),
 					ts.getTitles().get(maxPlace), pear, l, max));
 			}//if
+			else
+				correlatedOnlyForThemselve.add(new CorrelatedFeatures(ts.getTitles().get(i),
+						ts.getTitles().get(i), 0, null,0));
 		}//for i
 	}
 
@@ -75,6 +78,9 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 	
 	public List<CorrelatedFeatures> getNormalModel(){
 		return normalModel;
+	}
+	public List<CorrelatedFeatures> getCorrelatedOnlyForThemselve(){
+		return correlatedOnlyForThemselve;
 	}
 	@Override
 	public List<AnomalyReport> detectOnlyByFeature(TimeSeries ts,String feature){

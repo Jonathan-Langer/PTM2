@@ -18,12 +18,12 @@
             <Font size="31.0" />
          </font>
       </Label>
-      <CoordinateSystemDisplayer fx:id="selectedPrameter" layoutX="245.0" layoutY="-20.0" prefHeight="236.0" prefWidth="218.0">
+      <CoordinateSystemDisplayer fx:id="selectedPrameter" layoutX="245.0" layoutY="-25.0" prefHeight="236.0" prefWidth="218.0">
       </CoordinateSystemDisplayer>
-      <CoordinateSystemDisplayer fx:id="correlatedPrameter" layoutX="600.0" layoutY="-20.0" prefHeight="236.0" prefWidth="218.0">
+      <CoordinateSystemDisplayer fx:id="correlatedPrameter" layoutX="600.0" layoutY="-25.0" prefHeight="236.0" prefWidth="218.0">
          
       </CoordinateSystemDisplayer>
-      <CoordinateSystemDisplayer fx:id="detections" layoutX="402.5" layoutY="310.0"  prefHeight="236.0" prefWidth="500.0">
+      <CoordinateSystemDisplayer fx:id="detections" layoutX="402.5" layoutY="300.0"  prefHeight="236.0" prefWidth="500.0">
         
       </CoordinateSystemDisplayer>
       
