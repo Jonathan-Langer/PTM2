@@ -11,16 +11,20 @@ public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 	@Override
 	public void learnNormal(TimeSeries ts) {
 		thArr= new ArrayList<>();
-		ts.getInfo().forEach(col->thArr.add(zScore(ts.getLineAsArray(ts.getInfo().indexOf(col)))));
+		ts.getInfo().forEach(col->{
+			float[] colArr=ts.getLineAsArray(ts.getInfo().indexOf(col));
+			thArr.add(zScore(colArr,colArr.length-1));
+		});
 	}
 
-	public float zScore(float[] col) {
+	private float zScore(float[] col,int lastIndex) {
 		float th=0;
 		float z;
-		for(Float f:col)
+		float var=(float)Math.sqrt(StatLib.var(col));
+		float avg=StatLib.avg(col);
+		for(/*Float f:col*/int i=0;i<=lastIndex;i++)
 		{
-			z=(float) (Math.abs(f-StatLib.avg(col))
-					/Math.sqrt(StatLib.var(col)));
+			z=(Math.abs(col[i]-avg)/ var);
 			if(th<z)
 				th=z;
 		}
@@ -31,21 +35,21 @@ public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 	public List<AnomalyReport> detect(TimeSeries ts) {
 		List<AnomalyReport> detected = new ArrayList<AnomalyReport>();
 		ArrayList<Float> curr;
+		float[] curr2;
 		ArrayList<Float> info;
 		
 		for ( int i=0; i<ts.getLength();i++) {
-
 			curr = new ArrayList<>();
 			info = ts.getInfo().get(i);
-			
+			curr.addAll(info);
+			float[] arr=StatLib.toFloat(curr);
 			for (int j=0; j<info.size(); j++)
 			{
-				float z = zScore(StatLib.toFloat(curr));
+				float z = zScore(arr,j);
 				if (z>thArr.get(i))
 				{
 					detected.add(new AnomalyReport(ts.getTitles().get(i),j+1));
 				}//if
-				curr.add(info.get(j));
 			}//for
 		}//for
 		return detected;
@@ -60,14 +64,15 @@ public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 		int i=ts.getTitles().indexOf(feature);
 		curr = new ArrayList<>();
 		info = ts.getInfo().get(i);
+		curr.addAll(info);
+		float[] arr=StatLib.toFloat(curr);
 		for (int j=0; j<info.size(); j++)
 		{
-			float z = zScore(StatLib.toFloat(curr));
+			float z = zScore(arr,j);
 			if (z>thArr.get(i))
 			{
 				res.add(new AnomalyReport(ts.getTitles().get(i),j));
 			}//if
-			curr.add(info.get(j));
 		}//for
 		return res;
 	}

@@ -84,13 +84,27 @@ public class CoordinateSystemController implements Initializable {
 		double valueForMaxX=l.a*maxValueX+l.b;
 		Line toDisplay=new Line();
 		toDisplay.setStroke(color);
-		toDisplay.setStrokeWidth(1.0);
+		toDisplay.setStrokeWidth(3.0);
 		double x0=this.y.getEndX();
 		double y0=this.x.getEndY();
-		toDisplay.setStartX(x0+minValueX/(maxValueX-minValueX)*width);
-		toDisplay.setStartY(y0-valueForMinX/(maxValueY-minValueY)*height);
-		toDisplay.setEndX(x0+maxValueX/(maxValueX-minValueX)*width);
-		toDisplay.setEndY(y0-valueForMaxX/(maxValueY-minValueY)*height);
+		if(valueForMinX>=minValueY&&valueForMinX<=maxValueY){
+			toDisplay.setStartX(x0+minValueX/(maxValueX-minValueX)*width);
+			toDisplay.setStartY(y0-valueForMinX/(maxValueY-minValueY)*height);
+		}
+		else{
+			double xForMinY=(minValueY-l.b)/l.a;
+			toDisplay.setStartX(x0+xForMinY/(maxValueX-minValueX)*width);
+			toDisplay.setStartY(y0-minValueY/(maxValueY-minValueY)*height);
+		}
+		if(valueForMaxX<=maxValueY&&valueForMaxX>=minValueY){
+			toDisplay.setEndX(x0+maxValueX/(maxValueX-minValueX)*width);
+			toDisplay.setEndY(y0-valueForMaxX/(maxValueY-minValueY)*height);
+		}
+		else{
+			double xForMaxY=(maxValueY-l.b)/l.a;
+			toDisplay.setEndX(x0+xForMaxY/(maxValueX-minValueX)*width);
+			toDisplay.setEndY(y0-maxValueY/(maxValueY-minValueY)*height);
+		}
 		board.getChildren().add(toDisplay);
 		lines.add(toDisplay);
 	}
@@ -106,7 +120,7 @@ public class CoordinateSystemController implements Initializable {
 		double radiusDisplay=(x0+(c.center.x+c.radius)/(maxValueX-minValueX)*width-toDisplay.getCenterX());
 		toDisplay.setRadius(radiusDisplay);
 		toDisplay.setFill(Color.rgb(255, 255, 255, 0));
-		toDisplay.setStrokeWidth(2.0);
+		toDisplay.setStrokeWidth(3.0);
 		board.getChildren().add(toDisplay);
 		circles.add(toDisplay);
 	}

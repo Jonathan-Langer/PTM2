@@ -208,43 +208,19 @@ public class WindowController implements Initializable,Observer{
 					playerDisplayer.controller.playIcon.setFill(Color.BLACK);
 				if(newV!=0)
 					playerDisplayer.controller.stopIcon.setFill(Color.BLACK);
-				if(oldV<newV){
 					Platform.runLater(()->{
-						String s1=attributesView.selectedParameter.getValue();
-						String s2=attributesView.correlatedPrameter.getValue();
-						if(!s1.isEmpty()&&!s2.isEmpty()){
-							int time=(int)newV;
-							attributesView.controller.selectedPrameter.controller.addSetPoints(
-									vm.sendPointOf1Parameter(time
-											,attributesView.selectedParameter.getValue()),Color.BLUE);
-							playerDisplayer.currentTime.setValue(time);
-							if(!s2.equals("no correlated feature")){
-								attributesView.controller.correlatedPrameter.controller.addSetPoints(
-										vm.sendPointOf1Parameter(time
-												,attributesView.correlatedPrameter.getValue()),Color.BLUE);
-							}
+						if(oldV<newV)
+							initGraph();
+						else{
 							//playerDisplayer.currentTime.setValue(time);
-							vm.initPointsForDetector(s1,time);
+							attributesView.controller.selectedPrameter.controller.removePoint((int)(oldV-newV));
 							//playerDisplayer.currentTime.setValue(time);
-							attributesView.controller.detections.controller.addSetPoints(vm.sendNotAnomaliesPointWith2Parameter(s1,time),Color.BLUE);
+							attributesView.controller.correlatedPrameter.controller.removePoint((int)(oldV-newV));
 							//playerDisplayer.currentTime.setValue(time);
-							attributesView.controller.detections.controller.addSetPoints(vm.sendAnomaliesPointWith2Parameter(s1,time),Color.RED);
+							attributesView.controller.detections.controller.removePoint((int)(oldV-newV));
 							//playerDisplayer.currentTime.setValue(time);
 						}
 					});
-				}
-				else {
-					Platform.runLater(()->{
-						int time=(int)newV;
-						//playerDisplayer.currentTime.setValue(time);
-						attributesView.controller.selectedPrameter.controller.removePoint((int)(oldV-newV));
-						//playerDisplayer.currentTime.setValue(time);
-						attributesView.controller.correlatedPrameter.controller.removePoint((int)(oldV-newV));
-						//playerDisplayer.currentTime.setValue(time);
-						attributesView.controller.detections.controller.removePoint((int)(oldV-newV));
-						//playerDisplayer.currentTime.setValue(time);
-					});
-				}
 			}
 		});
 		playerDisplayer.controller.playIcon.fillProperty().addListener(new ChangeListener<Paint>() {
@@ -428,35 +404,30 @@ public class WindowController implements Initializable,Observer{
 					if(playerDisplayer.controller.playIcon.getFill()==Color.BLACK){
 						//checking if the player is already in play mode
 						//if it is, the points will be sent automatically
-						/*double time=playerDisplayer.currentTime.get();
-						try{
-							playerDisplayer.currentTime.set(time+1);
-							playerDisplayer.currentTime.set(time);
-						}catch(Exception e){
-							playerDisplayer.currentTime.set(time-1);
-							playerDisplayer.currentTime.set(time);
-						}*/
-						String s1=attributesView.selectedParameter.getValue();
-						String s2=attributesView.correlatedPrameter.getValue();
-						if(!s1.isEmpty()&&!s2.isEmpty()){
-							int time=(int)playerDisplayer.currentTime.get();
-							attributesView.controller.selectedPrameter.controller.addSetPoints(
-									vm.sendPointOf1Parameter(time
-											,attributesView.selectedParameter.getValue()),Color.BLUE);
-							playerDisplayer.currentTime.setValue(time);
-							if(!s2.equals("no correlated feature")){
-								attributesView.controller.correlatedPrameter.controller.addSetPoints(
-										vm.sendPointOf1Parameter(time
-												,attributesView.correlatedPrameter.getValue()),Color.BLUE);
-							}
-							vm.initPointsForDetector(s1,time);
-							attributesView.controller.detections.controller.addSetPoints(vm.sendNotAnomaliesPointWith2Parameter(s1,time),Color.BLUE);
-							attributesView.controller.detections.controller.addSetPoints(vm.sendAnomaliesPointWith2Parameter(s1,time),Color.RED);
-						}
+						initGraph();
 					}
 				}
 			}
 		});
+	}
+	private void initGraph(){
+		String s1=attributesView.selectedParameter.getValue();
+		String s2=attributesView.correlatedPrameter.getValue();
+		if(!s1.isEmpty()&&!s2.isEmpty()){
+			int time=(int)playerDisplayer.currentTime.get();
+			attributesView.controller.selectedPrameter.controller.addSetPoints(
+					vm.sendPointOf1Parameter(time
+							,attributesView.selectedParameter.getValue()),Color.BLUE);
+			playerDisplayer.currentTime.setValue(time);
+			if(!s2.equals("no correlated feature")){
+				attributesView.controller.correlatedPrameter.controller.addSetPoints(
+						vm.sendPointOf1Parameter(time
+								,attributesView.correlatedPrameter.getValue()),Color.BLUE);
+			}
+			vm.initPointsForDetector(s1,time);
+			attributesView.controller.detections.controller.addSetPoints(vm.sendNotAnomaliesPointWith2Parameter(s1,time),Color.BLUE);
+			attributesView.controller.detections.controller.addSetPoints(vm.sendAnomaliesPointWith2Parameter(s1,time),Color.RED);
+		}
 	}
 	public void loadClassFile(){
 		FileChooser fc=new FileChooser();

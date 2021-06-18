@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 		
 	public static float thForCorrelation = (float) 0.5;
-	public static float thForAnomaly=2;
+	public static float thForAnomaly=10;
 	public SimpleAnomalyDetector() {
 		super();
 		this.normalModel = null;
@@ -61,7 +61,6 @@ public class SimpleAnomalyDetector implements TimeSeriesAnomalyDetector {
 	public List<AnomalyReport> detect(TimeSeries ts) {
 		List<AnomalyReport> detected = new ArrayList<AnomalyReport>();
 		Point p;
-		
 		for ( int i=0; i<ts.getLength();i++) {
 			for (CorrelatedFeatures f : normalModel)
 			{

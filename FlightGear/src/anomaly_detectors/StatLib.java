@@ -3,24 +3,22 @@ package anomaly_detectors;
 import java.util.List;
 
 public class StatLib {
-	
-	public static float[] toFloat(List<Float> arr) {
-		float[] retArr = new float[arr.size()];
+
+	public static float[] toFloat(List<Float> l) {
+		float[] retArr = new float[l.size()];
 		for (int j=0; j<retArr.length;j++)
-			retArr[j]=arr.get(j);
+			retArr[j]=l.get(j);
 		return retArr;
 	}
 
 	// simple average
 	public static float avg(float[] x) {
-		float sum1 = 0;
-		float sum2 = 0;
-		int newLength = x.length >> 1;
-		for(int i = 0; i < newLength; i++) {
-			sum1 += x[i];
-			sum2 += x[i+newLength];
+		float avg = 0;
+		for (float item : x) {
+			avg += item;
 		}
-		return (sum1 + sum2)/x.length;
+		avg /= x.length;
+		return avg;
 	}
 
 	// returns the variance of X and Y
@@ -49,32 +47,10 @@ public class StatLib {
 
 	// returns the Pearson correlation coefficient of X and Y
 	public static float pearson(float[] x, float[] y) {
-		if(x == y) {
-			return 1;
-		}
-		if(x.length == y.length) {
-			float sumXY1 = 0, sumXY2 = 0,  sumX1 = 0, sumX2 = 0, sumY1 = 0, sumY2 = 0;
-			float avgOfX = avg(x);
-			float avgOfY = avg(y);
-			int newLength = x.length >> 1;
-			for(int i = 0; i < newLength ; i++) {
-				double calcX1 = x[i] - avgOfX;
-				double calcY1 = y[i] - avgOfY;
-				double calcX2 = x[i + newLength]-avgOfX;
-				double calcY2 = y[i + newLength] - avgOfY;
-
-				sumXY1 += (calcX1) * (calcY1);
-				sumXY2 += (calcX2) * (calcY2);
-
-				sumX1 += (calcX1) * (calcX1);
-				sumX2 += (calcX2) * (calcX2);
-
-				sumY1 += (calcY1) * (calcY1);
-				sumY2 += (calcY2) * (calcY2);
-			}
-			return (float)((sumXY1 + sumXY2)/Math.sqrt((sumX1 + sumX2) * (sumY1 + sumY2)));
-		}
-		return 0;
+		float sdX = (float) Math.sqrt(var(x));
+		float sdY = (float) Math.sqrt(var(y));
+		float cov = cov(x, y);
+		return (cov / (sdX * sdY));
 	}
 
 	// performs a linear regression and returns the line equation

@@ -52,7 +52,7 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 			trainZScoreAlgorithm.addCol(c.feature1,ts.getLine(c.feature1));
 			trainZScoreAlgorithm.addCol(c.feature2,ts.getLine(c.feature2));
 		}
-		zScoreDetector.learnNormal(trainZScoreAlgorithm);
+		zScoreDetector.learnNormal(/*trainZScoreAlgorithm*/ts);
 		regressionDetector=new SimpleAnomalyDetector((float) 0.95);
 		regressionDetector.learnNormal(ts);
 	}
