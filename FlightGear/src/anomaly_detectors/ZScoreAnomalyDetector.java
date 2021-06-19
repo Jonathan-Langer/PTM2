@@ -20,9 +20,11 @@ public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 	private float zScore(float[] col,int lastIndex) {
 		float th=0;
 		float z;
-		float var=(float)Math.sqrt(StatLib.var(col));
-		float avg=StatLib.avg(col);
-		for(/*Float f:col*/int i=0;i<=lastIndex;i++)
+		float[] tmp=new float[lastIndex+1];
+		System.arraycopy(col,0,tmp,0,lastIndex+1);
+		float var=(float)Math.sqrt(StatLib.var(tmp));
+		float avg=StatLib.avg(tmp);
+		for(int i=0;i<=lastIndex;i++)
 		{
 			z=(Math.abs(col[i]-avg)/ var);
 			if(th<z)
