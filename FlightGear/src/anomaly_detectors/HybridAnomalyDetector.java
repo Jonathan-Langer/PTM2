@@ -23,7 +23,7 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 	
 	@Override
 	public void learnNormal(TimeSeries ts) {
-		regressionDetector=new SimpleAnomalyDetector((float)0);
+		regressionDetector=new SimpleAnomalyDetector((float)0.5);
 		regressionDetector.learnNormal(ts);
 		List<CorrelatedFeatures> mostCorrelated=regressionDetector.getNormalModel();
 		WelzlAlgorithm algorithm=new WelzlAlgorithm();
@@ -37,9 +37,9 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 			if(Math.abs(c.corrlation)>=0.95)
 				featuresToAlgorithm.get("Regression").add(c);
 			else {
-				if(Math.abs(c.corrlation)<0.5)
+				/*if(Math.abs(c.corrlation)<0.5)
 					featuresToAlgorithm.get("ZScore").add(c);
-				else
+				else*/
 					featuresToAlgorithm.get("Welzl").add(c);
 			}
 		}
@@ -47,12 +47,12 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 			welzlCircleModel.put(c,algorithm.miniDisk(
 					getListPoint(ts.getLine(c.feature1), ts.getLine(c.feature2))));
 		}
-		TimeSeries trainZScoreAlgorithm=new TimeSeries();
+		/*TimeSeries trainZScoreAlgorithm=new TimeSeries();
 		for(CorrelatedFeatures c:featuresToAlgorithm.get("ZScore")) {
 			trainZScoreAlgorithm.addCol(c.feature1,ts.getLine(c.feature1));
 			trainZScoreAlgorithm.addCol(c.feature2,ts.getLine(c.feature2));
-		}
-		zScoreDetector.learnNormal(/*trainZScoreAlgorithm*/ts);
+		}*/
+		zScoreDetector.learnNormal(ts);
 		regressionDetector=new SimpleAnomalyDetector((float) 0.95);
 		regressionDetector.learnNormal(ts);
 	}
@@ -119,7 +119,6 @@ public class HybridAnomalyDetector implements TimeSeriesAnomalyDetector {
 				return null;
 			}
 		}
-		mostRelevant=null;
 		for(CorrelatedFeatures cf:featuresToAlgorithm.get("Regression")){
 			if(cf.feature1.equals(feature)||cf.feature2.equals(feature)){
 				if(mostRelevant==null)

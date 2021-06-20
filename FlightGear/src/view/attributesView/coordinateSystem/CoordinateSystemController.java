@@ -26,17 +26,16 @@ public class CoordinateSystemController implements Initializable {
 	double width;
 	double maxValueX,maxValueY;
 	double minValueX,minValueY;
-	List<Circle> points=new ArrayList<>();
-	List<Point> pointList=new ArrayList<>();
-	List<Line> lines=new ArrayList<>();
-	List<Circle> circles=new ArrayList<>();
+	final List<Circle> points=new ArrayList<>();
+	final List<Point> pointList=new ArrayList<>();
+	final List<Line> lines=new ArrayList<>();
+	final List<Circle> circles=new ArrayList<>();
 
 	public CoordinateSystemController() {
 		maxValueX=10000;
 		minValueX=-10000;
 		maxValueY=10000;
 		minValueY=-10000;
-		board=new AnchorPane();
 	}
 	public void changeSetting(double minX,double maxX,double minY,double maxY) {
 		if(maxX>minX&&maxY>minY){
@@ -129,36 +128,6 @@ public class CoordinateSystemController implements Initializable {
 		List<Point> tmp = new ArrayList<>(List.copyOf(listPoints));
 		tmp.removeAll(pointList);
 		tmp.forEach((p)->addPoint(p,color));
-	}
-	public void removePoint(int numOfPointToRemove){ // remove the last "numOfPointsToRemove" points
-		if(numOfPointToRemove>pointList.size()){
-			int x=pointList.size();
-			pointList.removeAll(pointList);
-			for(int i=0;i<x;i++)
-				if(board.getChildren().get(board.getChildren().size()-1) instanceof Circle){
-					Circle c=(Circle)board.getChildren().get(board.getChildren().size()-1);
-					if(!c.getFill().equals(Color.rgb(255, 255, 255, 0)))
-						board.getChildren().remove(board.getChildren().size()-1);
-					else
-						i--;
-				}
-				else
-					i--;
-		}
-		else{
-			for(int i=0;i<numOfPointToRemove;i++)
-				pointList.remove(pointList.size()-1);
-			for(int i=0;i<numOfPointToRemove;i++)
-				if(board.getChildren().get(board.getChildren().size()-1) instanceof Circle){
-					Circle c=(Circle)board.getChildren().get(board.getChildren().size()-1);
-					if(!c.getFill().equals(Color.rgb(255, 255, 255, 0)))
-						board.getChildren().remove(board.getChildren().size()-1);
-					else
-						i--;
-				}
-				else
-					i--;
-		}
 	}
 	public void clearAll() {
 		board.getChildren().removeAll(points);

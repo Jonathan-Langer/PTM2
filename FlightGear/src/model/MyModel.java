@@ -2,25 +2,15 @@ package model;
 
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
-import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Observable;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.function.Consumer;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import anomaly_detectors.*;
-import javafx.scene.control.Alert;
 import javafx.scene.paint.Color;
-import viewModel.ViewModel;
 
 public class MyModel extends Observable implements Model {
 
@@ -52,11 +42,10 @@ public class MyModel extends Observable implements Model {
 	}
 	@Override
 	public int getRate(){return rate;}
-	public double getAileronVal() {
-		return aileronVal;
-	}
 	public ArrayList<String> getNames() {
-		return train.getTitles();
+		if(train!=null)
+			return train.getTitles();
+		return new ArrayList<>();
 	}
 
 	@Override
@@ -74,18 +63,10 @@ public class MyModel extends Observable implements Model {
 		notifyObservers("aileronVal: " + aileronVal);
 	}
 
-	public double getElevatorVal() {
-		return elevatorVal;
-	}
-
 	public void setElevatorVal(double elevatorVal) {
 		this.elevatorVal = elevatorVal;
 		setChanged();
 		notifyObservers("elevatorVal: " + elevatorVal);
-	}
-
-	public double getRudderVal() {
-		return rudderVal;
 	}
 
 	public void setRudderVal(double rudderVal) {
@@ -94,18 +75,10 @@ public class MyModel extends Observable implements Model {
 		notifyObservers("rudderVal: " + rudderVal);
 	}
 
-	public double getThrottleVal() {
-		return throttleVal;
-	}
-
 	public void setThrottleVal(double throttleVal) {
 		this.throttleVal = throttleVal;
 		setChanged();
 		notifyObservers("throttleVal: " + throttleVal);
-	}
-
-	public double getAltimeterVal() {
-		return altimeterVal;
 	}
 
 	public void setAltimeterVal(double altimeterVal) {
@@ -114,18 +87,10 @@ public class MyModel extends Observable implements Model {
 		notifyObservers("altimeterVal: " + altimeterVal);
 	}
 
-	public double getAirspeedVal() {
-		return airspeedVal;
-	}
-
 	public void setAirspeedVal(double airspeedVal) {
 		this.airspeedVal = airspeedVal;
 		setChanged();
 		notifyObservers("airspeedVal: " + airspeedVal);
-	}
-
-	public double getHeadingVal() {
-		return headingVal;
 	}
 
 	public void setHeadingVal(double headingVal) {
@@ -134,28 +99,16 @@ public class MyModel extends Observable implements Model {
 		notifyObservers("headingVal: " + headingVal);
 	}
 
-	public double getRollVal() {
-		return rollVal;
-	}
-
 	public void setRollVal(double rollVal) {
 		this.rollVal = rollVal;
 		setChanged();
 		notifyObservers("rollVal: " + rollVal);
 	}
 
-	public double getPitchVal() {
-		return pitchVal;
-	}
-
 	public void setPitchVal(double pitchVal) {
 		this.pitchVal = pitchVal;
 		setChanged();
 		notifyObservers("pitchVal: " + pitchVal);
-	}
-
-	public double getYawVal() {
-		return yawVal;
 	}
 
 	public void setYawVal(double yawVal) {
@@ -189,8 +142,8 @@ public class MyModel extends Observable implements Model {
 		atrApeared.put("rate", -1);
 
 		try {
-			BufferedReader read = new BufferedReader(new FileReader(new File(txtFile)));
-			String line = null;
+			BufferedReader read = new BufferedReader(new FileReader((txtFile)));
+			String line;
 			while ((line = read.readLine()) != null) {
 				String[] data = line.split(",");
 				if (data.length == 4) {
@@ -401,8 +354,6 @@ public class MyModel extends Observable implements Model {
 			pointsToDisplay.put(rollName,new ArrayList<>());
 			pointsToDisplay.put(pitchName,new ArrayList<>());
 			pointsToDisplay.put(yawName,new ArrayList<>());
-			/*if(detector!=null)
-				detection=detector.detect(test);*/
 			return true;
 		}
 		return false;
@@ -421,7 +372,7 @@ public class MyModel extends Observable implements Model {
 				lastFile.createNewFile();
 			PrintWriter write = new PrintWriter(lastFile);
 			BufferedReader read = new BufferedReader(new FileReader(currentFile));
-			String line = null;
+			String line;
 			while ((line = read.readLine()) != null) {
 				write.println(line);
 				write.flush();
@@ -515,8 +466,6 @@ public class MyModel extends Observable implements Model {
 				return false;
 			detector = (TimeSeriesAnomalyDetector) c.newInstance();
 			detector.learnNormal(train);
-			/*if(test!=null)
-				detection=detector.detect(test);*/
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -620,7 +569,7 @@ public class MyModel extends Observable implements Model {
 	public CorrelatedFeatures getCorrelatedFeatures(String parameter) {
 		if (!train.getTitles().contains(parameter))
 			return null;
-		SimpleAnomalyDetector d = new SimpleAnomalyDetector(Float.parseFloat("0.5"));
+		SimpleAnomalyDetector d = new SimpleAnomalyDetector((float)0.5);
 		d.learnNormal(train);
 		List<CorrelatedFeatures> a = d.getNormalModel();
 		CorrelatedFeatures mostRelevant = null;
@@ -630,11 +579,6 @@ public class MyModel extends Observable implements Model {
 					mostRelevant = c;
 				else if (mostRelevant.corrlation < c.corrlation)
 					mostRelevant = c;
-			/*if (c.feature2.equals(parameter))
-				if (mostRelevant == null)
-					mostRelevant = c;
-				else if (mostRelevant.corrlation < c.corrlation)
-					mostRelevant = c;*/
 		}
 		return mostRelevant;
 	}

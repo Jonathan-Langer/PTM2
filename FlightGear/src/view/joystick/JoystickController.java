@@ -34,9 +34,6 @@ public class JoystickController implements Initializable {
 	Slider throttle;
 	@FXML
 	Label aileronVal, elevatorVal;
-	public JoystickController() {
-
-	}
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		heightToMove=outsideCircle.getRadius()-insideCircle.getRadius();

@@ -10,20 +10,29 @@ import model.ListOfAttributes;
 import view.joystick.JoystickController;
 
 public class AttributesViewDisplayer extends AnchorPane {
-	public AttributesViewController controller;
-	public StringProperty selectedParameter,correlatedPrameter;
+	public final AttributesViewController controller;
+	public final StringProperty selectedParameter,correlatedPrameter;
 	public AttributesViewDisplayer() {
 		super();
 		FXMLLoader loader=new FXMLLoader();
+		AnchorPane toDisplay=null;
 		try {
-			AnchorPane toDisplay=loader.load(getClass().getResource("AttributesView.fxml").openStream());
-			controller=loader.getController();
+			toDisplay=loader.load(getClass().getResource("AttributesView.fxml").openStream());
 			this.getChildren().add(toDisplay);
-			selectedParameter=controller.selectedPrameter.title;
-			correlatedPrameter=controller.correlatedPrameter.title;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		finally {
+			if(toDisplay!=null){
+				controller=loader.getController();
+				selectedParameter=controller.selectedPrameter.title;
+				correlatedPrameter=controller.correlatedPrameter.title;
+			}
+			else{
+				controller=null;
+				selectedParameter=new SimpleStringProperty();
+				correlatedPrameter=new SimpleStringProperty();
+			}
 		}
 	}
 }

@@ -15,7 +15,7 @@ public class Player extends AnchorPane {
 	public StringProperty speedPlayer;
 	public StringProperty csvTestFilePath;
 	public DoubleProperty currentTime;
-	public PlayerDisplayerController controller;
+	public final PlayerDisplayerController controller;
 	int length;
 	int rate=1;
 	boolean sliderMoved=true;
@@ -25,69 +25,75 @@ public class Player extends AnchorPane {
 
 	public Player() {
 		super();
+		speedPlayer=new SimpleStringProperty();
+		FXMLLoader fxl = new FXMLLoader();
+		AnchorPane toDisplay=null;
 		try {
-			speedPlayer=new SimpleStringProperty();
-			FXMLLoader fxl = new FXMLLoader();
-			AnchorPane toDisplay = fxl.load(getClass().getResource("Player.fxml").openStream());
-			controller = fxl.getController();
-			controller.options.valueProperty().addListener(new ChangeListener<String>() {
-				@Override
-				public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-					speedPlayer.setValue(controller.options.valueProperty().getValue());
-				}
-			});
-
-			speedPlayer.set(controller.options.getValue());
-			csvTestFilePath=controller.csvTestFilePath;
-			//currentTime=controller.timeLine.valueProperty();
-			currentTime=new SimpleDoubleProperty();
-			currentTime.addListener(new ChangeListener<Number>() {
-				@Override
-				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					Platform.runLater(()->{
-						double minValue=controller.timeLine.getMin();
-						double maxValue=controller.timeLine.getMax();
-						sliderMoved=false;
-						controller.timeLine.valueProperty().setValue(minValue+((maxValue-minValue)*currentTime.getValue()/length));
-						int hour=(int)(currentTime.get())/(rate)/60/60;
-						int minute=(int)((currentTime.get())/(rate)/60)%60;
-						int second=(int)(currentTime.get())/(rate)%60;
-						String newTimeLabel="";
-						if(hour<10)
-							newTimeLabel+="0"+hour+":";
-						else
-							newTimeLabel+=hour+":";
-						if(minute<10)
-							newTimeLabel+="0"+minute+":";
-						else
-							newTimeLabel+=minute+":";
-						if(second<10)
-							newTimeLabel+="0"+second;
-						else
-							newTimeLabel+=second;
-						controller.timeLabel.setText(newTimeLabel);
-					});
-				}
-			});
-			controller.timeLine.valueProperty().addListener(new ChangeListener<Number>() {
-				@Override
-				public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-					if(sliderMoved) {
-						double minValue = controller.timeLine.getMin();
-						double maxValue = controller.timeLine.getMax();
-
-						currentTime.setValue(
-								(Math.round((Math.round(controller.timeLine.valueProperty().getValue()) - minValue)
-										* length
-										/ (maxValue - minValue))));
-					}
-					else
-						sliderMoved=true;
-				}
-			});
+			toDisplay = fxl.load(getClass().getResource("Player.fxml").openStream());
 			this.getChildren().add(toDisplay);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		finally {
+			if(toDisplay!=null){
+				controller=fxl.getController();
+				controller.options.valueProperty().addListener(new ChangeListener<String>() {
+					@Override
+					public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+						speedPlayer.setValue(controller.options.valueProperty().getValue());
+					}
+				});
+
+				speedPlayer.set(controller.options.getValue());
+				csvTestFilePath=controller.csvTestFilePath;
+				currentTime=new SimpleDoubleProperty();
+				currentTime.addListener(new ChangeListener<Number>() {
+					@Override
+					public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+						Platform.runLater(()->{
+							double minValue=controller.timeLine.getMin();
+							double maxValue=controller.timeLine.getMax();
+							sliderMoved=false;
+							controller.timeLine.valueProperty().setValue(minValue+((maxValue-minValue)*currentTime.getValue()/length));
+							int hour=(int)(currentTime.get())/(rate)/60/60;
+							int minute=(int)((currentTime.get())/(rate)/60)%60;
+							int second=(int)(currentTime.get())/(rate)%60;
+							String newTimeLabel="";
+							if(hour<10)
+								newTimeLabel+="0"+hour+":";
+							else
+								newTimeLabel+=hour+":";
+							if(minute<10)
+								newTimeLabel+="0"+minute+":";
+							else
+								newTimeLabel+=minute+":";
+							if(second<10)
+								newTimeLabel+="0"+second;
+							else
+								newTimeLabel+=second;
+							controller.timeLabel.setText(newTimeLabel);
+						});
+					}
+				});
+				controller.timeLine.valueProperty().addListener(new ChangeListener<Number>() {
+					@Override
+					public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+						if(sliderMoved) {
+							double minValue = controller.timeLine.getMin();
+							double maxValue = controller.timeLine.getMax();
+
+							currentTime.setValue(
+									(Math.round((Math.round(controller.timeLine.valueProperty().getValue()) - minValue)
+											* length
+											/ (maxValue - minValue))));
+						}
+						else
+							sliderMoved=true;
+					}
+				});
+			}
+			else
+				controller=null;
 		}
 	}
 }

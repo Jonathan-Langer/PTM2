@@ -22,21 +22,14 @@ import view.attributesView.coordinateSystem.CoordinateSystemController;
 import view.attributesView.coordinateSystem.CoordinateSystemDisplayer;
 
 public class AttributesViewController implements Initializable {
-	ObservableList<String> list = FXCollections.observableArrayList();
+	final ObservableList<String> list = FXCollections.observableArrayList();
 
 	@FXML
 	ListView<String> listAttributes=new ListView<String>();
 	
 	@FXML
 	public CoordinateSystemDisplayer detections,selectedPrameter,correlatedPrameter;
-	
-	/*
-	 * public AttributesViewController(ListOfAttributes attributes) {
-	 * this.attributes=attributes; detections=new CoordinateSystemDisplayer();
-	 * selectedPrameter=new CoordinateSystemDisplayer(); correlatedPrameter=new
-	 * CoordinateSystemDisplayer(); }
-	 */
-	
+
 	public AttributesViewController() {
 		File lastSetting=new File(new File("resources/last_setting.txt").getAbsolutePath());
 		detections=new CoordinateSystemDisplayer();
@@ -53,8 +46,6 @@ public class AttributesViewController implements Initializable {
 			}
 		});
 		detections.title.setValue("anomaly detection");
-
-		//listAttributes.getSelectionModel().getSelectedItem()
 	}
 	
 	public void applySetting(Collection<String> c) {
@@ -64,6 +55,4 @@ public class AttributesViewController implements Initializable {
 		list.sort((s1,s2)->s1.compareTo(s2));
 		listAttributes.getItems().addAll(list);
 	}
-
-
 }

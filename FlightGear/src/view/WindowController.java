@@ -2,14 +2,10 @@ package view;
 
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLClassLoader;
-import java.nio.file.Files;
 import java.util.*;
 
 import anomaly_detectors.*;
-import javafx.animation.Animation;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,38 +14,15 @@ import javafx.scene.paint.Paint;
 import view.attributesView.AttributesViewDisplayer;
 import view.joystick.JoystickDisplayer;
 import view.player.*;
-import view.tableClocks.TableClocksController;
 import view.tableClocks.TableClocksDisplayer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-import model.AttributeSettings;
-import model.ListOfAttributes;
 import viewModel.ViewModel;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-//import javafx.scene.control.ListView;
-//import javafx.scene.control.MenuItem;
-//import javafx.scene.control.RadioButton;
-//import javafx.scene.control.SelectionMode;
-import javafx.scene.*;
-//import javafx.scene.control.TextArea;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import model.MyModel;
-//import javafx.scene.layout.AnchorPane;
+
 
 
 public class WindowController implements Initializable,Observer{
@@ -99,9 +72,6 @@ public class WindowController implements Initializable,Observer{
 		csvTrainFilePath.set("a");
 		csvTrainFilePath.set(s);
 		vm.bindToProperty("csvTest", playerDisplayer.csvTestFilePath,"V2VM");
-		/*s=playerDisplayer.csvTestFilePath.getValue();
-		playerDisplayer.csvTestFilePath.set("a");
-		playerDisplayer.csvTestFilePath.set(s);*/
 		vm.bindToProperty("aileronName",aileronName,"VM2V");
 		vm.bindToProperty("elevatorName",elevatorName,"VM2V");
 		vm.bindToProperty("rudderName",rudderName,"VM2V");
@@ -151,8 +121,6 @@ public class WindowController implements Initializable,Observer{
 		attributesView.controller.applySetting(vm.getNames());
 	}
 	//---------------FXML Objects--------------
-	@FXML
-	MenuItem editSetting;
 		
 	@FXML
 	AttributesViewDisplayer attributesView;
@@ -210,24 +178,9 @@ public class WindowController implements Initializable,Observer{
 						if(oldV<newV)
 							initGraph();
 						else{
-							/*//playerDisplayer.currentTime.setValue(time);
-							attributesView.controller.selectedPrameter.controller.removePoint((int)(oldV-newV));
-							//playerDisplayer.currentTime.setValue(time);
-							attributesView.controller.correlatedPrameter.controller.removePoint((int)(oldV-newV));
-							//playerDisplayer.currentTime.setValue(time);
-							attributesView.controller.detections.controller.removePoint((int)(oldV-newV));
-							//playerDisplayer.currentTime.setValue(time);*/
 							attributesView.controller.detections.controller.clearPoints();
 							attributesView.controller.selectedPrameter.controller.clearPoints();
 							attributesView.controller.correlatedPrameter.controller.clearPoints();
-							/*Shape shape=vm.sendShapeDetector(attributesView.selectedParameter.get());
-							if(shape!=null) {
-								if (shape instanceof Line)
-									attributesView.controller.detections.controller.addLine((Line) shape, Color.GREEN);
-								if (shape instanceof anomaly_detectors.Circle)
-									attributesView.controller.detections
-											.controller.addCircle((Circle) (shape), Color.GREEN);
-							}*/
 							initGraph();
 						}
 					});
@@ -242,7 +195,7 @@ public class WindowController implements Initializable,Observer{
 					else{
 						Alert message=new Alert(Alert.AlertType.ERROR);
 						message.setContentText("oops!"
-								+ " \n you didnt choose any csv test file, please choose one and try again");
+								+ " \n you didn't choose any csv test file, please choose one and try again");
 						message.show();
 						playerDisplayer.controller.playIcon.setFill(Color.BLACK);
 					}
@@ -258,7 +211,7 @@ public class WindowController implements Initializable,Observer{
 					else{
 						Alert message=new Alert(Alert.AlertType.ERROR);
 						message.setContentText("oops!"
-								+ " \n you didnt choose any csv test file, please choose one and try again");
+								+ " \n you didn't choose any csv test file, please choose one and try again");
 						message.show();
 						playerDisplayer.controller.stopIcon.setFill(Color.BLACK);
 					}
@@ -442,7 +395,7 @@ public class WindowController implements Initializable,Observer{
 	public void loadClassFile(){
 		FileChooser fc=new FileChooser();
 		fc.setTitle("open anomaly detector class file");
-		fc.setInitialDirectory(new File("./bin"));
+		fc.setInitialDirectory(new File("./bin/anomaly_detectors"));
 		fc.getExtensionFilters().addAll(
 				new FileChooser.ExtensionFilter
 				("class file", "*.class")
@@ -456,8 +409,7 @@ public class WindowController implements Initializable,Observer{
 						+ " \n the anomaly detector class file has been saved in the system");
 				message.show();
 				attributesView.controller.detections.controller.clearAll();
-			}
-			else {
+			}			else {
 				Alert message=new Alert(Alert.AlertType.ERROR);
 				message.setContentText("oops!"
 						+ " \n please choose a valid class file that implements the interface TimeSeriesAnomalyDetector");
@@ -486,7 +438,7 @@ public class WindowController implements Initializable,Observer{
 			if(!vm.checkValidateSettingFile(chooser.getPath())) {
 				Alert message=new Alert(Alert.AlertType.ERROR);
 				message.setContentText("oops!"
-						+ " \n this file format is not valid \n and the file was'nt saved in the system");
+						+ " \n this file format is not valid \n and the file wasn't saved in the system");
 				message.show();
 				txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
 			}
@@ -522,7 +474,7 @@ public class WindowController implements Initializable,Observer{
 			{
 				Alert message=new Alert(Alert.AlertType.ERROR);
 				message.setContentText("oops!"
-						+ " \n this file format is not valid \n and the file was'nt saved in the system");
+						+ " \n this file format is not valid \n and the file wasn't saved in the system");
 				message.show();
 			}
 			else {
@@ -541,6 +493,6 @@ public class WindowController implements Initializable,Observer{
 	
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+
 	}
 }
