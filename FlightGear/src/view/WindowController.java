@@ -144,12 +144,10 @@ public class WindowController implements Initializable,Observer{
 		vm.bindToProperty("minYaw",tableClocks.minYaw,"VM2V");
 		vm.bindToProperty("maxYaw",tableClocks.maxYaw,"VM2V");
 		vm.currentTime.bindBidirectional(playerDisplayer.currentTime);
+		vm.setTrainTimeSeries(csvTrainFilePath.get());
 		vm.applyValuesMinMax();
 		vm.applyNames();
 		playerDisplayer.setRate(vm.getRate());
-		//attributesView.controller.applySetting(vm.getNames());
-		//vm.checkValidateSettingFile(txtFilePath.getValue());
-		vm.setTrainTimeSeries(csvTrainFilePath.get());
 		attributesView.controller.applySetting(vm.getNames());
 	}
 	//---------------FXML Objects--------------
@@ -212,13 +210,25 @@ public class WindowController implements Initializable,Observer{
 						if(oldV<newV)
 							initGraph();
 						else{
-							//playerDisplayer.currentTime.setValue(time);
+							/*//playerDisplayer.currentTime.setValue(time);
 							attributesView.controller.selectedPrameter.controller.removePoint((int)(oldV-newV));
 							//playerDisplayer.currentTime.setValue(time);
 							attributesView.controller.correlatedPrameter.controller.removePoint((int)(oldV-newV));
 							//playerDisplayer.currentTime.setValue(time);
 							attributesView.controller.detections.controller.removePoint((int)(oldV-newV));
-							//playerDisplayer.currentTime.setValue(time);
+							//playerDisplayer.currentTime.setValue(time);*/
+							attributesView.controller.detections.controller.clearPoints();
+							attributesView.controller.selectedPrameter.controller.clearPoints();
+							attributesView.controller.correlatedPrameter.controller.clearPoints();
+							/*Shape shape=vm.sendShapeDetector(attributesView.selectedParameter.get());
+							if(shape!=null) {
+								if (shape instanceof Line)
+									attributesView.controller.detections.controller.addLine((Line) shape, Color.GREEN);
+								if (shape instanceof anomaly_detectors.Circle)
+									attributesView.controller.detections
+											.controller.addCircle((Circle) (shape), Color.GREEN);
+							}*/
+							initGraph();
 						}
 					});
 			}
@@ -359,17 +369,17 @@ public class WindowController implements Initializable,Observer{
 					String str = vm.getMostCorrelated(attributesView.selectedParameter.getValue());
 					if (str != null) {
 						attributesView.correlatedPrameter.setValue(str);
-						attributesView.controller.selectedPrameter.controller.clear();
+						attributesView.controller.selectedPrameter.controller.clearAll();
 						attributesView.controller.selectedPrameter.controller.changeSetting(0, vm.getLength(),
 								vm.getMinValColl(attributesView.selectedParameter.get()),
 								vm.getMaxValColl(attributesView.selectedParameter.get()));
-						attributesView.controller.correlatedPrameter.controller.clear();
+						attributesView.controller.correlatedPrameter.controller.clearAll();
 						if (!str.equals("no correlated feature")) {
 							attributesView.controller.correlatedPrameter.controller.changeSetting(0, vm.getLength(),
 									vm.getMinValColl(str),
 									vm.getMaxValColl(str));
 						}
-						attributesView.controller.detections.controller.clear();
+						attributesView.controller.detections.controller.clearAll();
 						CorrelatedFeatures cf=vm.getCorrelatedFeatureObject(t1);
 						if(cf!=null&&vm.howManyParameterTheDetectorUse(t1)==2){
 							if(cf.feature1.equals(t1))
@@ -391,7 +401,7 @@ public class WindowController implements Initializable,Observer{
 									vm.getMinValColl(t1),
 									vm.getMaxValColl(t1)
 							);
-						attributesView.controller.detections.controller.clear();
+						attributesView.controller.detections.controller.clearAll();
 						Shape shape=vm.sendShapeDetector(t1);
 						if(shape!=null){
 							if(shape instanceof Line)
@@ -445,7 +455,7 @@ public class WindowController implements Initializable,Observer{
 				message.setContentText("well done!"
 						+ " \n the anomaly detector class file has been saved in the system");
 				message.show();
-				attributesView.controller.detections.controller.clear();
+				attributesView.controller.detections.controller.clearAll();
 			}
 			else {
 				Alert message=new Alert(Alert.AlertType.ERROR);

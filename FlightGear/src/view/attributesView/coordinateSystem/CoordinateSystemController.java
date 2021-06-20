@@ -110,7 +110,8 @@ public class CoordinateSystemController implements Initializable {
 	}
 	public void addCircle(anomaly_detectors.Circle c, Paint color) {
 		double newMaxX=c.center.x+c.radius,newMinX=c.center.x-c.radius,newMaxY=c.center.y+c.radius,newMinY=c.center.y-c.radius;
-		changeSetting(Math.min(minValueX,newMinX),Math.max(newMaxX,maxValueX),Math.min(minValueY,newMinY),Math.max(maxValueY,newMaxY));
+		changeSetting(Math.min(minValueX,newMinX),Math.max(newMaxX,maxValueX),
+				Math.min(minValueY,newMinY),Math.max(maxValueY,newMaxY));//if the circle is out of the bounds of the coordinate system
 		double x0=this.y.getEndX();
 		double y0=this.x.getEndY();
 		Circle toDisplay=new Circle();
@@ -159,7 +160,7 @@ public class CoordinateSystemController implements Initializable {
 					i--;
 		}
 	}
-	public void clear() {
+	public void clearAll() {
 		board.getChildren().removeAll(points);
 		board.getChildren().removeAll(lines);
 		board.getChildren().removeAll(circles);
@@ -167,5 +168,10 @@ public class CoordinateSystemController implements Initializable {
 		pointList.removeAll(pointList);
 		lines.removeAll(lines);
 		circles.removeAll(circles);
+	}
+	public void clearPoints(){
+		board.getChildren().removeAll(points);
+		points.removeAll(points);
+		pointList.removeAll(pointList);
 	}
 }
