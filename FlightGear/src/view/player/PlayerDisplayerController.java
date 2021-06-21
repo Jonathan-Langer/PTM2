@@ -27,20 +27,19 @@ import model.ListOfAttributes;
 
 public class PlayerDisplayerController  implements Initializable {
 		
-	public StringProperty csvTestFilePath=new SimpleStringProperty();
+	StringProperty csvTestFilePath;
 	@FXML
 	Slider timeLine;
 	@FXML
-	public ComboBox<String> options = new ComboBox<>();
+	ComboBox<String> options;
 	@FXML
 	public FontAwesomeIcon playIcon,pauseIcon,stopIcon,forwardIcon,rewindIcon;
 	@FXML
-	public Label timeLabel;
+	Label timeLabel;
 	public PlayerDisplayerController() {
 		options = new ComboBox<>();
 		csvTestFilePath = new SimpleStringProperty();
 	}
-	
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

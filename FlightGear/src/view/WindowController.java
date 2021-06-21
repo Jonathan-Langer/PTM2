@@ -26,11 +26,10 @@ import javafx.scene.control.Alert;
 
 
 public class WindowController implements Initializable,Observer{
-	HashMap<StringProperty,String> namesAttribute=new HashMap<>();
-
-	StringProperty txtFilePath=new SimpleStringProperty();
-	StringProperty csvTrainFilePath=new SimpleStringProperty();
-	ViewModel vm;
+	final HashMap<StringProperty,String> namesAttribute=new HashMap<>();
+	final StringProperty txtFilePath=new SimpleStringProperty();
+	final StringProperty csvTrainFilePath=new SimpleStringProperty();
+	private ViewModel vm;
 	StringProperty aileronName,elevatorName,throttleName,rudderName,altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
 	public WindowController() {
 		txtFilePath.set(new File("resources/last_setting.txt").getAbsolutePath());
@@ -206,14 +205,14 @@ public class WindowController implements Initializable,Observer{
 			@Override
 			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
 				if(playerDisplayer.controller.stopIcon.getFill()!=Color.BLACK){
-					if(playerDisplayer.csvTestFilePath!=null)
+					if(playerDisplayer.csvTestFilePath.get()!=null)
 						vm.stop();
 					else{
 						Alert message=new Alert(Alert.AlertType.ERROR);
 						message.setContentText("oops!"
 								+ " \n you didn't choose any csv test file, please choose one and try again");
-						message.show();
 						playerDisplayer.controller.stopIcon.setFill(Color.BLACK);
+						message.show();
 					}
 				}
 			}
@@ -222,7 +221,15 @@ public class WindowController implements Initializable,Observer{
 			@Override
 			public void changed(ObservableValue<? extends Paint> observableValue, Paint paint, Paint t1) {
 				if(playerDisplayer.controller.pauseIcon.getFill()!=Color.BLACK)
-					vm.pause();
+					if(playerDisplayer.csvTestFilePath.get()!=null)
+						vm.pause();
+					else{
+						Alert message=new Alert(Alert.AlertType.ERROR);
+						message.setContentText("oops!"
+								+ " \n you didn't choose any csv test file, please choose one and try again");
+						playerDisplayer.controller.pauseIcon.setFill(Color.BLACK);
+						message.show();
+				}
 			}
 		});
 		playerDisplayer.controller.setEventHandlerForForward(()->vm.forward());
@@ -493,6 +500,5 @@ public class WindowController implements Initializable,Observer{
 	
 	@Override
 	public void update(Observable o, Object arg) {
-
 	}
 }

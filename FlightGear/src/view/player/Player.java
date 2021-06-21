@@ -16,9 +16,9 @@ public class Player extends AnchorPane {
 	public StringProperty csvTestFilePath;
 	public DoubleProperty currentTime;
 	public final PlayerDisplayerController controller;
-	int length;
-	int rate=1;
-	boolean sliderMoved=true;
+	private int length;
+	private int rate=1;
+	private boolean sliderMoved=true;
 
 	public void setRate(int r){rate=r;}
 	public void setLength(int l){length=l;}
