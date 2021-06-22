@@ -59,21 +59,20 @@ public class CoordinateSystemController implements Initializable {
 		x.setEndY(height-height*(0-minValueY)/(maxValueY-minValueY));
 		board.getChildren().removeAll(points);
 	}
-	public void addPoint(Point p,Paint color) {
+	public void addPoint(Point p,Paint color,double size) {
 		if(!pointList.contains(p)){
 			double x0=this.y.getEndX();
 			double y0=this.x.getEndY();
 			double displayX=x0+p.x/(maxValueX-minValueX)*width;
 			double displayY=y0-p.y/(maxValueY-minValueY)*height;
 			Circle toDisplay=new Circle();
-			toDisplay.setRadius(1);
+			toDisplay.setRadius(size);
 			toDisplay.setCenterX(displayX);
 			toDisplay.setCenterY(displayY);
 			toDisplay.setFill(color);
 			if(!points.contains(toDisplay)){
 				points.add(toDisplay);
 				pointList.add(p);
-				//board.getChildren().removeAll(points);
 				board.getChildren().add(toDisplay);
 			}
 		}
@@ -124,10 +123,10 @@ public class CoordinateSystemController implements Initializable {
 		board.getChildren().add(toDisplay);
 		circles.add(toDisplay);
 	}
-	public void addSetPoints(Collection<Point> listPoints, Paint color){
+	public void addSetPoints(Collection<Point> listPoints, Paint color,double size){
 		List<Point> tmp = new ArrayList<>(List.copyOf(listPoints));
 		tmp.removeAll(pointList);
-		tmp.forEach((p)->addPoint(p,color));
+		tmp.forEach((p)->addPoint(p,color,size));
 	}
 	public void clearAll() {
 		board.getChildren().removeAll(points);

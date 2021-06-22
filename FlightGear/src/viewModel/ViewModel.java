@@ -16,28 +16,28 @@ import model.MyModel;
 
 public class ViewModel extends Observable implements Observer{
 	public DoubleProperty currentTime;
-	StringProperty txtFilePath;
-	StringProperty csvTrainFilePath;
-	StringProperty csvTestFilePath;
+	private StringProperty txtFilePath;
+	private StringProperty csvTrainFilePath;
+	private StringProperty csvTestFilePath;
 
-	StringProperty aileronName,elevatorName,throttleName,rudderName,altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
+	private StringProperty aileronName,elevatorName,throttleName,rudderName,altimeterName,airspeedName,headingName,rollName,pitchName,yawName;
 
 	public final Map<String, Property> properties = new HashMap<>();
 
 	//--------values for gauge table----------
-	DoubleProperty altimeterValue, airspeedValue, headingValue,
+	private DoubleProperty altimeterValue, airspeedValue, headingValue,
 	rollValue,pitchValue,yawValue;
-	DoubleProperty minAltimeter,maxAltimeter,minAirspeed,maxAirspeed,minHeading,maxHeading,
+	private DoubleProperty minAltimeter,maxAltimeter,minAirspeed,maxAirspeed,minHeading,maxHeading,
 	minRoll,maxRoll,minPitch,maxPitch,minYaw,maxYaw;
 
 	//----------values for joystick-----------
-	DoubleProperty aileronValue, elevatorsValue
+	private DoubleProperty aileronValue, elevatorsValue
 	,throttleValue, rudderValue;
-	DoubleProperty minAileron,maxAileron,minElevator,maxElevator,minThrottle,maxThrottle,
+	private DoubleProperty minAileron,maxAileron,minElevator,maxElevator,minThrottle,maxThrottle,
 	minRudder,maxRudder;
 	
-	public Model m;
-	
+	private Model m;
+	private HashMap<Point,Color> pointsForDetector=new HashMap<>();
 	public ViewModel(Model m) {
 		this.m=m;
 		currentTime=new SimpleDoubleProperty();
@@ -269,19 +269,17 @@ public class ViewModel extends Observable implements Observer{
 	}
 	public void applyValuesMinMax(){ m.applyValuesMinMax();}
 	public void applyNames(){m.applyNames();}
+	public List<String> getNames() {
+		return m.getNames();
+	}
 	public boolean setTrainTimeSeries(String csvTrainFile) {
 		if(!m.setTrainTimeSeries(csvTrainFile))
 			return false;
 		return true;
 	}
-	public List<String> getNames() {
-		return m.getNames();
-	}
-	
 	public void saveLastCsvTrainFile(){
 		m.saveLastCsvTrainFile(csvTrainFilePath.getValue());
 	}
-	
 	public boolean setTestTimeSeries(String csvTestFile) {
 		if(!m.setTestTimeSeries(csvTestFile))
 			return false;
@@ -306,6 +304,7 @@ public class ViewModel extends Observable implements Observer{
 	public void forward(){m.forward();}
 	public void rewind(){m.rewind();}
 	public void setSpeedOfFlight(double speed){m.setSpeedOfFlight(speed);}
+
 	public void setCurrentTime(int currentTime){m.setCurrentTimeWithoutNotify(currentTime);}
 	public boolean setAnomalyDetector(String path,String name){
 		return m.setAnomalyDetector(path, name);
@@ -317,7 +316,6 @@ public class ViewModel extends Observable implements Observer{
 	public List<Point> sendPointOf1Parameter(int endTime, String feature){
 		return m.sendPointOf1Parameter(endTime,feature);
 	}
-	private HashMap<Point,Color> pointsForDetector=new HashMap<>();
 
 	public void initPointsForDetector(String feature,int endTime){
 		pointsForDetector=m.sendPointOf2Parameter(endTime,feature);

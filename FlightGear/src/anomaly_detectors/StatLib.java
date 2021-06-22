@@ -1,5 +1,6 @@
 package anomaly_detectors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StatLib {
@@ -19,6 +20,13 @@ public class StatLib {
 		}
 		avg /= x.length;
 		return avg;
+	}
+
+	public static List<Point> getListPoint(List<Float> x,List<Float> y){
+		List<Point> result=new ArrayList<>();
+		for(int i=0;i<x.size();i++)
+			result.add(new Point(x.get(i),y.get(i)));
+		return result;
 	}
 
 	// returns the variance of X and Y
@@ -76,5 +84,4 @@ public class StatLib {
 	public static float dev(Point p, Line l) {
 		return Math.abs(l.f(p.x) - p.y);
 	}
-
 }

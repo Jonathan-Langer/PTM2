@@ -14,24 +14,25 @@ import javafx.scene.paint.Color;
 
 public class MyModel extends Observable implements Model {
 
-	int currentTime = 0;
-	TimeSeries train, test;
-	//TimeSeries trainForView, testForView;
-	TimeSeriesAnomalyDetector detector;
-	ListOfAttributes atrList;
-	HashMap<String, Integer> collsForView;
-	String txtLast;
-	double aileronVal, elevatorVal, rudderVal, throttleVal, altimeterVal, airspeedVal, headingVal, rollVal, pitchVal, yawVal;
-	final String aileronName="aileron", elevatorName="elevator", rudderName="rudder", throttleName="throttle", altimeterName="altimeter", airspeedName="airspeed", headingName="heading", rollName="roll", pitchName="pitch", yawName="yaw";
-	int port = -1;
-	String ip = "";
-	int rate = -1;
-	Socket fg = null;
-	double speed;
-	PrintWriter writeToFlightGear = null;
-	ActiveObject task;
-	HashMap<String,List<Point>> pointsToDisplay;
-	String selectedFeature,correlatedFeature;
+	private int currentTime = 0;
+	private TimeSeries train, test;
+	private TimeSeriesAnomalyDetector detector;
+	private ListOfAttributes atrList;
+	private HashMap<String, Integer> collsForView;
+	private String txtLast;
+	private double aileronVal, elevatorVal, rudderVal, throttleVal, altimeterVal, airspeedVal, headingVal, rollVal, pitchVal, yawVal;
+	private final String aileronName="aileron", elevatorName="elevator", rudderName="rudder", throttleName="throttle", altimeterName="altimeter", airspeedName="airspeed", headingName="heading", rollName="roll", pitchName="pitch", yawName="yaw";
+	private int port = -1;
+	private String ip = "";
+	private int rate = -1;
+	private Socket fg = null;
+	private double speed;
+	private PrintWriter writeToFlightGear = null;
+	private ActiveObject task;
+	private HashMap<String,List<Point>> pointsToDisplay;
+	private String selectedFeature,correlatedFeature;
+	private List<AnomalyReport> detection;
+	private boolean wantToSuspend=false;
 
 	public MyModel() {
 		this.txtLast = new File("resources/last_setting.txt").getAbsolutePath();
@@ -42,6 +43,7 @@ public class MyModel extends Observable implements Model {
 	}
 	@Override
 	public int getRate(){return rate;}
+	@Override
 	public ArrayList<String> getNames() {
 		if(train!=null)
 			return train.getTitles();
@@ -56,61 +58,51 @@ public class MyModel extends Observable implements Model {
 		setChanged();
 		notifyObservers("rate: "+rate);
 	}
-
 	public void setAileronVal(double aileronVal) {
 		this.aileronVal = aileronVal;
 		setChanged();
 		notifyObservers("aileronVal: " + aileronVal);
 	}
-
 	public void setElevatorVal(double elevatorVal) {
 		this.elevatorVal = elevatorVal;
 		setChanged();
 		notifyObservers("elevatorVal: " + elevatorVal);
 	}
-
 	public void setRudderVal(double rudderVal) {
 		this.rudderVal = rudderVal;
 		setChanged();
 		notifyObservers("rudderVal: " + rudderVal);
 	}
-
 	public void setThrottleVal(double throttleVal) {
 		this.throttleVal = throttleVal;
 		setChanged();
 		notifyObservers("throttleVal: " + throttleVal);
 	}
-
 	public void setAltimeterVal(double altimeterVal) {
 		this.altimeterVal = altimeterVal;
 		setChanged();
 		notifyObservers("altimeterVal: " + altimeterVal);
 	}
-
 	public void setAirspeedVal(double airspeedVal) {
 		this.airspeedVal = airspeedVal;
 		setChanged();
 		notifyObservers("airspeedVal: " + airspeedVal);
 	}
-
 	public void setHeadingVal(double headingVal) {
 		this.headingVal = headingVal;
 		setChanged();
 		notifyObservers("headingVal: " + headingVal);
 	}
-
 	public void setRollVal(double rollVal) {
 		this.rollVal = rollVal;
 		setChanged();
 		notifyObservers("rollVal: " + rollVal);
 	}
-
 	public void setPitchVal(double pitchVal) {
 		this.pitchVal = pitchVal;
 		setChanged();
 		notifyObservers("pitchVal: " + pitchVal);
 	}
-
 	public void setYawVal(double yawVal) {
 		this.yawVal = yawVal;
 		setChanged();
@@ -294,7 +286,8 @@ public class MyModel extends Observable implements Model {
 			return detector.detectBy2Or1Parameter(f);
 		}catch(Exception e){return 2;}
 	}
-	public TimeSeries checkValidationCSV(String csv) {
+
+	private TimeSeries checkValidationCSV(String csv) {
 		TimeSeries ts = new TimeSeries(csv);
 		if (ts.isEmpty())
 			return null;
@@ -337,7 +330,7 @@ public class MyModel extends Observable implements Model {
 		}
 		return false;
 	}
-	List<AnomalyReport> detection;
+
 	@Override
 	public boolean setTestTimeSeries(String csvTestFile) {
 		TimeSeries ts = checkValidationCSV(csvTestFile);
@@ -359,12 +352,12 @@ public class MyModel extends Observable implements Model {
 		return false;
 	}
 
-
+	@Override
 	public void saveLastCsvTrainFile(String currentCsvTrainFile) {
 		copyFile(currentCsvTrainFile, new File("resources/last_train.txt").getAbsolutePath());
 	}
 
-	public void copyFile(String originalPath, String copyPath) {
+	private void copyFile(String originalPath, String copyPath) {
 		File lastFile = new File(copyPath);
 		File currentFile = new File(originalPath);
 		try {
@@ -383,6 +376,7 @@ public class MyModel extends Observable implements Model {
 			e.printStackTrace();
 		}
 	}
+	@Override
 	public double getMaxValueOfColl(String f) {
 		if(test!=null){
 			if(atrList.contains(f))
@@ -391,14 +385,13 @@ public class MyModel extends Observable implements Model {
 		}
 		return Double.MAX_VALUE;
 	}
-
 	@Override
 	public Shape sendShapeDetector(String f) {
 		if(detector!=null)
 			return detector.sendShape(f);
 		return null;
 	}
-
+	@Override
 	public double getMinValueOfColl(String f) {
 		if(test!=null){
 			if(atrList.contains(f))
@@ -408,7 +401,6 @@ public class MyModel extends Observable implements Model {
 		return Double.MIN_VALUE;
 	}
 
-	boolean wantToSuspend=false;
 	@Override
 	public void play() {
 		wantToSuspend=false;
@@ -473,7 +465,7 @@ public class MyModel extends Observable implements Model {
 		return true;
 	}
 
-	public String[] getPaths(String path, String name) {
+	private String[] getPaths(String path, String name) {
 		Character backs = 92;
 		String pattern = "\\W";
 		String backslash = (backs).toString();
@@ -546,7 +538,7 @@ public class MyModel extends Observable implements Model {
 		setChanged();
 		notifyObservers("currentTime: " + currentTime);
 	}
-
+	@Override
 	public int getLength() {
 		try{
 		return this.test.getLength();}
@@ -565,7 +557,7 @@ public class MyModel extends Observable implements Model {
 			return (correlatedFeature=mostRelevant.feature2);
 		return (correlatedFeature=mostRelevant.feature1);
 	}
-
+	@Override
 	public CorrelatedFeatures getCorrelatedFeatures(String parameter) {
 		if (!train.getTitles().contains(parameter))
 			return null;
@@ -650,5 +642,4 @@ public class MyModel extends Observable implements Model {
 			} catch (IOException e) { }
 		}
 	}
-
 }

@@ -5,13 +5,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class ActiveObject {
 
-    ArrayBlockingQueue<Runnable> q;
-    volatile boolean stop;
-    Runnable end=()->stop=true;
-    Thread t;
+    private ArrayBlockingQueue<Runnable> q;
+    private volatile boolean stop;
+    private final Runnable end=()->stop=true;
+    private Thread t;
 
-    public ActiveObject(int capacity)
-    {
+    public ActiveObject(int capacity) {
         q=new ArrayBlockingQueue<>(capacity);
         t=new Thread(()->{
             while(!stop)
@@ -28,8 +27,7 @@ public class ActiveObject {
         t.start();
     }
 
-    public void execute(Runnable r)
-    {
+    public void execute(Runnable r) {
         if(!stop)
             try{
                 q.put(r);

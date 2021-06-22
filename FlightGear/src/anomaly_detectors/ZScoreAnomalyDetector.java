@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ZScoreAnomalyDetector implements TimeSeriesAnomalyDetector {
 	
-	ArrayList<Float> thArr;
+	private List<Float> thArr;
 
 	@Override
 	public void learnNormal(TimeSeries ts) {

@@ -387,16 +387,16 @@ public class WindowController implements Initializable,Observer{
 			int time=(int)playerDisplayer.currentTime.get();
 			attributesView.controller.selectedPrameter.controller.addSetPoints(
 					vm.sendPointOf1Parameter(time
-							,attributesView.selectedParameter.getValue()),Color.BLUE);
+							,attributesView.selectedParameter.getValue()),Color.BLUE,1);
 			playerDisplayer.currentTime.setValue(time);
 			if(!s2.equals("no correlated feature")){
 				attributesView.controller.correlatedPrameter.controller.addSetPoints(
 						vm.sendPointOf1Parameter(time
-								,attributesView.correlatedPrameter.getValue()),Color.BLUE);
+								,attributesView.correlatedPrameter.getValue()),Color.BLUE,1);
 			}
 			vm.initPointsForDetector(s1,time);
-			attributesView.controller.detections.controller.addSetPoints(vm.sendNotAnomaliesPointWith2Parameter(s1,time),Color.BLUE);
-			attributesView.controller.detections.controller.addSetPoints(vm.sendAnomaliesPointWith2Parameter(s1,time),Color.RED);
+			attributesView.controller.detections.controller.addSetPoints(vm.sendNotAnomaliesPointWith2Parameter(s1,time),Color.BLUE,1);
+			attributesView.controller.detections.controller.addSetPoints(vm.sendAnomaliesPointWith2Parameter(s1,time),Color.RED,1.5);
 		}
 	}
 	public void loadClassFile(){

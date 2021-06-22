@@ -23,7 +23,6 @@ public class TableClocksController implements Initializable {
 	StackPane altimeter,airspeed,heading,roll,pitch,yaw;
 	Gauge gAltimeter,gAirspeed,gHeading,gRoll,gPitch,gYaw;
 
-	
 	public TableClocksController() {
 		altimeter=new StackPane(); //height of the flight
 		airspeed=new StackPane(); //speed of the flight
@@ -32,7 +31,6 @@ public class TableClocksController implements Initializable {
 		pitch=new StackPane();
 		yaw=new StackPane();
 	}
-	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		gAltimeter=GaugeBuilder.create()

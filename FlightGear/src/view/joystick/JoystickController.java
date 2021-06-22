@@ -1,9 +1,7 @@
 package view.joystick;
 
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -14,7 +12,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.shape.Circle;
-import model.ListOfAttributes;
 
 public class JoystickController implements Initializable {
 
@@ -22,8 +19,8 @@ public class JoystickController implements Initializable {
 	DoubleProperty maxAileron=new SimpleDoubleProperty();
 	DoubleProperty minElevator=new SimpleDoubleProperty();
 	DoubleProperty maxElevator=new SimpleDoubleProperty();
-	double heightToMove,widthToMove;
-	double centerX,centerY;
+	private double heightToMove,widthToMove;
+	private double centerX,centerY;
 	@FXML
 	Label throttleTitle,rudderTitle,aileronTitle,elevatorTitle;
 	@FXML
@@ -52,12 +49,5 @@ public class JoystickController implements Initializable {
 				insideCircle.setCenterY(centerY-Double.parseDouble(elevatorVal.getText())*heightToMove);
 			}
 		});
-	}
-	public void toDelete(){
-		Scanner s=new Scanner(System.in);
-		System.out.print("aileron: ");
-		aileronVal.setText(s.next());
-		System.out.print("elevator: ");
-		elevatorVal.setText(s.next());
 	}
 }

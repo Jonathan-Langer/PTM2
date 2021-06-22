@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Set;
 
-public class ListOfAttributes extends Observable{
+public class ListOfAttributes{
 	HashMap<String,AttributeSettings> attributesConnection;
 	int port,rate;
 	String ip;
@@ -26,7 +26,6 @@ public class ListOfAttributes extends Observable{
 	public ListOfAttributes() {
 		attributesConnection=new HashMap<String, AttributeSettings>();
 	}
-	public boolean isEmpty(){return attributesConnection.keySet().size()==0;}
 	public ListOfAttributes(String txtFile) {
 		attributesConnection=new HashMap<>();
 		try {
@@ -60,11 +59,8 @@ public class ListOfAttributes extends Observable{
 			//e.printStackTrace();
 		}
 	}
-	public void addAttribute(String attributeName, AttributeSettings attributeSettings) {
-		attributesConnection.put(attributeName, attributeSettings);
-		setChanged();
-		notifyObservers();
-	}
+	public boolean isEmpty(){return attributesConnection.keySet().size()==0;}
+	public void addAttribute(String attributeName, AttributeSettings attributeSettings) {attributesConnection.put(attributeName, attributeSettings); }
 	public boolean contains(String attributeName) {
 		return attributesConnection.containsKey(attributeName);
 	}

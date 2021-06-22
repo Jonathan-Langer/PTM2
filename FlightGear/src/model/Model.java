@@ -1,46 +1,45 @@
 package model;
 
-import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Predicate;
 
 import anomaly_detectors.*;
 import javafx.scene.paint.Color;
 
 public interface Model {
+	void start();// connect to flight gear
+	void play();
+	void pause();
+	void stop();
+	void forward();
+	void rewind();
 
-	public void shutDown();
-	public boolean setTrainTimeSeries(String csvTrainFile);
-	public boolean setTestTimeSeries(String csvTestFile);
-	public void setCurrentTime(int currentTime);
-	public void saveLastCsvTrainFile(String csvTrainFile);
-	public int getLength();
-	public int getRate();
-	public List<String> getNames();
-	public void setSpeedOfFlight(double speed);
-	public void play();
-	public void pause();
-	public void stop();
-	public void forward();
-	public void rewind();
-	public void setCurrentTimeWithoutNotify(int currentTime);
-	public double getMinValueOfColl(String f);
-	public double getMaxValueOfColl(String f);
-	public int howManyParameterTheDetectorUse(String f);
-	
-	public boolean setAnomalyDetector(String path,String name);
-	public void start(); //run in the background
+	boolean checkValidateSettingFile(String txtFile);
+	void saveLastSettingFile(String currentTxtFile);
+	List<String> getNames();
+	void applyValuesMinMax();
+	void applyNames();
+	int getRate();
+	void setSpeedOfFlight(double speed);
 
-	public boolean checkValidateSettingFile(String txtFile);
-	public void saveLastSettingFile(String currentTxtFile);
-	public void applyValuesMinMax();
-	public void applyNames();
-	public void setValues(int timeStep);
-	public String getMostCorrelated(String parameter);
-	public List<Point> sendPointOf1Parameter(int endTime, String feature);
-	public HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature);
-	public CorrelatedFeatures getCorrelatedFeatures(String parameter);
-	public Shape sendShapeDetector(String feature);
+	boolean setTrainTimeSeries(String csvTrainFile);
+	void saveLastCsvTrainFile(String csvTrainFile);
+
+	boolean setTestTimeSeries(String csvTestFile);
+	int getLength();
+	void setValues(int timeStep);
+	void setCurrentTime(int currentTime);
+	void setCurrentTimeWithoutNotify(int currentTime);
+	double getMinValueOfColl(String f);
+	double getMaxValueOfColl(String f);
+
+	boolean setAnomalyDetector(String path,String name);
+	int howManyParameterTheDetectorUse(String f);
+	String getMostCorrelated(String parameter);
+	List<Point> sendPointOf1Parameter(int endTime, String feature);
+	HashMap<Point, Color> sendPointOf2Parameter(int endTime, String feature);
+	CorrelatedFeatures getCorrelatedFeatures(String parameter);
+	Shape sendShapeDetector(String feature);
+
+	void shutDown();
 }
